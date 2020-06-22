@@ -29,5 +29,16 @@ public class HelloController {
         }
         return response.getResult();
     }
+    @GetMapping("/test")
+    public SampleDTO.TestResp test() {
 
+        SampleDTO.Test req = new SampleDTO.Test();
+        req.setId("100");
+        req.setName("hello");
+        BaseResponse<SampleDTO.TestResp> response = frontClient.create(req);
+        if(!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)){
+            throw new ServiceException(response.getStatus(),response.getMessage());
+        }
+        return response.getResult();
+    }
 }
