@@ -33,9 +33,10 @@
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.cloud.arc</groupId>
-            <artifactId>arc-util</artifactId>
+            <artifactId>arc-dependencies</artifactId>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
