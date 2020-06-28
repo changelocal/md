@@ -11,5 +11,10 @@
 
     <artifactId>md-atom-user-core</artifactId>
 
-
+    <dependencies>
+        <dependency>
+            <groupId>com.cloud.arc</groupId>
+            <artifactId>arc-db</artifactId>
+        </dependency>
+    </dependencies>
 </project>
