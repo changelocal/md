@@ -73,11 +73,16 @@
             <groupId>com.cloud.arc</groupId>
             <artifactId>arc-dependencies</artifactId>
         </dependency>
-
-        <!-- <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>-->
+        <dependency>
+            <groupId>com.cloud.arc</groupId>
+            <artifactId>arc-db</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>arc.md</groupId>
+            <artifactId>md-atom-user-core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 

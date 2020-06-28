@@ -19,6 +19,7 @@
     <modules>
         <module>arc-common</module>
         <module>arc-util</module>
+        <module>arc-db</module>
     </modules>
 
 
@@ -63,13 +64,15 @@
         <bytetcc.version>0.5.9</bytetcc.version>
         <servlet-api.version>4.0.1</servlet-api.version>
         <httpclient.version>4.5</httpclient.version>
-        <mysql.version>5.1.46</mysql.version>
+        <mysql.version>8.0.20</mysql.version>
         <h2database.version>1.4.200</h2database.version>
         <jest.version>6.3.0</jest.version>
         <fastjson.version>1.2.47</fastjson.version>
         <javax-validation-api.version>2.0.1.Final</javax-validation-api.version>
         <mariadb4j.version>2.4.0</mariadb4j.version>
         <sleuth.version>2.1.2.RELEASE</sleuth.version>
+        <jpa.version>2.1.3.RELEASE</jpa.version>
+        <persistence.version>1.0.2</persistence.version>
     </properties>
 
     <dependencyManagement>
@@ -164,6 +167,12 @@
                 <groupId>org.redisson</groupId>
                 <artifactId>redisson</artifactId>
                 <version>${redisson.version}</version>
+            </dependency>
+            <!-- HikariCp -->
+            <dependency>
+                <groupId>com.zaxxer</groupId>
+                <artifactId>HikariCP</artifactId>
+                <version>${hikaricp.version}</version>
             </dependency>
             <!-- druid 数据源 -->
             <dependency>
@@ -427,6 +436,21 @@
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-starter-sleuth</artifactId>
                 <version>${sleuth.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>repository.org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-jpa</artifactId>
+                <version>${jpa.version}</version>
+            </dependency>
+            <!--<dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-dbcp2</artifactId>
+                <version>2.1.1</version>
+            </dependency>-->
+            <dependency>
+                <groupId>javax.persistence</groupId>
+                <artifactId>persistence-api</artifactId>
+                <version>${persistence.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
