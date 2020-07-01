@@ -5,9 +5,10 @@ import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.model.OSSObject;
 import com.aliyun.oss.model.PutObjectRequest;
 import com.aliyun.oss.model.PutObjectResult;
-import kf.arc.util.log.Logger;
-import kf.arc.util.log.LoggerManager;
-import org.apache.poi.util.IOUtils;
+
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -22,8 +23,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 @Component
+@Slf4j
 public class OSSClientFacade {
-    private Logger logger = LoggerManager.getLogger(OSSClientFacade.class);
     @Value("${oss.bucketName}")
     private String bucketName;
     @Value("${oss.filedir}")
@@ -45,7 +46,7 @@ public class OSSClientFacade {
             PutObjectResult putResult = ossClient.putObject(new PutObjectRequest(bucketName, fileName, instream));
             ret = putResult.getETag();
         } catch (IOException e) {
-            logger.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             throw new RuntimeException("图片上传失败");
         } finally {
             try {
@@ -75,7 +76,7 @@ public class OSSClientFacade {
             PutObjectResult putResult = ossClient.putObject(new PutObjectRequest(bucketName, fileName, instream));
             ret = putResult.getETag();
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             throw new RuntimeException("图片上传失败");
         } finally {
             try {
@@ -100,6 +101,7 @@ public class OSSClientFacade {
         InputStream objectContent = object.getObjectContent();
 
         byte[] bytes = IOUtils.toByteArray(objectContent);
+//        byte[] bytes = null;
         objectContent.close();
 
         return bytes;
