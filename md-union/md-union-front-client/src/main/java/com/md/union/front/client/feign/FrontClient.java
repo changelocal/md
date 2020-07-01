@@ -26,4 +26,15 @@ public interface FrontClient {
     @PostMapping(value = "/hot", headers = { "Content-Type=application/json" })
     BaseResponse<TrademarkDTO.HotResp> hot(@RequestBody TrademarkDTO.Hot request);
 
+    @PostMapping(value = "/search", headers = { "Content-Type=application/json" })
+    BaseResponse<TrademarkDTO.SearchResp> search(@RequestBody TrademarkDTO.Search request);
+
+    @PostMapping(value = "/consultation", headers = { "Content-Type=application/json" })
+    BaseResponse<TrademarkDTO.ConsultationResp> consultation(@RequestBody TrademarkDTO.Consultation request);
+
+    @PostMapping(value = "/detail", headers = { "Content-Type=application/json" })
+    BaseResponse<TrademarkDTO.PurchaseResp> detail(@RequestBody TrademarkDTO.Purchase request);
+
+    @PostMapping(value = "/signup", headers = { "Content-Type=application/json" })
+    BaseResponse<TrademarkDTO.SignUpDetailsResp> signup(@RequestBody TrademarkDTO.SignUpDetails request);
 }
