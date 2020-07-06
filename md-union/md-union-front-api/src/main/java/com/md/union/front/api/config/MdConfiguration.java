@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.servlet.Filter;
@@ -45,7 +46,7 @@ public class MdConfiguration implements WebMvcConfigurer, EnvironmentAware {
 		registration.setName("responseWrapFilter");
 		registration.setFilter(new ResponseWrapFilter());
 		registration.setOrder(2);
-		registration.addUrlPatterns("/api/*");
+		registration.addUrlPatterns("/front/*");
 		return registration;
 	}
 
@@ -57,5 +58,10 @@ public class MdConfiguration implements WebMvcConfigurer, EnvironmentAware {
 	public void setEnvironment(Environment environment) {
 		this.environment = environment;
 	}
+
+	/*@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry.addResourceHandler("/swagger/**").addResourceLocations("classpath:/swagger/dist/");
+	}*/
 
 }

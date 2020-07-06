@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -60,18 +61,21 @@ public class Order {
     @ApiModel("我的订单列提交资料")
     @Data
     public static class SubmitOrder{
-        @ApiModelProperty("主键id")
+        @ApiModelProperty("订单id")
         public int id;
         /*@ApiModelProperty("订单编号")
         public String orderNo;*/
         @ApiModelProperty("订单提交资料方式 1企业 2 个人")
         private int submitType;
+        @ApiModelProperty("文件资料id")
         List<String> fileIds;
     }
 
     @Data
     @ApiModel("商标订单详情")
     public static class Detail{
+        @ApiModelProperty("主键id")
+        private int id;
         @ApiModelProperty("用户id")
         private int userId;
         @ApiModelProperty("订单编号")
@@ -82,10 +86,8 @@ public class Order {
         private Brand.Person person;
         @ApiModelProperty("分类名称")
         public String categoryName;
-        @ApiModelProperty("最高价格")
-        public String maxPrice;
-        @ApiModelProperty("最低价格")
-        public String minPrice;
+        @ApiModelProperty("支付价格")
+        public String payPrice;
         @ApiModelProperty("定金")
         public String prePrice;
         @ApiModelProperty("订单状态 1待支付定金 2待提交资料 3委托受理 4待支付尾款 5已完成")
@@ -95,7 +97,9 @@ public class Order {
         @ApiModelProperty("订单总价")
         public String totalPrice;
         @ApiModelProperty("商标购买的分类编号")
-        private List<Brand.Category> categroyList;
+        private List<Category.Info> categroyList;
+        @ApiModelProperty("订单完成时间")
+        private String overTime;
     }
 
 
