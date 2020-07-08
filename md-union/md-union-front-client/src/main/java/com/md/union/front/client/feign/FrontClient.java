@@ -22,8 +22,12 @@ public interface FrontClient {
 	 */
 	@PostMapping(value = "/create", headers = { "Content-Type=application/json" })
 	BaseResponse<SampleDTO.TestResp> create(@RequestBody SampleDTO.Test request);
+
     @PostMapping(value = "/hot", headers = { "Content-Type=application/json" })
-    BaseResponse<TrademarkDTO.HotResp> hot(@RequestBody TrademarkDTO.Hot request);
+    BaseResponse<TrademarkDTO.HotResp> hot();
+
+    @PostMapping(value = "/hot/click", headers = { "Content-Type=application/json" })
+    BaseResponse<TrademarkDTO.HotClickResp> hotClick();
 
     @PostMapping(value = "/search", headers = { "Content-Type=application/json" })
     BaseResponse<TrademarkDTO.SearchResp> search(@RequestBody TrademarkDTO.Search request);
@@ -36,5 +40,8 @@ public interface FrontClient {
 
     @PostMapping(value = "/signup", headers = { "Content-Type=application/json" })
     BaseResponse<TrademarkDTO.SignUpDetailsResp> signup(@RequestBody TrademarkDTO.SignUpDetails request);
+
+    @PostMapping(value = "/right", headers = { "Content-Type=application/json" })
+    BaseResponse<TrademarkDTO.SignUpDetailsResp> right(@RequestBody TrademarkDTO.SignUpDetails request);
 
 }

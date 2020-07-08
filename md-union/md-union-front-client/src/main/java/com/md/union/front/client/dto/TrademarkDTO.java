@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
+@Data
 @ApiModel("购买商标相关")
 public class TrademarkDTO {
     @Data
@@ -17,14 +17,30 @@ public class TrademarkDTO {
     public static class HotResp{
         private List<HotTrademarkCate> hotTrademarkCates;
     }
+    @Data
     public static class HotTrademarkCate{
         @ApiModelProperty("分类代号")
-        private String number;
+        private int id;
         @ApiModelProperty("分类名字")
         private String name;
-        @ApiModelProperty("分类下的热门商标")
-        private List<Trademark> hotTrademarks;
+        @ApiModelProperty("热门商标图标")
+        private String icon;
     }
+    @Data
+    @ApiModel("热门商标点击查询结果")
+    public static class HotClickResp{
+        @ApiModelProperty("分类推荐")
+        private List<HotTrademark> hotTrademarks;
+    }
+    @Data
+    @ApiModel("热门商标点击查询结果")
+    public static class HotTrademark{
+        @ApiModelProperty("分类名字")
+        private String name;
+        @ApiModelProperty("分类推荐")
+        private List<Trademark> trademarks;
+    }
+    @Data
     public static class Trademark {
         @ApiModelProperty("商标id")
         private String id;
@@ -33,9 +49,11 @@ public class TrademarkDTO {
         @ApiModelProperty("商标图片")
         private String pic;
         @ApiModelProperty("价格区间")
-        private String price;
+        private String maxPrice;
+        @ApiModelProperty("价格区间")
+        private String minPrice;
         @ApiModelProperty("是否特价")
-        private String SpecialPrice;
+        private boolean SpecialPrice;
     }
 
     @Data
@@ -48,9 +66,9 @@ public class TrademarkDTO {
         @ApiModelProperty("价格")
         private String price;
         @ApiModelProperty("组合")
-        private String combination;
+        private int combination;
         @ApiModelProperty("字符")
-        private String character;
+        private int character;
         @ApiModelProperty("当前页")
         private int pageIndex;
         @ApiModelProperty("每页显示条数")
