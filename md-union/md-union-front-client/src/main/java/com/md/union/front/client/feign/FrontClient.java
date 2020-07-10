@@ -2,6 +2,7 @@ package com.md.union.front.client.feign;
 
 
 import com.arc.util.http.BaseResponse;
+import com.md.union.front.client.dto.NameDTO;
 import com.md.union.front.client.dto.SampleDTO;
 import com.md.union.front.client.dto.TrademarkDTO;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -44,4 +45,6 @@ public interface FrontClient {
     @PostMapping(value = "/right", headers = { "Content-Type=application/json" })
     BaseResponse<TrademarkDTO.SignUpDetailsResp> right(@RequestBody TrademarkDTO.SignUpDetails request);
 
+    @PostMapping(value = "/name/search", headers = { "Content-Type=application/json" })
+    BaseResponse<NameDTO.SearchRes> searchName(@RequestBody NameDTO.SearchReq request);
 }

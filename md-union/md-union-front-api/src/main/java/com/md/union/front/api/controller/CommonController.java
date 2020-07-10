@@ -2,13 +2,10 @@ package com.md.union.front.api.controller;
 
 
 import com.alibaba.fastjson.JSONObject;
-import com.arc.common.ServiceException;
-import com.arc.util.http.BaseResponse;
 import com.google.common.base.Strings;
 import com.md.union.front.api.facade.OSSClientFacade;
 import com.md.union.front.api.vo.OssFileInfo;
-import com.md.union.front.client.dto.SampleDTO;
-import com.md.union.front.client.feign.FrontClient;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.hibernate.validator.constraints.NotBlank;
@@ -25,7 +22,8 @@ import java.util.Date;
 import java.util.Random;
 
 @RestController
-@RequestMapping("api")
+@RequestMapping("/front/common")
+@Api(tags = {"小程序通用功能"})
 public class CommonController {
     @Value("${oss.filedir}")
     private String realPath;

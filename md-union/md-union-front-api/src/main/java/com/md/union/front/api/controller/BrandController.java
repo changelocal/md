@@ -4,8 +4,6 @@ import com.arc.common.ServiceException;
 import com.arc.util.http.BaseResponse;
 import com.md.union.front.api.vo.Brand;
 import com.md.union.front.api.vo.Category;
-import com.md.union.front.api.vo.Order;
-import com.md.union.front.client.dto.SampleDTO;
 import com.md.union.front.client.dto.TrademarkDTO;
 import com.md.union.front.client.feign.FrontClient;
 import io.swagger.annotations.Api;
@@ -64,6 +62,7 @@ public class BrandController {
                 res.setMaxPrice(f.getMaxPrice());
                 res.setMinPrice(f.getMinPrice());
                 res.setSpecial(f.isSpecialPrice());
+//                res.setPerson();
 
                 specialRes.add(res);
             });
@@ -117,7 +116,7 @@ public class BrandController {
         return result;
     }
 
-    @ApiOperation("购买商标维权详情信息")
+    @ApiOperation("购买商标维权详情信息(服务类订单)")
     @GetMapping("/deal/detail/{typeId}")
     public Brand.DealDetail dealDtail(@PathVariable("typeId") String typeId) {
         Brand.DealDetail result = new Brand.DealDetail();
