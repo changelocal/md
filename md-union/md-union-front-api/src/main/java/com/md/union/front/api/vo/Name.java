@@ -34,6 +34,10 @@ public class Name {
         private int status;
         @ApiModelProperty("字数")
         private int wordCnt;
+        @ApiModelProperty("当前页")
+        public int pageIndex;
+        @ApiModelProperty("每页显示条数")
+        public int pageSize;
     }
 
     @Data

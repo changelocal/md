@@ -48,8 +48,6 @@ public class Brand {
         public String minPrice;
         @ApiModelProperty("是否是特价")
         public boolean special;
-        @ApiModelProperty("商标顾问")
-        public Person person;
     }
 
     @Data

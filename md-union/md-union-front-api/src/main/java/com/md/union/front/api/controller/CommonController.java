@@ -2,10 +2,14 @@ package com.md.union.front.api.controller;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.arc.common.ServiceException;
+import com.arc.util.http.BaseResponse;
 import com.google.common.base.Strings;
 import com.md.union.front.api.facade.OSSClientFacade;
 import com.md.union.front.api.vo.Consultation;
 import com.md.union.front.api.vo.OssFileInfo;
+import com.md.union.front.client.dto.TrademarkDTO;
+import com.md.union.front.client.feign.FrontClient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -36,6 +40,8 @@ public class CommonController {
 
     @Autowired
     private OSSClientFacade ossClientFacade;
+    @Autowired
+    private FrontClient frontClient;
 
     @ApiOperation(tags = "上传文件相关", value = "上传文件到oss", notes = "上传文件到oss")
     @ResponseBody
@@ -99,6 +105,18 @@ public class CommonController {
     @GetMapping("/consultation/{id}")
     public Consultation.ConsultationResp dealDtail(@PathVariable("id") String id) {
         Consultation.ConsultationResp result = new Consultation.ConsultationResp();
+
+        TrademarkDTO.Consultation consultation = new TrademarkDTO.Consultation();
+        consultation.setId(id);
+        BaseResponse<TrademarkDTO.ConsultationResp> response = frontClient.consultation(consultation);
+        if(!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)){
+            throw new ServiceException(response.getStatus(),response.getMessage());
+        }
+
+        result.setName(response.getResult().getName());
+        result.setQq(response.getResult().getQq());
+        result.setTel(response.getResult().getTel());
+        result.setTitle(response.getResult().getTitle());
 
         return result;
     }

@@ -62,7 +62,6 @@ public class BrandController {
                 res.setMaxPrice(f.getMaxPrice());
                 res.setMinPrice(f.getMinPrice());
                 res.setSpecial(f.isSpecialPrice());
-//                res.setPerson();
 
                 specialRes.add(res);
             });
