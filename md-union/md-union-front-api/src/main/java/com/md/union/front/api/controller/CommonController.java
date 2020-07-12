@@ -4,6 +4,7 @@ package com.md.union.front.api.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Strings;
 import com.md.union.front.api.facade.OSSClientFacade;
+import com.md.union.front.api.vo.Consultation;
 import com.md.union.front.api.vo.OssFileInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -94,6 +95,12 @@ public class CommonController {
 //        logger.info("getFile response:{}", response);
     }
 
+    @ApiOperation("咨询按钮接口")
+    @GetMapping("/consultation/{id}")
+    public Consultation.ConsultationResp dealDtail(@PathVariable("id") String id) {
+        Consultation.ConsultationResp result = new Consultation.ConsultationResp();
 
+        return result;
+    }
 
 }
