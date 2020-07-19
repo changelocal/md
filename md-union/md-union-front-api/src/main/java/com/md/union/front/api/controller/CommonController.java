@@ -30,7 +30,7 @@ import java.util.Random;
 @Api(tags = {"小程序通用功能"})
 public class CommonController {
 
-    //@Autowired
+    @Autowired
     private OssClientTool ossClientTool;
     @Autowired
     private FrontClient frontClient;
