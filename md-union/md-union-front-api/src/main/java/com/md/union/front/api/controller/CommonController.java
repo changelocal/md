@@ -3,9 +3,9 @@ package com.md.union.front.api.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.arc.common.ServiceException;
+import com.arc.util.file.oss.OssClientTool;
 import com.arc.util.http.BaseResponse;
 import com.google.common.base.Strings;
-import com.md.union.front.api.facade.OSSClientFacade;
 import com.md.union.front.api.vo.Consultation;
 import com.md.union.front.api.vo.OssFileInfo;
 import com.md.union.front.client.dto.TrademarkDTO;
@@ -15,7 +15,6 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,18 +29,13 @@ import java.util.Random;
 @RequestMapping("/front/common")
 @Api(tags = {"小程序通用功能"})
 public class CommonController {
-    @Value("${oss.filedir}")
-    private String realPath;
-    @Value("${oss.bucketName}")
-    private String bucketName;
-    @Value("${oss.endpoint}")
-    private String endpoint;
 
-
-    @Autowired
-    private OSSClientFacade ossClientFacade;
+    //@Autowired
+    private OssClientTool ossClientTool;
     @Autowired
     private FrontClient frontClient;
+
+    private String realPath = "aaa";
 
     @ApiOperation(tags = "上传文件相关", value = "上传文件到oss", notes = "上传文件到oss")
     @ResponseBody
@@ -51,7 +45,7 @@ public class CommonController {
         SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyyMM");
         String fileName = dateFormat2.format(new Date()) + DigestUtils.md5Hex(fileObj.getOriginalFilename()
                 + System.currentTimeMillis() + new Random().nextLong()) + "." + ex[1];
-        ossClientFacade.uploadImg2Oss(fileObj, realPath.concat(fileName));
+        ossClientTool.uploadImg2Oss(fileObj, realPath.concat(fileName));
 //        logger.info("==================================http://compensate-info.oss-cn-zhangjiakou.aliyuncs.com/" + realPath + fileName);
         OssFileInfo res = new OssFileInfo();
         res.setName(fileName);
@@ -75,7 +69,7 @@ public class CommonController {
                 return;
             } else {
 //                String ossFileName = redisClient.get(insuranceId + "_sign");
-                String ossFileName =  "_sign";
+                String ossFileName = "_sign";
                 if (Strings.isNullOrEmpty(ossFileName)) {
                     response.setContentType("application/json");
                     JSONObject result = new JSONObject();
@@ -90,7 +84,7 @@ public class CommonController {
             }
         }
 //        logger.info("getFile filename:{}", filename);
-        byte[] imgFromOss = ossClientFacade.getImgFromOss((filename));
+        byte[] imgFromOss = ossClientTool.getImgFromOss((filename));
         String[] ex = filename.split("\\.");
 //        logger.info("getFile ex:{}", ex[0]);
 //        response.setContentType("image/"+ex[1].concat(";charset=utf-8"));
@@ -109,8 +103,8 @@ public class CommonController {
         TrademarkDTO.Consultation consultation = new TrademarkDTO.Consultation();
         consultation.setId(id);
         BaseResponse<TrademarkDTO.ConsultationResp> response = frontClient.consultation(consultation);
-        if(!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)){
-            throw new ServiceException(response.getStatus(),response.getMessage());
+        if (!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+            throw new ServiceException(response.getStatus(), response.getMessage());
         }
 
         result.setName(response.getResult().getName());
