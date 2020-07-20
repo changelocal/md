@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.arc.util.ioc.ServiceLocatorAutoConfig
+  com.arc.util.ioc.ServiceLocatorAutoConfig,\
+  com.arc.util.file.oss.OssClientTool

@@ -73,6 +73,7 @@
         <sleuth.version>2.1.2.RELEASE</sleuth.version>
         <jpa.version>2.1.3.RELEASE</jpa.version>
         <persistence.version>1.0.2</persistence.version>
+        <oss.version>3.5.0</oss.version>
     </properties>
 
     <dependencyManagement>
@@ -451,6 +452,11 @@
                 <groupId>javax.persistence</groupId>
                 <artifactId>persistence-api</artifactId>
                 <version>${persistence.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.aliyun.oss</groupId>
+                <artifactId>aliyun-sdk-oss</artifactId>
+                <version>${oss.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
