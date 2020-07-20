@@ -25,7 +25,7 @@ public class BrandClassController {
     private BrandClassDao brandClassDao;
 
     @ApiOperation(value = "获得热门", notes = "获得热门")
-    @PostMapping("/gethot")
+    @PostMapping("/hot")
     public BrandClassVO.HotResp hot() {
         BrandClassVO.HotResp result = new BrandClassVO.HotResp();
         BrandClass brandClass = new BrandClass();

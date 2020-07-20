@@ -12,4 +12,5 @@ public class AdminUser {
     private String qqAccount;
     private String wxAccount;
     private String nickName;
+    private int isEnable;
 }

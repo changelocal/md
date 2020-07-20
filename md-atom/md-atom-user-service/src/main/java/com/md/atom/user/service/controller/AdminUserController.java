@@ -45,7 +45,7 @@ public class AdminUserController {
     }
 
     @ApiOperation(value = "新增加管理人员", notes = "新增加管理人员")
-    @PostMapping("/create")
+    @PostMapping("/create1")
     public AdminUserVO.AddResp create(@RequestBody AdminUserVO.Add request) {
 
         AdminUser adminUser = new AdminUser();

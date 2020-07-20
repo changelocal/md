@@ -3,6 +3,7 @@ package com.atom.core.dao;
 import com.arc.db.jsd.Filter;
 import com.arc.db.jsd.UpdateValues;
 import com.atom.core.model.AdminUser;
+import com.google.common.base.Strings;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -24,8 +25,20 @@ public class AdminUserDao extends BaseDao {
 
     public void update(AdminUser adminUser) {
         UpdateValues updateValues = new UpdateValues();
-        if(adminUser.getId()>0){
+        if(!Strings.isNullOrEmpty(adminUser.getId())){
             updateValues.add("id",adminUser.getId());
+        }
+        if(!Strings.isNullOrEmpty(adminUser.getMobile())){
+            updateValues.add("mobile",adminUser.getMobile());
+        }
+        if(!Strings.isNullOrEmpty(adminUser.getQqAccount())){
+            updateValues.add("qq_account",adminUser.getQqAccount());
+        }
+        if(!Strings.isNullOrEmpty(adminUser.getNickName())){
+            updateValues.add("nick_name",adminUser.getNickName());
+        }
+        if(adminUser.getIsEnable()>0){
+            updateValues.add("is_enable",adminUser.getIsEnable());
         }
 
         DB().update("admin_user").set(updateValues).where(f("id",adminUser.getId())).result();
@@ -39,11 +52,15 @@ public class AdminUserDao extends BaseDao {
 
     public List<AdminUser> find(AdminUser adminUser) {
         Filter filter= Filter.create();
-        if(adminUser.getId()>0){
+        if(!Strings.isNullOrEmpty(adminUser.getId())){
             filter=filter.and(f("id",adminUser.getId()));
         }
-
-
+        if(!Strings.isNullOrEmpty(adminUser.getMobile())){
+            filter=filter.and(f("mobile",adminUser.getMobile()));
+        }
+        if(!Strings.isNullOrEmpty(adminUser.getQqAccount())){
+            filter=filter.and(f("qq_account",adminUser.getQqAccount()));
+        }
         List<AdminUser> list = DB().select(AdminUser.class)
                                 .where(filter).result().all(AdminUser.class);
         return list==null?new ArrayList<>():list;
