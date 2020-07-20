@@ -6,10 +6,11 @@ import lombok.Data;
 
 @Data
 @JsdTable(nameStyle = NameStyle.CAMEL)
-public class AdminUser {
+public class BrandClass {
     private String id;
-    private String mobile;
-    private String qqAccount;
-    private String wxAccount;
-    private String nickName;
+    private String name;
+    private String code;
+    private String desc;
+    private String pcode;
+    private String isHot;
 }
