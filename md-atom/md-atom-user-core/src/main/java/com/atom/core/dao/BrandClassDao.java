@@ -45,13 +45,13 @@ public class BrandClassDao extends BaseDao {
             filter=filter.and(f("id",BrandClass.getId()));
         }
         if(!Strings.isNullOrEmpty(BrandClass.getCode())){
-            filter=filter.and(f("id",BrandClass.getCode()));
+            filter=filter.and(f("code",BrandClass.getCode()));
         }
         if(!Strings.isNullOrEmpty(BrandClass.getPcode())){
-            filter=filter.and(f("id",BrandClass.getPcode()));
+            filter=filter.and(f("pcode",BrandClass.getPcode()));
         }
         if(!Strings.isNullOrEmpty(BrandClass.getIsHot())){
-            filter=filter.and(f("id",BrandClass.getIsHot()));
+            filter=filter.and(f("is_hot",BrandClass.getIsHot()));
         }
 
         List<BrandClass> list = DB().select(BrandClass.class)

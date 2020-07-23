@@ -61,6 +61,9 @@ public class AdminUserDao extends BaseDao {
         if(!Strings.isNullOrEmpty(adminUser.getQqAccount())){
             filter=filter.and(f("qq_account",adminUser.getQqAccount()));
         }
+        if((adminUser.getIsEnable()>0)){
+            filter=filter.and(f("is_enable",adminUser.getIsEnable()));
+        }
         List<AdminUser> list = DB().select(AdminUser.class)
                                 .where(filter).result().all(AdminUser.class);
         return list==null?new ArrayList<>():list;
