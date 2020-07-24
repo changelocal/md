@@ -122,7 +122,7 @@ public class Brand {
         @ApiModelProperty("市场价")
         public String marketPrice;
         @ApiModelProperty("累计成交")
-        public String total;
+        public int total;
     }
 
     @Data
@@ -134,13 +134,17 @@ public class Brand {
         private String brief;
         @ApiModelProperty("报价")
         private String priceDesc;
+        @ApiModelProperty("商标分类")
+        private int brandType;
+        @ApiModelProperty("主键id")
+        private int id;
     }
 
     @Data
     @ApiModel("商标维权报价介绍信息详情")
     public static class BrandRight {
         @ApiModelProperty("主键id")
-        private String id;
+        private int id;
         @ApiModelProperty("介绍图片")
         private String img;
         @ApiModelProperty("主题")
@@ -149,6 +153,8 @@ public class Brand {
         private String brief;
         @ApiModelProperty("报价")
         private String priceDesc;
+        @ApiModelProperty("商标分类")
+        private int brandType;
     }
 
     @Data
