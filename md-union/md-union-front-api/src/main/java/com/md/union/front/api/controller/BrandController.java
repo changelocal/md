@@ -81,33 +81,47 @@ public class BrandController {
     @PostMapping("/search")
     public Brand.SearchRes brandSearch(@RequestBody Brand.SearchReq request) {
         Brand.SearchRes result = new Brand.SearchRes();
-
-        TrademarkDTO.Search req = new TrademarkDTO.Search();
-        req.setName(request.getBrandName());
-        req.setCategory(request.getCategoryNo());
-        req.setCharacter(request.getBrandSize());
-        req.setCombination(request.getUnionType());
-        req.setPrice(request.getPriceType());
-
-        req.setPageIndex(request.getPageIndex());
-        req.setPageSize(request.getPageSize());
-
-        BaseResponse<TrademarkDTO.SearchResp> response = frontClient.search(req);
-        if (!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
-            throw new ServiceException(response.getStatus(), response.getMessage());
-        }
-        response.getResult().getTrademarklist().forEach(e -> {
+        List<Brand.SpecialRes> specialRes = new ArrayList<>();
+        for(int i = 0;i<5;i++){
             Brand.SpecialRes res = new Brand.SpecialRes();
-            res.setBrandName(e.getName());
-            res.setCategoryName(e.getName());
-            res.setId(e.getId());
-            res.setImgUrl(e.getPic());
-            res.setSpecial(e.isSpecialPrice());
+            res.setBrandName("name"+i);
+            res.setCategoryName("cate"+i);
+            res.setId(""+i);
+            res.setImgUrl("pic"+i);
+            res.setSpecial(true);
+            specialRes.add(res);
+        }
 
-        });
-
-        result.setTotal(response.getResult().getTotal());
+        result.setList(specialRes);
+        result.setTotal(5);
         return result;
+
+//        TrademarkDTO.Search req = new TrademarkDTO.Search();
+//        req.setName(request.getBrandName());
+//        req.setCategory(request.getCategoryNo());
+//        req.setCharacter(request.getBrandSize());
+//        req.setCombination(request.getUnionType());
+//        req.setPrice(request.getPriceType());
+//
+//        req.setPageIndex(request.getPageIndex());
+//        req.setPageSize(request.getPageSize());
+//
+//        BaseResponse<TrademarkDTO.SearchResp> response = frontClient.search(req);
+//        if (!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+//            throw new ServiceException(response.getStatus(), response.getMessage());
+//        }
+//        response.getResult().getTrademarklist().forEach(e -> {
+//            Brand.SpecialRes res = new Brand.SpecialRes();
+//            res.setBrandName(e.getName());
+//            res.setCategoryName(e.getName());
+//            res.setId(e.getId());
+//            res.setImgUrl(e.getPic());
+//            res.setSpecial(e.isSpecialPrice());
+//
+//        });
+//
+//        result.setTotal(response.getResult().getTotal());
+//        return result;
     }
 
     @ApiOperation("买商标分类查询")
