@@ -8,7 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,7 +25,7 @@ public class BrandClassController {
     private BrandClassDao brandClassDao;
 
     @ApiOperation(value = "获得热门", notes = "获得热门")
-    @PostMapping("/hot")
+    @GetMapping("/hot")
     public BrandClassVO.HotResp hot() {
         BrandClassVO.HotResp result = new BrandClassVO.HotResp();
         BrandClass brandClass = new BrandClass();
@@ -37,7 +37,7 @@ public class BrandClassController {
             brandClasses.forEach(e->{
                 BrandClassVO.Cate item = new BrandClassVO.Cate();
                 item.setId(e.getId());
-                item.setName(e.getName());
+                item.setCategoryName(e.getName());
                 cates.add(item);
             });
 

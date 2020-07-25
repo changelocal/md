@@ -10,7 +10,7 @@ public class BrandClassVO {
     @Data
     public static class Cate{
         private String id;
-        private String name;
+        private String categoryName;
 
     }
 
