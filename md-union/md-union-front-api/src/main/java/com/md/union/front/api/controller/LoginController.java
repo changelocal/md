@@ -5,10 +5,7 @@ import com.md.union.front.api.vo.MinUser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/front/login")
@@ -19,7 +16,7 @@ public class LoginController {
     private MinCommon minCommon;
 
     @ApiOperation("小程序登录")
-    @PostMapping("/min/code")
+    @GetMapping("/min/{code}")
     public MinUser login(@PathVariable("code") String code) {
         return minCommon.minLogin(code);
     }
