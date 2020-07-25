@@ -22,6 +22,7 @@ public class WxUserController {
     @Autowired
     private WxUserDao wxUserDao;
 
+    @ApiOperation(value = "查询所有微信用户", notes = "查询所有微信用户")
     @GetMapping("/query")
     public WxUserVO.QueryResp query() {
         WxUserVO.QueryResp result = new WxUserVO.QueryResp();
