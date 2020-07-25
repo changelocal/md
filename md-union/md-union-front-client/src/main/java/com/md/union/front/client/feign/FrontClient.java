@@ -6,6 +6,7 @@ import com.md.union.front.client.dto.NameDTO;
 import com.md.union.front.client.dto.SampleDTO;
 import com.md.union.front.client.dto.TrademarkDTO;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -47,4 +48,7 @@ public interface FrontClient {
 
     @PostMapping(value = "/name/search", headers = { "Content-Type=application/json" })
     BaseResponse<NameDTO.SearchRes> searchName(@RequestBody NameDTO.SearchReq request);
+
+    @GetMapping(value = "/hello")
+    BaseResponse<String> hello();
 }

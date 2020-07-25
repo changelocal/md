@@ -11,6 +11,7 @@ import com.md.union.front.client.dto.TrademarkDTO;
 import com.md.union.front.client.feign.FrontClient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/front/brand")
 @Api(tags = {"商标管理服务"})
+@Slf4j
 public class BrandController {
 
     @Autowired
@@ -29,7 +31,9 @@ public class BrandController {
     @GetMapping("/hot/category")
     public List<Brand.HotRes> hotCategory() {
         List<Brand.HotRes> result = new ArrayList<>();
-
+        BaseResponse<String> aa = frontClient.hello();
+        log.info("xxxxxxxxxxxx======{}",aa);
+        if(true) return new ArrayList<>();
         BaseResponse<TrademarkDTO.HotResp> response = frontClient.hot();
         if (!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(response.getStatus(), response.getMessage());

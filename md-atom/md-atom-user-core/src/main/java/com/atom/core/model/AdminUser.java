@@ -5,7 +5,7 @@ import com.arc.db.jsd.annotation.JsdTable;
 import lombok.Data;
 
 @Data
-@JsdTable(nameStyle = NameStyle.CAMEL)
+@JsdTable(nameStyle = NameStyle.LOWER)
 public class AdminUser {
     private String id;
     private String mobile;

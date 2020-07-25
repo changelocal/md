@@ -23,8 +23,8 @@ public class TestController {
 
     @GetMapping("/hello")
     public String hello() {
-        List<Order> list = orderDao.query();
-        log.info("list = {}", JSON.toJSON(list));
+        //List<Order> list = orderDao.query();
+        log.info("list = {}", "dffd");
         return "";
     }
 

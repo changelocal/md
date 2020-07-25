@@ -29,8 +29,8 @@ public class BrandClassController {
     public BrandClassVO.HotResp hot() {
         BrandClassVO.HotResp result = new BrandClassVO.HotResp();
         BrandClass brandClass = new BrandClass();
-        brandClass.setPcode("0");
-        brandClass.setIsHot("1");
+        brandClass.setPcode(0);
+        brandClass.setIsHot(1);
         List<BrandClass> brandClasses = brandClassDao.find(brandClass);
         if(!CollectionUtils.isEmpty(brandClasses)){
             List<BrandClassVO.Cate> cates = new ArrayList<>();

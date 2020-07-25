@@ -5,12 +5,12 @@ import com.arc.db.jsd.annotation.JsdTable;
 import lombok.Data;
 
 @Data
-@JsdTable(nameStyle = NameStyle.CAMEL)
+@JsdTable(nameStyle = NameStyle.LOWER)
 public class BrandClass {
     private String id;
     private String name;
-    private String code;
-    private String desc;
-    private String pcode;
-    private String isHot;
+    private int code;
+    //private String desc;
+    private int pcode;
+    private int isHot;
 }

@@ -18,15 +18,14 @@ public class BrandClassDao extends BaseDao {
         return DB().select(BrandClass.class).result().all(BrandClass.class);
     }
 
-    public long add(BrandClass BrandClass)
-    {
+    public long add(BrandClass BrandClass) {
         long id = (long) DB().insert(BrandClass).result(true).getKeys().get(0);
         return (int)id;
     }
 
     public void update(BrandClass BrandClass) {
         UpdateValues updateValues = new UpdateValues();
-        if(!Strings.isNullOrEmpty(BrandClass.getIsHot())){
+        if(BrandClass.getIsHot()>0){
             updateValues.add("is_hot",BrandClass.getIsHot());
         }
 
@@ -44,13 +43,13 @@ public class BrandClassDao extends BaseDao {
         if(!Strings.isNullOrEmpty(BrandClass.getId())){
             filter=filter.and(f("id",BrandClass.getId()));
         }
-        if(!Strings.isNullOrEmpty(BrandClass.getCode())){
+        if(BrandClass.getCode()>0){
             filter=filter.and(f("code",BrandClass.getCode()));
         }
-        if(!Strings.isNullOrEmpty(BrandClass.getPcode())){
+        if(BrandClass.getPcode()>0){
             filter=filter.and(f("pcode",BrandClass.getPcode()));
         }
-        if(!Strings.isNullOrEmpty(BrandClass.getIsHot())){
+        if(BrandClass.getIsHot()>0){
             filter=filter.and(f("is_hot",BrandClass.getIsHot()));
         }
 
