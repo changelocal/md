@@ -15,7 +15,7 @@ import java.util.List;
 
 @Api(tags = {"管理微信用户 "}, description = "接口负责人：sxj")
 @RestController
-@RequestMapping("api")
+@RequestMapping("wx")
 @Slf4j
 public class WxUserController {
 

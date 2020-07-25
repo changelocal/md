@@ -15,7 +15,7 @@ import java.util.List;
 
 @Api(tags = {"管理人员 "}, description = "接口负责人：sxj")
 @RestController
-@RequestMapping("api")
+@RequestMapping("user")
 @Slf4j
 public class AdminUserController {
 
