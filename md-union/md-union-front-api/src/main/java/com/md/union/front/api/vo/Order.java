@@ -39,7 +39,7 @@ public class Order {
         @ApiModelProperty("主键id")
         public int id;
         @ApiModelProperty("订单编号")
-        public int orderNo;
+        public String orderNo;
         @ApiModelProperty("图片id")
         public String imgNo;
         @ApiModelProperty("图片url")
