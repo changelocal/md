@@ -31,14 +31,14 @@ public class BrandController {
     @GetMapping("/hot/category")
     public List<Brand.HotRes> hotCategory() {
         List<Brand.HotRes> result = new ArrayList<>();
-        BaseResponse<String> aa = frontClient.hello();
+        /*BaseResponse<String> aa = frontClient.hello();
         log.info("xxxxxxxxxxxx======{}",aa);
-        if(true) return new ArrayList<>();
+        if(true) return new ArrayList<>();*/
         BaseResponse<TrademarkDTO.HotResp> response = frontClient.hot();
         if (!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(response.getStatus(), response.getMessage());
         }
-        response.getResult().getHotTrademarkCates().forEach(e -> {
+        response.getResult().getCates().forEach(e -> {
             Brand.HotRes brand = new Brand.HotRes();
             brand.setCategoryName(e.getName());
             brand.setId(e.getId());

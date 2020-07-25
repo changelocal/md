@@ -15,12 +15,12 @@ public class TrademarkDTO {
     @Data
     @ApiModel("热门商标查询结果")
     public static class HotResp{
-        private List<HotTrademarkCate> hotTrademarkCates;
+        private List<HotTrademarkCate> cates;
     }
     @Data
     public static class HotTrademarkCate{
         @ApiModelProperty("分类代号")
-        private int id;
+        private String id;
         @ApiModelProperty("分类名字")
         private String name;
         @ApiModelProperty("热门商标图标")

@@ -15,7 +15,7 @@ public class Brand {
     @ApiModel("热门商标分类")
     public static class HotRes {
         @ApiModelProperty("主键id")
-        private int id;
+        private String id;
         @ApiModelProperty("商标分类icon")
         private String icon;
         @ApiModelProperty("商标分类名称")
