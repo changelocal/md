@@ -25,7 +25,7 @@ public class TestController {
     public String hello() {
         //List<Order> list = orderDao.query();
         log.info("list = {}", "dffd");
-        return "";
+        return "aaaa";
     }
 
     @ApiOperation(value = "测试订单", notes = "测试订单")
