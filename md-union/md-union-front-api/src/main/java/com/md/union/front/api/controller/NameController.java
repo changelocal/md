@@ -1,9 +1,6 @@
 package com.md.union.front.api.controller;
 
-import com.arc.common.ServiceException;
-import com.arc.util.http.BaseResponse;
 import com.md.union.front.api.vo.Name;
-import com.md.union.front.client.dto.NameDTO;
 import com.md.union.front.client.feign.FrontClient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,33 +24,43 @@ public class NameController {
     @PostMapping("/search")
     public Name.SearchRes brandSearch(@RequestBody Name.SearchReq request) {
         Name.SearchRes result = new Name.SearchRes();
-
-        NameDTO.SearchReq req = new NameDTO.SearchReq();
-        req.setCategory(request.getCategory());
-        req.setInput(request.getInput());
-        req.setStatus(request.getStatus());
-        req.setWordCnt(request.getWordCnt());
-
-
-        BaseResponse<NameDTO.SearchRes> response = frontClient.searchName(req);
-        if(!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)){
-            throw new ServiceException(response.getStatus(),response.getMessage());
-        }
         List<Name.Info> infos = new ArrayList<>();
-        response.getResult().getList().forEach(e->{
-            Name.Info info = new Name.Info();
-            info.setBrand(e.getBrand());
-            info.setBuyOrRegist(e.getBuyOrRegist());
-            info.setId(e.getId());
-            info.setSuccessRate(e.getSuccessRate());
-
-            infos.add(info);
-        });
-
-        result.setList(infos);
-        result.setCount(response.getResult().getCount());
-
+        for (int i = 0; i < 5; i++) {
+            Name.Info item = new Name.Info();
+            item.setBrand("汽车" + i);
+            item.setBuyOrRegist(78 + i);
+            item.setSuccessRate("90%");
+            item.setId(i);
+            infos.add(item);
+        }
+        result.setCount(5);
         return result;
+
+//        NameDTO.SearchReq req = new NameDTO.SearchReq();
+//        req.setCategory(request.getCategory());
+//        req.setInput(request.getInput());
+//        req.setStatus(request.getStatus());
+//        req.setWordCnt(request.getWordCnt());
+//
+//        BaseResponse<NameDTO.SearchRes> response = frontClient.searchName(req);
+//        if(!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)){
+//            throw new ServiceException(response.getStatus(),response.getMessage());
+//        }
+//        List<Name.Info> infos = new ArrayList<>();
+//        response.getResult().getList().forEach(e->{
+//            Name.Info info = new Name.Info();
+//            info.setBrand(e.getBrand());
+//            info.setBuyOrRegist(e.getBuyOrRegist());
+//            info.setId(e.getId());
+//            info.setSuccessRate(e.getSuccessRate());
+//
+//            infos.add(info);
+//        });
+//
+//        result.setList(infos);
+//        result.setCount(response.getResult().getCount());
+//
+//        return result;
     }
 
 }
