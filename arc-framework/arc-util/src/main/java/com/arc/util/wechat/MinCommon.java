@@ -2,10 +2,8 @@ package com.arc.util.wechat;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.arc.util.file.oss.OssProperties;
-import com.arc.util.lang.FaultException;
 import com.arc.util.http.HttpRequest;
-import kf.arc.util.redis.RedisClient;
+import com.arc.util.lang.FaultException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -24,7 +22,7 @@ import org.springframework.context.annotation.Configuration;
 public class MinCommon {
     private final WechatProperties properties;
 
-    private static RedisClient redisClient = new RedisClient("RedisCache");
+//    private static RedisClient redisClient = new RedisClient("RedisCache");
 
     public MinCommon(WechatProperties wechatProperties){
         this.properties = wechatProperties;
@@ -37,9 +35,9 @@ public class MinCommon {
      */
     public  String getMinAccessToken() {
         String tokenCache = "WXP_TEMPLATE_" + properties.getMinAppid();
-        if (redisClient.exists(tokenCache)) {
-            return redisClient.get(tokenCache);
-        }
+//        if (redisClient.exists(tokenCache)) {
+//            return redisClient.get(tokenCache);
+//        }
         String accessTokenUrl = properties.getRootHost()+"/weixin" + "/cgi-bin/token?grant_type=client_credential&appid=" +
                 properties.getMinAppid() + "&secret=" + properties.getMinSecret();
         log.info("getMinAccessToken req url {}", accessTokenUrl);
@@ -50,7 +48,7 @@ public class MinCommon {
             throw new FaultException("获取minAccessToken失败" + resp.getString("errmsg"));
         }
         String accessToken = resp.getString("access_token");
-        redisClient.set(tokenCache, accessToken, (resp.getIntValue("expires_in") - 10));
+//        redisClient.set(tokenCache, accessToken, (resp.getIntValue("expires_in") - 10));
         return accessToken;
     }
 
@@ -61,9 +59,9 @@ public class MinCommon {
      */
     public  String getPubAccessToken() {
         String tokenCache = "WXP_TEMPLATE_" + properties.getWxAppid();
-        if (redisClient.exists(tokenCache)) {
-            return redisClient.get(tokenCache);
-        }
+//        if (redisClient.exists(tokenCache)) {
+//            return redisClient.get(tokenCache);
+//        }
         String accessTokenUrl = properties.getRootHost()+"/weixin" + "/cgi-bin/token?grant_type=client_credential&appid=" +
                 properties.getWxAppid() + "&secret=" + properties.getWxSecret();
         log.info("accessReq url {}", accessTokenUrl);
@@ -74,7 +72,7 @@ public class MinCommon {
             throw new FaultException("获取accessToken失败" + resp.getString("errmsg"));
         }
         String accessToken = resp.getString("access_token");
-        redisClient.set(tokenCache, accessToken, (resp.getIntValue("expires_in") - 10));
+//        redisClient.set(tokenCache, accessToken, (resp.getIntValue("expires_in") - 10));
         return accessToken;
     }
 
@@ -115,7 +113,7 @@ public class MinCommon {
         log.info("sendPubTip result {}", result);
         JSONObject sendResult = JSON.parseObject(result);
         if (sendResult.getIntValue("errcode") == 40001) {
-            redisClient.del("WXP_TEMPLATE_" + properties.getWxAppid());
+//            redisClient.del("WXP_TEMPLATE_" + properties.getWxAppid());
             reSendPubTip(request);
         }
     }
@@ -149,7 +147,7 @@ public class MinCommon {
         log.info("wxp  access_token:{}", resp.getString("access_token"));
 
         //缓存access_token  refresh_token
-        redisClient.set("wxp_access_token", resp.getString("access_token"), 7200);
+//        redisClient.set("wxp_access_token", resp.getString("access_token"), 7200);
 
 
     }
