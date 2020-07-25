@@ -46,9 +46,8 @@ public class BrandClassDao extends BaseDao {
         if(BrandClass.getCode()>0){
             filter=filter.and(f("code",BrandClass.getCode()));
         }
-        if(BrandClass.getPcode()>0){
+
             filter=filter.and(f("pcode",BrandClass.getPcode()));
-        }
         if(BrandClass.getIsHot()>0){
             filter=filter.and(f("is_hot",BrandClass.getIsHot()));
         }

@@ -29,7 +29,7 @@ public interface FrontClient {
      * 获得热门
      * @return
      */
-    @PostMapping(value = "/hot")
+    @GetMapping(value = "/hot")
     BaseResponse<TrademarkDTO.HotResp> hot();
 
     /**
