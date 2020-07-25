@@ -57,8 +57,8 @@ public class WxUserDao extends BaseDao {
         if(!Strings.isNullOrEmpty(wxUser.getMobile())){
             filter=filter.and(f("mobile",wxUser.getMobile()));
         }
-        if(!Strings.isNullOrEmpty(wxUser.getOpen_id())){
-            filter=filter.and(f("open_id",wxUser.getOpen_id()));
+        if(!Strings.isNullOrEmpty(wxUser.getOpenId())){
+            filter=filter.and(f("open_id",wxUser.getOpenId()));
         }
         if((wxUser.getIsEnable()>0)){
             filter=filter.and(f("is_enable",wxUser.getIsEnable()));

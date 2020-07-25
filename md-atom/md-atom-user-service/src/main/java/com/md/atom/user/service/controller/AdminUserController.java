@@ -23,7 +23,7 @@ public class AdminUserController {
     private AdminUserDao adminUserDao;
 
     @GetMapping("/query")
-    public AdminUserVO.QueryResp hello() {
+    public AdminUserVO.QueryResp query() {
         AdminUserVO.QueryResp result = new AdminUserVO.QueryResp();
         List<AdminUser> list = adminUserDao.query();
 
