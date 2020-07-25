@@ -24,15 +24,28 @@ public interface FrontClient {
 	@PostMapping(value = "/create", headers = { "Content-Type=application/json" })
 	BaseResponse<SampleDTO.TestResp> create(@RequestBody SampleDTO.Test request);
 
+    /**
+     * 获得热门
+     * @return
+     */
     @PostMapping(value = "/hot", headers = { "Content-Type=application/json" })
     BaseResponse<TrademarkDTO.HotResp> hot();
 
+    /**
+     * 热门点击后
+     * @return
+     */
     @PostMapping(value = "/hot/click", headers = { "Content-Type=application/json" })
     BaseResponse<TrademarkDTO.HotClickResp> hotClick();
 
     @PostMapping(value = "/search", headers = { "Content-Type=application/json" })
     BaseResponse<TrademarkDTO.SearchResp> search(@RequestBody TrademarkDTO.Search request);
 
+    /**
+     * 点击咨询按钮
+     * @param request
+     * @return
+     */
     @PostMapping(value = "/consultation", headers = { "Content-Type=application/json" })
     BaseResponse<TrademarkDTO.ConsultationResp> consultation(@RequestBody TrademarkDTO.Consultation request);
 
@@ -45,6 +58,11 @@ public interface FrontClient {
     @PostMapping(value = "/right", headers = { "Content-Type=application/json" })
     BaseResponse<TrademarkDTO.SignUpDetailsResp> right(@RequestBody TrademarkDTO.SignUpDetails request);
 
+    /**
+     * 品牌起名搜索
+     * @param request
+     * @return
+     */
     @PostMapping(value = "/name/search", headers = { "Content-Type=application/json" })
     BaseResponse<NameDTO.SearchRes> searchName(@RequestBody NameDTO.SearchReq request);
 }

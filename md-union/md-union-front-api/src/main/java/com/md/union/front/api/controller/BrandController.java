@@ -128,7 +128,18 @@ public class BrandController {
     @PostMapping("/category")
     public Category.SearchRes categorySearch(@RequestBody Category.SearchReq request) {
         Category.SearchRes result = new Category.SearchRes();
+        List<Category.Info> infos = new ArrayList<>();
+        for(int i = 0;i<5;i++){
+            Category.Info e = new Category.Info();
+            e.setCategoryName("name"+i);
+            e.setCategoryNo(""+i);
+            e.setDesc("desc");
+            e.setIcon("icon");
+            e.setRegisterStatus(true);
 
+        }
+        result.setList(infos);
+        result.setCount(5);
         return result;
     }
 
@@ -145,16 +156,21 @@ public class BrandController {
     public Brand.Detail buyDetail(@PathVariable("brandId") String brandId) {
         Brand.Detail result = new Brand.Detail();
 
-        TrademarkDTO.Purchase req = new TrademarkDTO.Purchase();
-        req.setId(brandId);
-        BaseResponse<TrademarkDTO.PurchaseResp> response = frontClient.detail(req);
-        if (!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
-            throw new ServiceException(response.getStatus(), response.getMessage());
-        }
-        result.setImgUrl(response.getResult().getBigPic());
-        result.setPrePrice(response.getResult().getDeposit());
-        result.setCategoryName(response.getResult().getConcept());
+        result.setImgUrl("http://pic.5tu.cn/uploads/allimg/1607/pic_5tu_big_201607221326573826.jpg");
+        result.setPrePrice("999");
+        result.setCategoryName("测试分类");
         return result;
+
+//        TrademarkDTO.Purchase req = new TrademarkDTO.Purchase();
+//        req.setId(brandId);
+//        BaseResponse<TrademarkDTO.PurchaseResp> response = frontClient.detail(req);
+//        if (!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+//            throw new ServiceException(response.getStatus(), response.getMessage());
+//        }
+//        result.setImgUrl(response.getResult().getBigPic());
+//        result.setPrePrice(response.getResult().getDeposit());
+//        result.setCategoryName(response.getResult().getConcept());
+//        return result;
 
     }
 
