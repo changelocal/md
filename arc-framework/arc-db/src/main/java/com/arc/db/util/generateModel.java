@@ -1,4 +1,4 @@
-package com.atom.core.util;
+package com.arc.db.util;
 
 import lombok.Data;
 
