@@ -93,12 +93,20 @@ public class WxUserDTO {
          * 微信二维码名片
          */
         private String wxQrcode;
+        /**
+         * 当前页
+         */
+        private int pageIndex;
+        /**
+         * 每页显示条数
+         */
+        private int pageSize;
     }
 
     @Data
     public static class QueryResp{
-        private List<WxUser> wxUsers;
-        private int total;
+        private List<WxUser> items;
+        private int totalCount;
     }
     @Data
     public static class Resp{

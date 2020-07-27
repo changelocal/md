@@ -17,7 +17,7 @@ import java.util.List;
 
 @Api(tags = {"45大分类 "}, description = "接口负责人：sxj")
 @RestController
-@RequestMapping("api")
+@RequestMapping("brand")
 @Slf4j
 public class BrandClassController {
 

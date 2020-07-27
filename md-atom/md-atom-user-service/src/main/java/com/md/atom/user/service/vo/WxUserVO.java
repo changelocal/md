@@ -14,11 +14,11 @@ public class WxUserVO {
     }
     @Data
     public static class QueryResp{
-        private List<User> userList;
-        private int total;
+        private List<WxUser> items;
+        private int totalCount;
     }
     @Data
-    public static class User{
+    public static class WxUser{
         /**
          * 主键
          */
@@ -93,5 +93,13 @@ public class WxUserVO {
          * 商户编号
          */
         private String businessNo;
+        /**
+         * 当前页
+         */
+        private int pageIndex;
+        /**
+         * 每页显示条数
+         */
+        private int pageSize;
     }
 }

@@ -2,9 +2,7 @@ package com.md.union.front.client.feign;
 
 
 import com.arc.util.http.BaseResponse;
-import com.md.union.front.client.dto.NameDTO;
-import com.md.union.front.client.dto.SampleDTO;
-import com.md.union.front.client.dto.TrademarkDTO;
+import com.md.union.front.client.dto.*;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 /**
  * 服务接口
  */
-@FeignClient(name = "md-atom-user-service", path = "/api")
+@FeignClient(name = "md-atom-user-service")
 public interface FrontClient {
 
 	/**
@@ -69,4 +67,19 @@ public interface FrontClient {
 
     @GetMapping(value = "/hello")
     BaseResponse<String> hello();
+
+    @PostMapping(value = "/wxuser/add", headers = { "Content-Type=application/json" })
+    BaseResponse<WxUserDTO.Resp> add(@RequestBody WxUserDTO.WxUser request);
+
+    @PostMapping(value = "/wxuser/query", headers = { "Content-Type=application/json" })
+    BaseResponse<WxUserDTO.QueryResp> query(@RequestBody WxUserDTO.WxUser request);
+
+    @PostMapping(value = "/adminuser/add", headers = { "Content-Type=application/json" })
+    BaseResponse<AdminUserDTO.Resp> add(@RequestBody AdminUserDTO.AdminUser request);
+
+    @PostMapping(value = "/adminuser/query", headers = { "Content-Type=application/json" })
+    BaseResponse<AdminUserDTO.QueryResp> query(@RequestBody AdminUserDTO.AdminUser request);
+
+    @PostMapping(value = "/adminuser/update", headers = { "Content-Type=application/json" })
+    BaseResponse<AdminUserDTO.Resp> update(@RequestBody AdminUserDTO.AdminUser request);
 }
