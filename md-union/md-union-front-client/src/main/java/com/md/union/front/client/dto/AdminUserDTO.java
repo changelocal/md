@@ -1,4 +1,4 @@
-package com.md.atom.user.service.vo;
+package com.md.union.front.client.dto;
 
 import lombok.Data;
 
@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 
-public class AdminUserVO {
+public class AdminUserDTO {
 
     @Data
     public static class AdminUser{
@@ -93,15 +93,6 @@ public class AdminUserVO {
          * 微信二维码名片
          */
         private String wxQrcode;
-
-        /**
-         * 当前页
-         */
-        private int pageIndex;
-        /**
-         * 每页显示条数
-         */
-        private int pageSize;
     }
 
     @Data
