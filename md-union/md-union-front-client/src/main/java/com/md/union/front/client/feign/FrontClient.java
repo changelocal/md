@@ -23,29 +23,31 @@ public interface FrontClient {
 	@PostMapping(value = "/create", headers = { "Content-Type=application/json" })
 	BaseResponse<SampleDTO.TestResp> create(@RequestBody SampleDTO.Test request);
 
+    @GetMapping(value = "/hello")
+    BaseResponse<String> hello();
+
+	/**********************************品牌相关***********************************/
     /**
      * 获得热门
      * @return
      */
-    @GetMapping(value = "/hot")
+    @GetMapping(value = "/brand/hot")
     BaseResponse<TrademarkDTO.HotResp> hot();
-
     /**
      * 热门点击后
      * @return
      */
-    @PostMapping(value = "/hot/click", headers = { "Content-Type=application/json" })
+    @PostMapping(value = "/brand/hot/click", headers = { "Content-Type=application/json" })
     BaseResponse<TrademarkDTO.HotClickResp> hotClick();
 
-    @PostMapping(value = "/search", headers = { "Content-Type=application/json" })
+    @PostMapping(value = "/brand/search", headers = { "Content-Type=application/json" })
     BaseResponse<TrademarkDTO.SearchResp> search(@RequestBody TrademarkDTO.Search request);
-
     /**
      * 点击咨询按钮
      * @param request
      * @return
      */
-    @PostMapping(value = "/consultation", headers = { "Content-Type=application/json" })
+    @PostMapping(value = "/adminuser/consultation", headers = { "Content-Type=application/json" })
     BaseResponse<TrademarkDTO.ConsultationResp> consultation(@RequestBody TrademarkDTO.Consultation request);
 
     @PostMapping(value = "/detail", headers = { "Content-Type=application/json" })
@@ -56,7 +58,6 @@ public interface FrontClient {
 
     @PostMapping(value = "/right", headers = { "Content-Type=application/json" })
     BaseResponse<TrademarkDTO.SignUpDetailsResp> right(@RequestBody TrademarkDTO.SignUpDetails request);
-
     /**
      * 品牌起名搜索
      * @param request
@@ -64,21 +65,22 @@ public interface FrontClient {
      */
     @PostMapping(value = "/name/search", headers = { "Content-Type=application/json" })
     BaseResponse<NameDTO.SearchRes> searchName(@RequestBody NameDTO.SearchReq request);
-
-    @GetMapping(value = "/hello")
-    BaseResponse<String> hello();
-
+    /**********************************微信用户相关***********************************/
     @PostMapping(value = "/wxuser/add", headers = { "Content-Type=application/json" })
     BaseResponse<WxUserDTO.Resp> add(@RequestBody WxUserDTO.WxUser request);
 
     @PostMapping(value = "/wxuser/query", headers = { "Content-Type=application/json" })
     BaseResponse<WxUserDTO.QueryResp> query(@RequestBody WxUserDTO.WxUser request);
 
+    /**********************************系统用户相关***********************************/
     @PostMapping(value = "/adminuser/add", headers = { "Content-Type=application/json" })
     BaseResponse<AdminUserDTO.Resp> add(@RequestBody AdminUserDTO.AdminUser request);
 
     @PostMapping(value = "/adminuser/query", headers = { "Content-Type=application/json" })
     BaseResponse<AdminUserDTO.QueryResp> query(@RequestBody AdminUserDTO.AdminUser request);
+
+    @PostMapping(value = "/adminuser/find", headers = { "Content-Type=application/json" })
+    BaseResponse<AdminUserDTO.QueryResp> find(@RequestBody AdminUserDTO.AdminUser request);
 
     @PostMapping(value = "/adminuser/update", headers = { "Content-Type=application/json" })
     BaseResponse<AdminUserDTO.Resp> update(@RequestBody AdminUserDTO.AdminUser request);

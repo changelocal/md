@@ -10,7 +10,12 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @Api(tags = {"管理人员 "}, description = "接口负责人：sxj")
 @RestController
@@ -29,19 +34,18 @@ public class AdminUserController {
         BeanUtils.copyProperties(adminUser, para);
         PageResult<AdminUser> list = adminUserDao.query(para);
         BeanUtils.copyProperties(list, result);
-//        if(!CollectionUtils.isEmpty(list)){
-//            List<AdminUserVO.AdminUser> users = new ArrayList<>();
-//            list.forEach(e->{
-//                AdminUserVO.AdminUser item = new AdminUserVO.AdminUser();
-//                item.setId(e.getId());
-//                item.setNickname(e.getNickname());
-//                item.setMobile(e.getMobile());
-//                item.setQqAccount(e.getQqAccount());
-//                item.setWxAccount(e.getWxAccount());
-//                users.add(item);
-//            });
-//            result.setUserList(users);
-//        }
+
+        return result;
+    }
+
+    @PostMapping("/find")
+    public AdminUserVO.QueryResp find(AdminUserVO.AdminUser adminUser) {
+        AdminUserVO.QueryResp result = new AdminUserVO.QueryResp();
+
+        AdminUserParam para = new AdminUserParam();
+        BeanUtils.copyProperties(adminUser, para);
+        List<AdminUser> list = adminUserDao.find(para);
+        BeanUtils.copyProperties(list, result);
 
         return result;
     }
