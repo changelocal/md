@@ -43,20 +43,20 @@ public interface FrontClient {
     @PostMapping(value = "/brand/search", headers = { "Content-Type=application/json" })
     BaseResponse<TrademarkDTO.SearchResp> search(@RequestBody TrademarkDTO.Search request);
     /**
-     * 点击咨询按钮
+     * 点击咨询按钮随意返回有效的销售人员
      * @param request
      * @return
      */
     @PostMapping(value = "/adminuser/consultation", headers = { "Content-Type=application/json" })
     BaseResponse<TrademarkDTO.ConsultationResp> consultation(@RequestBody TrademarkDTO.Consultation request);
 
-    @PostMapping(value = "/detail", headers = { "Content-Type=application/json" })
+    @PostMapping(value = "/brand/detail", headers = { "Content-Type=application/json" })
     BaseResponse<TrademarkDTO.PurchaseResp> detail(@RequestBody TrademarkDTO.Purchase request);
 
-    @PostMapping(value = "/signup", headers = { "Content-Type=application/json" })
+    @PostMapping(value = "/brand/signup", headers = { "Content-Type=application/json" })
     BaseResponse<TrademarkDTO.SignUpDetailsResp> signup(@RequestBody TrademarkDTO.SignUpDetails request);
 
-    @PostMapping(value = "/right", headers = { "Content-Type=application/json" })
+    @PostMapping(value = "/brand/right", headers = { "Content-Type=application/json" })
     BaseResponse<TrademarkDTO.SignUpDetailsResp> right(@RequestBody TrademarkDTO.SignUpDetails request);
     /**
      * 品牌起名搜索

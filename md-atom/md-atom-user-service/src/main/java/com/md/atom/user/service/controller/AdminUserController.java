@@ -50,6 +50,19 @@ public class AdminUserController {
         return result;
     }
 
+    @PostMapping("/consultation")
+    public AdminUserVO.QueryResp consultation(AdminUserVO.AdminUser adminUser) {
+        AdminUserVO.QueryResp result = new AdminUserVO.QueryResp();
+
+        AdminUserParam para = new AdminUserParam();
+        para.setIsEnable(1);
+
+        List<AdminUser> list = adminUserDao.find(para);
+        BeanUtils.copyProperties(list, result);
+
+        return result;
+    }
+
     @ApiOperation(value = "新增加管理人员", notes = "新增加管理人员")
     @PostMapping("/add")
     public AdminUserVO.Resp add(@RequestBody AdminUserVO.AdminUser request) {

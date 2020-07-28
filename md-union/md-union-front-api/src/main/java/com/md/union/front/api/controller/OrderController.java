@@ -27,7 +27,7 @@ public class OrderController {
     @ApiOperation("我的订单提交资料")
     @PostMapping("submit")
     public void submitOrder(@RequestBody Order.SubmitOrder request) {
-
+        //common 里已经有实现，可以拷贝
     }
 
     @ApiOperation("我的订单详细信息")

@@ -1,11 +1,9 @@
 package com.md.union.front.api.vo;
 
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -62,7 +60,7 @@ public class Order {
     @Data
     public static class SubmitOrder{
         @ApiModelProperty("订单id")
-        public int id;
+        public String id;
         /*@ApiModelProperty("订单编号")
         public String orderNo;*/
         @ApiModelProperty("订单提交资料方式 1企业 2 个人")
