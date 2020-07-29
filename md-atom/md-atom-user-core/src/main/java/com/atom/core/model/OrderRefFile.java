@@ -1,10 +1,9 @@
 package com.atom.core.model;
 
-import lombok.Data;
 import com.arc.db.jsd.NameStyle;
 import com.arc.db.jsd.annotation.JsdTable;
+import lombok.Data;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 
@@ -17,7 +16,7 @@ public class OrderRefFile {
 	/**
 	 * 主键id
 	 */
-	private int id;
+	private Long id;
 
 	/**
 	 * 订单编号

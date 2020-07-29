@@ -11,7 +11,7 @@ public class RefDTO {
         /**
          * 主键id
          */
-        private int id;
+        private Long id;
 
         /**
          * 订单编号

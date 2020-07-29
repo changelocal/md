@@ -72,9 +72,10 @@ public class OrderRefFileDao extends BaseDao  {
 		return result;
 	}
 
-	public int add(OrderRefFile orderRefFile) {
-		long id = (long) DB().insert(orderRefFile).result(true).getKeys().get(0);
-		return (int)id;
+	public void add(OrderRefFile orderRefFile) {
+//        long id = (long) DB().insert(orderRefFile).result(true).getKeys().get(0);
+        DB().insert(orderRefFile).result(true).getKeys().get(0);
+//		return (int)id;
 	}
 
 	public void update(OrderRefFile orderRefFile) {

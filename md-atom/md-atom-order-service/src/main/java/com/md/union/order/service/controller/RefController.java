@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
+
 @RestController
 @RequestMapping("ref")
 public class RefController {
@@ -37,6 +39,7 @@ public class RefController {
 
         OrderRefFile orderRefFile = new OrderRefFile();
         BeanUtils.copyProperties(request, orderRefFile);
+        orderRefFile.setCreateTime(new Date());
         orderRefFileDao.add(orderRefFile);
 
         return resp;
