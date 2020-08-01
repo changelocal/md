@@ -4,6 +4,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @ApiModel("咨询")
 public class Consultation {
@@ -26,4 +28,14 @@ public class Consultation {
         @ApiModelProperty("qq")
         private String qq;
     }
+
+    @Data
+    @ApiModel("热门搜索")
+    public static class HomeHotResp{
+        @ApiModelProperty("搜索次数")
+        private String searchCount;
+        @ApiModelProperty("热门搜索")
+        private List<String> hotSearch;
+    }
+
 }

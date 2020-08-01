@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping("/front/common")
 @Api(tags = {"小程序通用功能"})
@@ -104,4 +107,18 @@ public class CommonController {
         return result;
     }
 
+    @ApiOperation("首页热门搜索，搜索次数")
+    @GetMapping("/home/hot")
+    public Consultation.HomeHotResp homeHot() {
+        Consultation.HomeHotResp res = new Consultation.HomeHotResp();
+        res.setSearchCount("26354");
+        List<String> strings = new ArrayList<>();
+        strings.add("口罩");
+        strings.add("新基建");
+        strings.add("医学鉴证");
+        strings.add("环保材料");
+        strings.add("5G");
+        res.setHotSearch(strings);
+        return res;
+    }
 }
