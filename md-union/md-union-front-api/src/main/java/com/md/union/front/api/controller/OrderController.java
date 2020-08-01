@@ -30,17 +30,29 @@ public class OrderController {
         //common 里已经有实现，可以拷贝
     }
 
-    @ApiOperation("我的订单详细信息")
-    @PostMapping("/detail/{id}")
+    @ApiOperation("我的商品订单详情")
+    @GetMapping("/detail/{id}")
     public Order.Detail OrderDtail(@PathVariable("id") int id) {
         Order.Detail result = new Order.Detail();
-
+        result.setId(1);
+        result.setUserId(10);
+        result.setOrderNo("348484434");
+        result.setImgUrl("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1595652198157&di=96ccdca4a57760b03b43489df7ce953a&imgtype=0&src=http%3A%2F%2Fimg.mp.sohu.com%2Fupload%2F20170602%2F5402bd3037b44135a7362532ae67e2b7_th.png");
+        result.setPerson(getPerson());
+        result.setCategoryName("名典");
+        result.setPayPrice("100.00");
+        result.setPrePrice("100.00");
+        result.setOrderStatus(1);
+        result.setCreateTime("2020-01-01");
+        result.setOverTime("2020-01-02");
+        result.setTotalPrice("2000");
+        result.setCategroyList(getlist());
         return result;
 
     }
 
-    @ApiOperation("我的订单详细信息")
-    @PostMapping("/deal/detail/{id}")
+    @ApiOperation("我的服务订单详情")
+    @GetMapping("/deal/detail/{id}")
     public Order.Detail OrderDealDtail(@PathVariable("id") int id) {
         Order.Detail result = new Order.Detail();
         result = getOrderDetail(id);

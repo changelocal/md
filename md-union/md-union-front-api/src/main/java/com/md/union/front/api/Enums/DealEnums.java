@@ -52,7 +52,7 @@ public enum DealEnums {
     }
 
     public String getImg() {
-        return img == null ? def_img : img;
+        return ((img == null)||img.length()==0) ? def_img : img;
     }
 
     private String def_img = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1595638504208&di=754606fdcb88e6b4ee9ea1476f4c2a5f&imgtype=0&src=http%3A%2F%2Fimage-ali.bianjiyi.com%2F1%2F2018%2F0710%2F14%2F15312043093853.jpg";

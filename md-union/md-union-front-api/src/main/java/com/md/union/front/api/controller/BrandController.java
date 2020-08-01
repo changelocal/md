@@ -148,7 +148,7 @@ public class BrandController {
     }
 
     @ApiOperation("购买商标维权详情信息(服务类订单) brandType(1商标注册2维权3信息变更) 主键")
-    @GetMapping("/deal/detail/{brandType}/{id}/")
+    @GetMapping("/deal/detail/{brandType}/{id}")
     public Brand.DealDetail dealDtail(@PathVariable("brandType") int brandType, @PathVariable("id") int id) {
         //Brand.DealDetail result = new Brand.DealDetail();
 

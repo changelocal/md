@@ -89,7 +89,7 @@ public class Order {
         @ApiModelProperty("定金")
         public String prePrice;
         @ApiModelProperty("订单状态 1待支付定金 2待提交资料 3委托受理 4待支付尾款 5已完成")
-        public int OrderStatus;
+        public int orderStatus;
         @ApiModelProperty("下单时间")
         public String createTime;
         @ApiModelProperty("订单总价")
