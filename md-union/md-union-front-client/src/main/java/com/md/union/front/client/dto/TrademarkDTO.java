@@ -1,10 +1,10 @@
 package com.md.union.front.client.dto;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.List;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 @Data
 @ApiModel("购买商标相关")
 public class TrademarkDTO {
@@ -178,5 +178,22 @@ public class TrademarkDTO {
         private String date;
         @ApiModelProperty("内容")
         private String content;
+    }
+
+    @Data
+    public static class Cate{
+        private int code;
+        private String categoryName;
+        private String des;
+
+    }
+
+    @Data
+    public static class RootBrandResp{
+        private List<Cate> cates;
+    }
+    @Data
+    public static class RootBrandReq{
+        private int code;
     }
 }

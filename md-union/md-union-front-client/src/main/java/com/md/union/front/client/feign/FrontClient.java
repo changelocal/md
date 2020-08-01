@@ -5,6 +5,7 @@ import com.arc.util.http.BaseResponse;
 import com.md.union.front.client.dto.*;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -58,6 +59,12 @@ public interface FrontClient {
 
     @PostMapping(value = "/brand/right", headers = { "Content-Type=application/json" })
     BaseResponse<TrademarkDTO.SignUpDetailsResp> right(@RequestBody TrademarkDTO.SignUpDetails request);
+
+    @GetMapping(value = "/brand/root", headers = { "Content-Type=application/json" })
+    BaseResponse<TrademarkDTO.RootBrandResp> root();
+
+    @GetMapping(value = "/brand/details/{code}", headers = { "Content-Type=application/json" })
+    BaseResponse<TrademarkDTO.RootBrandResp> details(@PathVariable("code") int code);
     /**
      * 品牌起名搜索
      * @param request

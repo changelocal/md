@@ -9,8 +9,9 @@ public class BrandClassVO {
 
     @Data
     public static class Cate{
-        private String id;
+        private int code;
         private String categoryName;
+        private String des;
 
     }
 

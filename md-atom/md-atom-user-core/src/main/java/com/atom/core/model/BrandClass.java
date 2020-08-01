@@ -10,7 +10,7 @@ public class BrandClass {
     private String id;
     private String name;
     private int code;
-    //private String desc;
+    private String des;
     private int pcode;
     private int isHot;
 }

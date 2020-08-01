@@ -119,6 +119,67 @@ public class CommonController {
         strings.add("环保材料");
         strings.add("5G");
         res.setHotSearch(strings);
+
+
+
+        return res;
+    }
+
+    @ApiOperation("所有45大分类")
+    @GetMapping("/allbrandclass")
+    public Consultation.BrandClassResp allBrandClass() {
+        Consultation.BrandClassResp res = new Consultation.BrandClassResp();
+//        List<Consultation.RootBrandClass> rootBrandClasses = new ArrayList<>();
+//        for(int i =1;i<45;i++){
+//            Consultation.RootBrandClass node = new Consultation.RootBrandClass();
+//            node.setCode(""+i);
+//            node.setName("分类之"+i);
+//            rootBrandClasses.add(node);
+//        }
+//        res.setRootBrandClasses(rootBrandClasses);
+
+        BaseResponse<TrademarkDTO.RootBrandResp> response = frontClient.root();
+        if (!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+            throw new ServiceException(response.getStatus(), response.getMessage());
+        }
+        List<Consultation.RootBrandClass> rootBrandClasses = new ArrayList<>();
+        response.getResult().getCates().forEach(e -> {
+            Consultation.RootBrandClass node = new Consultation.RootBrandClass();
+            node.setCode(e.getCode());
+            node.setName(e.getCode()+"类 "+e.getCategoryName());
+            rootBrandClasses.add(node);
+        });
+        res.setRootBrandClasses(rootBrandClasses);
+        return res;
+    }
+
+    @ApiOperation("45大分类详情")
+    @GetMapping("/brandclass/{code}")
+    public Consultation.BrandClassDetailsResp brandClass(@PathVariable("code") int code) {
+        Consultation.BrandClassDetailsResp res = new Consultation.BrandClassDetailsResp();
+//        List<Consultation.BrandClass> brandClasses = new ArrayList<>();
+//        for(int i =1;i<9;i++){
+//            Consultation.BrandClass node = new Consultation.BrandClass();
+//            node.setDesc("详情特别长"+i);
+//            node.setName("分类下面的具体小分类"+i);
+//            brandClasses.add(node);
+//        }
+//        res.setBrandClasses(brandClasses);
+
+
+        BaseResponse<TrademarkDTO.RootBrandResp> response = frontClient.details(code);
+        if (!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+            throw new ServiceException(response.getStatus(), response.getMessage());
+        }
+        List<Consultation.BrandClass> rootBrandClasses = new ArrayList<>();
+        response.getResult().getCates().forEach(e -> {
+            Consultation.BrandClass node = new Consultation.BrandClass();
+            node.setDesc(e.getDes());
+            node.setName(e.getCode()+" "+e.getCategoryName());
+            rootBrandClasses.add(node);
+        });
+        res.setBrandClasses(rootBrandClasses);
+//        BeanUtils.copyProperties(response.getResult().getCates(), res);
         return res;
     }
 }

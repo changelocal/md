@@ -30,12 +30,40 @@ public class Consultation {
     }
 
     @Data
+    @ApiModel("45大分类全部")
+    public static class BrandClassResp{
+        @ApiModelProperty("45大分类")
+        private List<RootBrandClass> rootBrandClasses;
+    }
+    @Data
+    @ApiModel("45大分类")
+    public static class RootBrandClass{
+        @ApiModelProperty("代号")
+        private int code;
+        @ApiModelProperty("名字")
+        private String name;
+    }
+    @Data
     @ApiModel("热门搜索")
     public static class HomeHotResp{
-        @ApiModelProperty("搜索次数")
+        @ApiModelProperty("搜索数量")
         private String searchCount;
         @ApiModelProperty("热门搜索")
         private List<String> hotSearch;
-    }
 
+    }
+    @Data
+    @ApiModel("45大分类详情")
+    public static class BrandClassDetailsResp{
+        @ApiModelProperty("45大分类")
+        private List<BrandClass> brandClasses;
+    }
+    @Data
+    @ApiModel("45大分类")
+    public static class BrandClass{
+        @ApiModelProperty("名字")
+        private String name;
+        @ApiModelProperty("详情")
+        private String desc;
+    }
 }

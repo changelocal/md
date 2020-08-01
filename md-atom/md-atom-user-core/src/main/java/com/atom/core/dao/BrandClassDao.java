@@ -1,6 +1,8 @@
 package com.atom.core.dao;
 
 import com.arc.db.jsd.Filter;
+import com.arc.db.jsd.SortType;
+import com.arc.db.jsd.Sorters;
 import com.arc.db.jsd.UpdateValues;
 import com.atom.core.model.BrandClass;
 import com.google.common.base.Strings;
@@ -10,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.arc.db.jsd.Shortcut.f;
+import static com.arc.db.jsd.Shortcut.t;
 
 @Repository
 public class BrandClassDao extends BaseDao {
@@ -46,14 +49,14 @@ public class BrandClassDao extends BaseDao {
         if(BrandClass.getCode()>0){
             filter=filter.and(f("code",BrandClass.getCode()));
         }
-
-            filter=filter.and(f("pcode",BrandClass.getPcode()));
+        filter=filter.and(f("pcode",BrandClass.getPcode()));
         if(BrandClass.getIsHot()>0){
             filter=filter.and(f("is_hot",BrandClass.getIsHot()));
         }
+        Sorters sorters = t(BrandClass.class).sorters(SortType.ASC,"code");
 
         List<BrandClass> list = DB().select(BrandClass.class)
-                                .where(filter).result().all(BrandClass.class);
+                                .where(filter).orderBy(sorters).result().all(BrandClass.class);
         return list==null?new ArrayList<>():list;
     }
 }
