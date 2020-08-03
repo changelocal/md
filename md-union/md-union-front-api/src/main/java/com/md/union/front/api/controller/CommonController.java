@@ -2,20 +2,24 @@ package com.md.union.front.api.controller;
 
 
 import com.arc.common.ServiceException;
+import com.arc.util.file.oss.OssClientTool;
 import com.arc.util.http.BaseResponse;
 import com.md.union.front.api.vo.Consultation;
+import com.md.union.front.api.vo.OssFileInfo;
 import com.md.union.front.client.dto.TrademarkDTO;
 import com.md.union.front.client.feign.FrontClient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 @RestController
 @RequestMapping("/front/common")
@@ -24,23 +28,24 @@ public class CommonController {
 
     @Autowired
     private FrontClient frontClient;
+    private OssClientTool ossClientTool;
 
-    private String realPath = "aaa";
+    private String realPath = "md";
 
-//    @ApiOperation(tags = "上传文件相关", value = "上传文件到oss", notes = "上传文件到oss")
-//    @ResponseBody
-//    @PostMapping("upfile2oss")
-//    public OssFileInfo upFile(@RequestParam(value = "fileObj") MultipartFile fileObj) {
-//        String[] ex = fileObj.getContentType().split("/");
-//        SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyyMM");
-//        String fileName = dateFormat2.format(new Date()) + DigestUtils.md5Hex(fileObj.getOriginalFilename()
-//                + System.currentTimeMillis() + new Random().nextLong()) + "." + ex[1];
-//        ossClientTool.uploadImg2Oss(fileObj, realPath.concat(fileName));
-////        logger.info("==================================http://compensate-info.oss-cn-zhangjiakou.aliyuncs.com/" + realPath + fileName);
-//        OssFileInfo res = new OssFileInfo();
-//        res.setName(fileName);
-//        return res;
-//    }
+    @ApiOperation(tags = "上传文件相关", value = "上传文件到oss", notes = "上传文件到oss")
+    @ResponseBody
+    @PostMapping("upfile2oss")
+    public OssFileInfo upFile(@RequestParam(value = "fileObj") MultipartFile fileObj) {
+        String[] ex = fileObj.getContentType().split("/");
+        SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyyMM");
+        String fileName = dateFormat2.format(new Date()) + DigestUtils.md5Hex(fileObj.getOriginalFilename()
+                + System.currentTimeMillis() + new Random().nextLong()) + "." + ex[1];
+        ossClientTool.uploadImg2Oss(fileObj, realPath.concat(fileName));
+//        logger.info("==================================http://compensate-info.oss-cn-zhangjiakou.aliyuncs.com/" + realPath + fileName);
+        OssFileInfo res = new OssFileInfo();
+        res.setName(fileName);
+        return res;
+    }
 
 
 //    @ApiOperation(tags = "上传文件相关", value = "下载文件从oss，返回文件对象", notes = "下载文件从oss，返回文件对象")
@@ -119,9 +124,6 @@ public class CommonController {
         strings.add("环保材料");
         strings.add("5G");
         res.setHotSearch(strings);
-
-
-
         return res;
     }
 

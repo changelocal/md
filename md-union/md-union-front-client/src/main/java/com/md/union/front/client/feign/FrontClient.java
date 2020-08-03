@@ -41,8 +41,13 @@ public interface FrontClient {
     @PostMapping(value = "/brand/hot/click", headers = { "Content-Type=application/json" })
     BaseResponse<TrademarkDTO.HotClickResp> hotClick();
 
-    @PostMapping(value = "/brand/search", headers = { "Content-Type=application/json" })
-    BaseResponse<TrademarkDTO.SearchResp> search(@RequestBody TrademarkDTO.Search request);
+    /**
+     * md商标的翻页查询
+     * @param request
+     * @return
+     */
+    @PostMapping(value = "/mdbrand/search", headers = { "Content-Type=application/json" })
+    BaseResponse<TrademarkDTO.QueryMdBrandResp> search(@RequestBody TrademarkDTO.MdBrand request);
     /**
      * 点击咨询按钮随意返回有效的销售人员
      * @param request

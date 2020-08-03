@@ -2,7 +2,6 @@ package com.md.union.front.api.controller;
 
 import com.arc.common.ServiceException;
 import com.arc.util.http.BaseResponse;
-import com.md.union.front.api.vo.Brand;
 import com.md.union.front.api.vo.Common;
 import com.md.union.front.client.dto.RefDTO;
 import com.md.union.front.client.feign.FrontOrderClient;
@@ -33,14 +32,6 @@ public class ResourceController {
         result.add("https://www.jseea.cn/contents/channel_178/2018/11/1811211458927(3).png");
         result.add("https://www.jseea.cn/contents/channel_178/2018/11/1811211458927(3).png");
         return result;
-    }
-
-    @ApiOperation("上传图片")
-    @PostMapping("/selectPic")
-    public String selectPic(@RequestBody Brand.SearchReq request) {
-
-
-        return "";
     }
 
     @ApiOperation("提交资料")
