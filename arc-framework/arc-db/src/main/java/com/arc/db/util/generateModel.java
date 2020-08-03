@@ -18,10 +18,15 @@ import java.util.List;
  */
 public class generateModel {
 
-    private static String url = "jdbc:mysql://47.92.65.35:3306/md";
-    private static String user = "root";
-    private static String pwd = "tianxiuquan";
-    private static String tableName = "order_ref_file"; //数据库表名
+//    private static String url = "jdbc:mysql://47.92.65.35:3306/md";
+//    private static String user = "root";
+//    private static String pwd = "tianxiuquan";
+//    private static String tableName = "order_ref_file"; //数据库表名
+
+    private static String url = "jdbc:mysql://rm-2ze483z2gdr20974fuo.mysql.rds.aliyuncs.com:3306/db_ytmd_prod";
+    private static String user = "mdlogo";
+    private static String pwd = "mdlogo123!";
+    private static String tableName = "md_brand"; //数据库表名
 
     private static String parentPath = "C:\\Users\\shenx\\IdeaProjects\\md\\md-atom\\md-atom-user-core\\src\\main\\java\\com\\atom\\core\\";
     //model 层的 包名  包路径
