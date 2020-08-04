@@ -10,89 +10,81 @@ public class WxUserDTO {
 
     @Data
     public static class WxUser{
-        private String id;
-
         /**
-         *
+         * 主键
          */
-        private Date createTime;
+        private long id;
 
         /**
-         *
+         * 用户唯一标识id
          */
-        private String account;
+        private String appId;
 
         /**
-         *
+         * 联合id
          */
-        private String password;
+        private String unionId;
 
         /**
-         * 0=god,
+         * 微信公众号openId
          */
-        private int type;
-
-
+        private String openId;
 
         /**
-         * 角色
+         * 微信小程序openId
          */
-        private String role;
+        private String minId;
 
         /**
-         *
+         * 是否关注(1关注 2取消关注)
          */
-        private String email;
+        private int followStatus;
 
         /**
-         *
+         * 用户的性别，值为1时是男性，值为2时是女性，值为0时是未知
          */
-        private Date lastLoginTime;
+        private int sex;
 
         /**
-         * 手机号
+         * 昵称
+         */
+        private String nickName;
+
+        /**
+         * 真实姓名
+         */
+        private String realName;
+
+        /**
+         * 身份证号
+         */
+        private String idCard;
+
+        /**
+         * 手机
          */
         private String mobile;
 
         /**
-         * 微信-openid 用于微信二维码登录
+         * 联系地址
          */
-        private String wxId;
+        private String address;
 
         /**
-         *
+         * 推广快递员编号
          */
-        private String avatar;
+        private String shareNo;
 
         /**
-         * 姓名
+         * 关注时间
          */
-        private String nickname;
+        private Date createTime;
 
         /**
-         * 0=禁用，1=启用
+         * 商户编号
          */
-        private int isEnable;
+        private String businessNo;
 
-        /**
-         * 备注
-         */
-        private String remark;
-
-        /**
-         * QQ号
-         */
-        private String qqAccount;
-
-        /**
-         * 微信号
-         */
-        private String wxAccount;
-
-        /**
-         * 微信二维码名片
-         */
-        private String wxQrcode;
         /**
          * 当前页
          */
