@@ -5,7 +5,6 @@ import com.md.union.front.api.Enums.DealEnums;
 import com.md.union.front.api.Enums.RegisterEnums;
 import com.md.union.front.api.vo.Brand;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -78,7 +77,52 @@ public class DealController {
         });
 
 
+        return result;
+    }
+
+    @ApiOperation("商标维权-品牌权益")
+    @GetMapping("/power/brand")
+    public List<Brand.BrandIcon> powerBrand() {
+        List<Brand.BrandIcon> result = new ArrayList<>();
+        Brand.BrandIcon item1 = new Brand.BrandIcon();
+        item1.setId(1);
+        item1.setIcon("https://i.52112.com/icon/jpg/256/20200728/85114/3586064.jpg");
+        item1.setBrandType(DealEnums.BRAND_REFUSE_DEAL.getType());
+        item1.setTitle(DealEnums.BRAND_REFUSE_DEAL.getTitle());
+        result.add(item1);
+
+        Brand.BrandIcon item2 = new Brand.BrandIcon();
+        item2.setId(2);
+        item2.setIcon("https://i.52112.com/icon/jpg/256/20200728/85114/3586034.jpg");
+        item2.setBrandType(DealEnums.BRAND_DISCUSS_DEAL.getType());
+        item2.setTitle(DealEnums.BRAND_DISCUSS_DEAL.getTitle());
+        result.add(item2);
+        return result;
+    }
+
+    @ApiOperation("权威认证")
+    @GetMapping("/power/auth")
+    public List<Brand.PowerAuth> powerAuth() {
+        List<Brand.PowerAuth> result = new ArrayList<>();
+        String [] imgs = new String[]{
+                "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=278311229,1239881690&fm=26&gp=0.jpg",
+                "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1596528776843&di=5437c3ebb293f41beba72910acce6df5&imgtype=0&src=http%3A%2F%2F2b.zol-img.com.cn%2Fproduct%2F121_500x2000%2F511%2FceoccsCV9o.gif",
+                "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1596528842606&di=ba4e365c2660234af731029a001737bc&imgtype=0&src=http%3A%2F%2Fimg.sm160.net%2FImg%2Fmarket%2F00%2F05%2F23%2F49%2F5234988.jpg",
+                "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1596528859451&di=5cb55bef12920bd05b2a1cdc1c18657a&imgtype=0&src=http%3A%2F%2Fimgs.soufun.com%2Fnews%2F2011_06%2F29%2Fhome%2F1309340221537_000.jpg",
+                "https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2267034892,3785324037&fm=26&gp=0.jpg"
+        };
+        for (int i = 0; i < 5; i++) {
+            Brand.PowerAuth item = new Brand.PowerAuth();
+            item.setId(i+1);
+            item.setImg(imgs[i]);
+            item.setTitle("权威认证");
+            result.add(item);
+        }
+
 
         return result;
     }
+
+
+
 }

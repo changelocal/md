@@ -158,6 +158,19 @@ public class Brand {
     }
 
     @Data
+    @ApiModel("商标维权-品牌权益")
+    public static class BrandIcon{
+        @ApiModelProperty("主键id")
+        private int id;
+        @ApiModelProperty("图标")
+        private String icon;
+        @ApiModelProperty("标题")
+        private String title;
+        @ApiModelProperty("商标分类")
+        private int brandType;
+    }
+
+    @Data
     @ApiModel("商标维权报价介绍")
     public static class DealRight {
         @ApiModelProperty("品牌顾问")
@@ -190,6 +203,17 @@ public class Brand {
         private int Brandstatus;
         @ApiModelProperty("商标状态描述 1提交申请，2审核中，3初审公告，4注册成功，5商标无效")
         private int BrandstatusDesc;
+    }
+
+    @Data
+    @ApiModel("权威认证")
+    public static class PowerAuth{
+        @ApiModelProperty("主键id")
+        private int id;
+        @ApiModelProperty("图标")
+        private String img;
+        @ApiModelProperty("标题")
+        private String title;
     }
 
 }
