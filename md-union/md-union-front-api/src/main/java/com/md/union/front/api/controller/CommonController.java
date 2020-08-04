@@ -102,10 +102,11 @@ public class CommonController {
             throw new ServiceException(response.getStatus(), response.getMessage());
         }
         //返回任意销售信息
-        result.setName(response.getResult().getName());
-        result.setQq(response.getResult().getQq());
-        result.setTel(response.getResult().getTel());
-        result.setTitle(response.getResult().getTitle());
+        result.setName(response.getResult().getNickname());
+        result.setQq(response.getResult().getQqAccount());
+        result.setTel(response.getResult().getMobile());
+        result.setTitle(response.getResult().getRole());
+
         //应该记录一下咨询记录 todo
 
 

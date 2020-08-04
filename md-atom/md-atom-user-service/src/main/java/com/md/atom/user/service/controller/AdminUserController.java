@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,14 +52,16 @@ public class AdminUserController {
     }
 
     @PostMapping("/consultation")
-    public AdminUserVO.QueryResp consultation(AdminUserVO.AdminUser adminUser) {
-        AdminUserVO.QueryResp result = new AdminUserVO.QueryResp();
+    public AdminUserVO.AdminUser consultation(AdminUserVO.AdminUser adminUser) {
+        AdminUserVO.AdminUser result = new AdminUserVO.AdminUser();
 
         AdminUserParam para = new AdminUserParam();
         para.setIsEnable(1);
 
         List<AdminUser> list = adminUserDao.find(para);
-        BeanUtils.copyProperties(list, result);
+        if(!CollectionUtils.isEmpty(list)){
+            BeanUtils.copyProperties(list.get(0), result);
+        }
 
         return result;
     }

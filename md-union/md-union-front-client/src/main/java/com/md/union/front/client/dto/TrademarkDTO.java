@@ -22,9 +22,9 @@ public class TrademarkDTO {
     @Data
     public static class HotTrademarkCate{
         @ApiModelProperty("分类代号")
-        private String id;
+        private int code;
         @ApiModelProperty("分类名字")
-        private String name;
+        private String categoryName;
         @ApiModelProperty("热门商标图标")
         private String icon;
     }
@@ -94,13 +94,13 @@ public class TrademarkDTO {
     @ApiModel("咨询对象信息")
     public static class ConsultationResp{
         @ApiModelProperty("姓名")
-        private String name;
+        private String nickname;
         @ApiModelProperty("头衔")
-        private String title;
+        private String role;
         @ApiModelProperty("电话")
-        private String tel;
+        private String mobile;
         @ApiModelProperty("qq")
-        private String qq;
+        private String qqAccount;
     }
     @Data
     @ApiModel("购买")

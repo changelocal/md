@@ -40,9 +40,10 @@ public class BrandController {
         }
         response.getResult().getCates().forEach(e -> {
             Brand.HotRes brand = new Brand.HotRes();
-            brand.setCategoryName(e.getName());
-            brand.setId(e.getId());
+            brand.setCategoryName(e.getCategoryName());
+            brand.setCode(e.getCode());
             brand.setIcon(e.getIcon());
+            brand.setTypeName(e.getCode()+"类");
             result.add(brand);
         });
         return result;
