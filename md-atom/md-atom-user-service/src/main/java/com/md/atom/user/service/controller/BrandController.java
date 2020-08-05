@@ -10,11 +10,13 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Api(tags = {"品牌管理 "}, description = "接口负责人：sxj")
@@ -31,9 +33,21 @@ public class BrandController {
         BrandVO.QueryResp result = new BrandVO.QueryResp();
         MdBrandParam mdBrand = new MdBrandParam();
         BeanUtils.copyProperties(request, mdBrand);
+        mdBrand.setIsEnable(2);
+        mdBrand.setIsDelete(1);
+        mdBrand.setIsSale(1);
+        mdBrand.setType(1);
         PageResult<MdBrand> query = mdBrandDao.query(mdBrand);
-        BeanUtils.copyProperties(query, result);
-
+        if(!CollectionUtils.isEmpty(query.getItems())){
+            List<BrandVO.MdBrand> mdBrands = new ArrayList<>();
+            query.getItems().forEach(e->{
+                BrandVO.MdBrand brand = new BrandVO.MdBrand();
+                BeanUtils.copyProperties(e, brand);
+                mdBrands.add(brand);
+            });
+            result.setMdBrands(mdBrands);
+        }
+        result.setTotal(query.getTotalCount());
         return result;
     }
 

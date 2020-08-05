@@ -200,12 +200,21 @@ public class TrademarkDTO {
     }
 
     @Data
-    public static class QueryMdBrandResp{
+    public static class QueryResp{
         private List<MdBrand> mdBrands;
         private int total;
     }
     @Data
     public static class MdBrand {
+        /**
+         * 商标价格区间下限
+         */
+        private BigDecimal priceLow;
+
+        /**
+         * 商标价格区间上限
+         */
+        private BigDecimal priceHigh;
         /**
          *
          */
@@ -325,16 +334,6 @@ public class TrademarkDTO {
          * 商标价格
          */
         private BigDecimal price;
-
-        /**
-         * 商标价格区间下限
-         */
-        private BigDecimal priceLow;
-
-        /**
-         * 商标价格区间上限
-         */
-        private BigDecimal priceHigh;
 
         /**
          *

@@ -1,15 +1,13 @@
 package com.atom.core.dao;
 
-import com.arc.db.jsd.Filter;
-import com.arc.db.jsd.SortType;
-import com.arc.db.jsd.Sorters;
-import com.arc.db.jsd.UpdateValues;
+import com.arc.db.jsd.*;
 import com.arc.util.data.PageResult;
 import com.atom.core.model.MdBrand;
 import com.atom.core.model.MdBrandParam;
 import com.google.common.base.Strings;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +23,12 @@ public class MdBrandDao extends BaseDao  {
 		PageResult<MdBrand> result = new PageResult<>();
 		Filter filter= Filter.create();
 
+        if(mdBrandParam.getPriceLow().compareTo(BigDecimal.valueOf(0))>0){
+            filter=filter.and(f("price", FilterType.GTE,mdBrandParam.getPriceLow()));
+        }
+        if(mdBrandParam.getPriceHigh().compareTo(BigDecimal.valueOf(0))>0){
+            filter=filter.and(f("price", FilterType.LTE,mdBrandParam.getPriceHigh()));
+        }
 		if(!Strings.isNullOrEmpty(mdBrandParam.getBrandName())){
 			filter=filter.and(f("brand_name",mdBrandParam.getBrandName()));
 		}
@@ -109,9 +113,7 @@ public class MdBrandDao extends BaseDao  {
 		if(mdBrandParam.getTotalBuyCountInc()>0){
 			filter=filter.and(f("total_buy_count_inc",mdBrandParam.getTotalBuyCountInc()));
 		}
-		if(mdBrandParam.getSuid()>0){
-			filter=filter.and(f("suid",mdBrandParam.getSuid()));
-		}
+
 		Sorters sorters = t("md_brand").sorters(SortType.ASC,"id");
 		long total=(long)this.DB().select(count()).from("md_brand").where(filter).result().value();
 		if(total>0){

@@ -130,21 +130,26 @@ public class BrandController {
         req.setComType(request.getUnionType());
 //        req.setPrice(request.getPriceType());
         if(request.getPriceType()==1){
-            req.setPriceLow(new BigDecimal(10000));
-            req.setPriceHigh(new BigDecimal(20000));
+            req.setPriceLow(new BigDecimal(1));
+            req.setPriceHigh(new BigDecimal(2000000));
         }else if (request.getPriceType()==2) {
-            req.setPriceLow(new BigDecimal(10000));
-            req.setPriceHigh(new BigDecimal(20000));
+            req.setPriceLow(new BigDecimal(1));
+            req.setPriceHigh(new BigDecimal(10000));
         }else if (request.getPriceType()==3) {
             req.setPriceLow(new BigDecimal(10000));
             req.setPriceHigh(new BigDecimal(20000));
+        }else if (request.getPriceType()==3) {
+            req.setPriceLow(new BigDecimal(20000));
+            req.setPriceHigh(new BigDecimal(50000));
+        }else if (request.getPriceType()==3) {
+            req.setPriceLow(new BigDecimal(50000));
+            req.setPriceHigh(new BigDecimal(2000000));
         }
-
 
         req.setPageIndex(request.getPageIndex());
         req.setPageSize(request.getPageSize());
 
-        BaseResponse<TrademarkDTO.QueryMdBrandResp> response = frontClient.search(req);
+        BaseResponse<TrademarkDTO.QueryResp> response = frontClient.search(req);
         if (!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(response.getStatus(), response.getMessage());
         }
@@ -154,7 +159,7 @@ public class BrandController {
             res.setCategoryName(e.getCategory()+"");
             res.setId(e.getId());
             res.setImgUrl(e.getImageUrl());
-            res.setSpecial(e.getPromoteFlag()==1?true:false);
+//            res.setSpecial(e.getPromoteFlag()==1?true:false);
 
         });
 

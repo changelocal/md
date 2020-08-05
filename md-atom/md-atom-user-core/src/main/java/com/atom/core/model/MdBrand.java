@@ -347,6 +347,6 @@ public class MdBrand {
 	/**
 	 * 
 	 */
-	private int suid;
+	private long suid;
 
 }

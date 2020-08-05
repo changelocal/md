@@ -47,7 +47,7 @@ public interface FrontClient {
      * @return
      */
     @PostMapping(value = "/mdbrand/query", headers = { "Content-Type=application/json" })
-    BaseResponse<TrademarkDTO.QueryMdBrandResp> search(@RequestBody TrademarkDTO.MdBrand request);
+    BaseResponse<TrademarkDTO.QueryResp> search(@RequestBody TrademarkDTO.MdBrand request);
     /**
      * 点击咨询按钮随意返回有效的销售人员
      * @param request
