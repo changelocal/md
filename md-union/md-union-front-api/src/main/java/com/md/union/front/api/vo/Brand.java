@@ -58,9 +58,9 @@ public class Brand {
         @ApiModelProperty("商标名称")
         private String brandName;
         @ApiModelProperty("商标分类编号")
-        private String categoryNo;
+        private int categoryNo;
         @ApiModelProperty("价格类型")
-        private String priceType;
+        private int priceType;
         @ApiModelProperty("商标组合分类")
         private int unionType;
         @ApiModelProperty("商标字符类型 0不限 1(1-2个字) 2(3个字) 3(4个字) 5(5个字以上) ")

@@ -327,6 +327,16 @@ public class TrademarkDTO {
         private BigDecimal price;
 
         /**
+         * 商标价格区间下限
+         */
+        private BigDecimal priceLow;
+
+        /**
+         * 商标价格区间上限
+         */
+        private BigDecimal priceHigh;
+
+        /**
          *
          */
         private BigDecimal promotePrice;
