@@ -86,14 +86,14 @@ public class DealController {
         List<Brand.BrandIcon> result = new ArrayList<>();
         Brand.BrandIcon item1 = new Brand.BrandIcon();
         item1.setId(1);
-        item1.setIcon("https://i.52112.com/icon/jpg/256/20200728/85114/3586064.jpg");
+        item1.setIcon("http://47.92.65.35:8082/file/icon/message.png");
         item1.setBrandType(DealEnums.BRAND_REFUSE_DEAL.getType());
         item1.setTitle(DealEnums.BRAND_REFUSE_DEAL.getTitle());
         result.add(item1);
 
         Brand.BrandIcon item2 = new Brand.BrandIcon();
         item2.setId(2);
-        item2.setIcon("https://i.52112.com/icon/jpg/256/20200728/85114/3586034.jpg");
+        item2.setIcon("http://47.92.65.35:8082/file/icon/note.png");
         item2.setBrandType(DealEnums.BRAND_DISCUSS_DEAL.getType());
         item2.setTitle(DealEnums.BRAND_DISCUSS_DEAL.getTitle());
         result.add(item2);

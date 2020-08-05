@@ -28,6 +28,7 @@ public class CommonController {
 
     @Autowired
     private FrontClient frontClient;
+    @Autowired
     private OssClientTool ossClientTool;
 
     private String realPath = "md";
