@@ -53,32 +53,55 @@ public class BrandController {
     @GetMapping("/list")
     public List<Brand.GroupRes> list() {
         List<Brand.GroupRes> result = new ArrayList<>();
-        BaseResponse<TrademarkDTO.HotClickResp> response = frontClient.hotClick();
-        if (!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
-            throw new ServiceException(response.getStatus(), response.getMessage());
+//        BaseResponse<TrademarkDTO.HotClickResp> response = frontClient.hotClick();
+//        if (!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+//            throw new ServiceException(response.getStatus(), response.getMessage());
+//        }
+//        response.getResult().getHotTrademarks().forEach(e -> {
+//            Brand.GroupRes brand = new Brand.GroupRes();
+//            brand.setName(e.getName());
+//            List<Brand.SpecialRes> specialRes = new ArrayList<>();
+//            e.getTrademarks().forEach(f -> {
+//
+//                Brand.SpecialRes res = new Brand.SpecialRes();
+//                res.setId(f.getId());
+//                res.setBrandName(f.getName());
+//                res.setImgUrl(f.getPic());
+//                res.setMaxPrice(f.getMaxPrice());
+//                res.setMinPrice(f.getMinPrice());
+//                res.setSpecial(f.isSpecialPrice());
+//
+//                specialRes.add(res);
+//            });
+
+
+
+//        });
+        Brand.GroupRes brand = new Brand.GroupRes();
+        brand.setName("燃料油脂");
+        List<Brand.SpecialRes> specialRes = new ArrayList<>();
+        for(int i=0;i<5;i++){
+            Brand.SpecialRes res = new Brand.SpecialRes();
+            res.setId("id"+i);
+            res.setBrandName("name"+i);
+            res.setImgUrl("http://ytmd-library.oss-cn-beijing.aliyuncs.com/26/0001-4c11-8cd7-5a926ecab9ac-cd30428fecf0-9a342.gif");
+            res.setMaxPrice("12345");
+            res.setMinPrice("123");
+            res.setSpecial(true);
+
+            specialRes.add(res);
+
         }
-        response.getResult().getHotTrademarks().forEach(e -> {
-            Brand.GroupRes brand = new Brand.GroupRes();
-            brand.setName(e.getName());
-            List<Brand.SpecialRes> specialRes = new ArrayList<>();
-            e.getTrademarks().forEach(f -> {
-
-                Brand.SpecialRes res = new Brand.SpecialRes();
-                res.setId(f.getId());
-                res.setBrandName(f.getName());
-                res.setImgUrl(f.getPic());
-                res.setMaxPrice(f.getMaxPrice());
-                res.setMinPrice(f.getMinPrice());
-                res.setSpecial(f.isSpecialPrice());
-
-                specialRes.add(res);
-            });
-
-            brand.setList(specialRes);
-
-            result.add(brand);
-        });
-
+        brand.setList(specialRes);
+        result.add(brand);
+        brand = new Brand.GroupRes();
+        brand.setName("金属材料");
+        brand.setList(specialRes);
+        result.add(brand);
+        brand = new Brand.GroupRes();
+        brand.setName("机械设备");
+        brand.setList(specialRes);
+        result.add(brand);
         return result;
     }
 
