@@ -30,7 +30,7 @@ public class MdBrandDao extends BaseDao  {
             filter=filter.and(f("price", FilterType.LTE,mdBrandParam.getPriceHigh()));
         }
 		if(!Strings.isNullOrEmpty(mdBrandParam.getBrandName())){
-			filter=filter.and(f("brand_name",mdBrandParam.getBrandName()));
+			filter=filter.and(f("brand_name",FilterType.LK,mdBrandParam.getBrandName()));
 		}
 		if(!Strings.isNullOrEmpty(mdBrandParam.getBrandId())){
 			filter=filter.and(f("brand_id",mdBrandParam.getBrandId()));

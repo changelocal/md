@@ -105,23 +105,14 @@ public class TrademarkDTO {
     @Data
     @ApiModel("购买")
     public static class Purchase{
-        @ApiModelProperty("商标ID")
-        private String id;
+        @ApiModelProperty("商标名称")
+        private String name;
     }
     @Data
     @ApiModel("购买详情")
     public static class PurchaseResp{
-        @ApiModelProperty("商标id")
-        private String id;
-        @ApiModelProperty("商标名字")
-        private String name;
-        @ApiModelProperty("商标图片")
-        private String pic;
         @ApiModelProperty("商标分类列表")
         private List<TrademarkCate> trademarkCateList;
-        @ApiModelProperty("定金")
-        private String deposit;
-
         @ApiModelProperty("初审公告期号")
         private String firstNo;
         @ApiModelProperty("初审公告日期")
@@ -149,13 +140,21 @@ public class TrademarkDTO {
         @ApiModelProperty("咨询人信息")
         private ConsultationResp consultationResp;
     }
+    @Data
+    @ApiModel("商标注册详情")
     public static class TrademarkCate {
-        @ApiModelProperty("商标分类id")
+        @ApiModelProperty("商标id")
         private String id;
         @ApiModelProperty("商标名字")
         private String name;
-        @ApiModelProperty("价格区间")
-        private String price;
+        @ApiModelProperty("商标图片")
+        private String pic;
+        @ApiModelProperty("定金")
+        private String deposit;
+        @ApiModelProperty("商标分类id")
+        private String cateCode;
+        @ApiModelProperty("商标分类名字")
+        private String cateName;
     }
     @Data
     @ApiModel("商标注册详情")

@@ -49,6 +49,14 @@ public interface FrontClient {
     @PostMapping(value = "/mdbrand/query", headers = { "Content-Type=application/json" })
     BaseResponse<TrademarkDTO.QueryResp> search(@RequestBody TrademarkDTO.MdBrand request);
     /**
+     * md商标的精确查询
+     * @param request
+     * @return
+     */
+    @PostMapping(value = "/mdbrand/find", headers = { "Content-Type=application/json" })
+    BaseResponse<TrademarkDTO.QueryResp> find(@RequestBody TrademarkDTO.MdBrand request);
+
+    /**
      * 点击咨询按钮随意返回有效的销售人员
      * @param request
      * @return
@@ -56,8 +64,8 @@ public interface FrontClient {
     @PostMapping(value = "/adminuser/consultation", headers = { "Content-Type=application/json" })
     BaseResponse<TrademarkDTO.ConsultationResp> consultation(@RequestBody TrademarkDTO.Consultation request);
 
-    @PostMapping(value = "/brand/detail", headers = { "Content-Type=application/json" })
-    BaseResponse<TrademarkDTO.PurchaseResp> detail(@RequestBody TrademarkDTO.Purchase request);
+//    @PostMapping(value = "/brand/detail", headers = { "Content-Type=application/json" })
+//    BaseResponse<TrademarkDTO.PurchaseResp> detail(@RequestBody TrademarkDTO.Purchase request);
 
     @PostMapping(value = "/brand/signup", headers = { "Content-Type=application/json" })
     BaseResponse<TrademarkDTO.SignUpDetailsResp> signup(@RequestBody TrademarkDTO.SignUpDetails request);

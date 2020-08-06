@@ -51,6 +51,29 @@ public class BrandController {
         return result;
     }
 
+    @PostMapping("/find")
+    public BrandVO.QueryResp find(@RequestBody BrandVO.MdBrand request) {
+        BrandVO.QueryResp result = new BrandVO.QueryResp();
+        MdBrandParam mdBrand = new MdBrandParam();
+        BeanUtils.copyProperties(request, mdBrand);
+        mdBrand.setIsEnable(2);
+        mdBrand.setIsDelete(1);
+        mdBrand.setIsSale(1);
+        mdBrand.setType(1);
+        List<MdBrand> query = mdBrandDao.find(mdBrand);
+        if(!CollectionUtils.isEmpty(query)){
+            List<BrandVO.MdBrand> mdBrands = new ArrayList<>();
+            query.forEach(e->{
+                BrandVO.MdBrand brand = new BrandVO.MdBrand();
+                BeanUtils.copyProperties(e, brand);
+                mdBrands.add(brand);
+            });
+            result.setMdBrands(mdBrands);
+        }
+
+        return result;
+    }
+
     @ApiOperation(value = "create", notes = "create")
     @PostMapping("/create")
     public BrandVO.Resp create(@RequestBody BrandVO.MdBrand request) {
@@ -61,16 +84,6 @@ public class BrandController {
         return result;
     }
 
-    @ApiOperation(value = "find", notes = "find")
-    @PostMapping("/find")
-    public BrandVO.QueryResp find(@RequestBody BrandVO.MdBrand request) {
-        BrandVO.QueryResp result = new BrandVO.QueryResp();
-        MdBrandParam mdBrand = new MdBrandParam();
-        BeanUtils.copyProperties(request, mdBrand);
-        List<MdBrand> mdBrands = mdBrandDao.find(mdBrand);
-        BeanUtils.copyProperties(mdBrands, result);
-        return result;
-    }
     @ApiOperation(value = "update", notes = "update")
     @PostMapping("/update")
     public BrandVO.Resp update(@RequestBody BrandVO.MdBrand request) {

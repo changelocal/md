@@ -3,6 +3,7 @@ package com.md.union.front.api.controller;
 
 import com.arc.common.ServiceException;
 import com.arc.util.file.oss.OssClientTool;
+import com.arc.util.file.oss.OssProperties;
 import com.arc.util.http.BaseResponse;
 import com.md.union.front.api.vo.Consultation;
 import com.md.union.front.api.vo.OssFileInfo;
@@ -28,8 +29,8 @@ public class CommonController {
 
     @Autowired
     private FrontClient frontClient;
-    @Autowired
-    private OssClientTool ossClientTool;
+
+    private OssClientTool ossClientTool = new OssClientTool(new OssProperties());
 
     private String realPath = "md";
 
@@ -133,14 +134,6 @@ public class CommonController {
     @GetMapping("/allbrandclass")
     public Consultation.BrandClassResp allBrandClass() {
         Consultation.BrandClassResp res = new Consultation.BrandClassResp();
-//        List<Consultation.RootBrandClass> rootBrandClasses = new ArrayList<>();
-//        for(int i =1;i<45;i++){
-//            Consultation.RootBrandClass node = new Consultation.RootBrandClass();
-//            node.setCode(""+i);
-//            node.setName("分类之"+i);
-//            rootBrandClasses.add(node);
-//        }
-//        res.setRootBrandClasses(rootBrandClasses);
 
         BaseResponse<TrademarkDTO.RootBrandResp> response = frontClient.root();
         if (!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
@@ -161,15 +154,6 @@ public class CommonController {
     @GetMapping("/brandclass/{code}")
     public Consultation.BrandClassDetailsResp brandClass(@PathVariable("code") int code) {
         Consultation.BrandClassDetailsResp res = new Consultation.BrandClassDetailsResp();
-//        List<Consultation.BrandClass> brandClasses = new ArrayList<>();
-//        for(int i =1;i<9;i++){
-//            Consultation.BrandClass node = new Consultation.BrandClass();
-//            node.setDesc("详情特别长"+i);
-//            node.setName("分类下面的具体小分类"+i);
-//            brandClasses.add(node);
-//        }
-//        res.setBrandClasses(brandClasses);
-
 
         BaseResponse<TrademarkDTO.RootBrandResp> response = frontClient.details(code);
         if (!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {

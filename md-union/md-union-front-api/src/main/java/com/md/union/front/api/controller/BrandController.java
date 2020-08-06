@@ -13,6 +13,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -104,24 +105,15 @@ public class BrandController {
         return result;
     }
 
+    /**
+     * 查商标，准备购买
+     * @param request
+     * @return
+     */
     @ApiOperation("买商标查询")
     @PostMapping("/search")
     public Brand.SearchRes brandSearch(@RequestBody Brand.SearchReq request) {
         Brand.SearchRes result = new Brand.SearchRes();
-//        List<Brand.SpecialRes> specialRes = new ArrayList<>();
-//        for(int i = 0;i<5;i++){
-//            Brand.SpecialRes res = new Brand.SpecialRes();
-//            res.setBrandName("name"+i);
-//            res.setCategoryName("cate"+i);
-//            res.setId(""+i);
-//            res.setImgUrl("pic"+i);
-//            res.setSpecial(true);
-//            specialRes.add(res);
-//        }
-//
-//        result.setList(specialRes);
-//        result.setTotal(5);
-//        return result;
 
         TrademarkDTO.MdBrand req = new TrademarkDTO.MdBrand();
         req.setBrandName(request.getBrandName());
@@ -153,16 +145,22 @@ public class BrandController {
         if (!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(response.getStatus(), response.getMessage());
         }
-        response.getResult().getMdBrands().forEach(e -> {
-            Brand.SpecialRes res = new Brand.SpecialRes();
-            res.setBrandName(e.getBrandName());
-            res.setCategoryName(e.getCategory()+"");
-            res.setId(e.getId());
-            res.setImgUrl(e.getImageUrl());
-//            res.setSpecial(e.getPromoteFlag()==1?true:false);
+        List<Brand.SpecialRes> specialRes = new ArrayList<>();
+        if(!CollectionUtils.isEmpty(response.getResult().getMdBrands())){
+            response.getResult().getMdBrands().forEach(e -> {
+                Brand.SpecialRes res = new Brand.SpecialRes();
+                res.setBrandName(e.getBrandName());
+                res.setCategoryName(e.getCategory()+"");
+                res.setId(e.getId());
+                res.setImgUrl(e.getImageUrl());
+                res.setSpecial(e.getPromoteFlag()==1);
+                res.setMinPrice(e.getPrice().toString());
+                res.setMaxPrice(e.getPrice().toString());
+                specialRes.add(res);
+            });
+        }
 
-        });
-
+        result.setList(specialRes);
         result.setTotal(response.getResult().getTotal());
         return result;
     }
@@ -194,27 +192,64 @@ public class BrandController {
         return getBrandDetail(brandType, id);
     }
 
+    /**
+     * 查到商标以后，点击购买
+     * @param brandName
+     * @return
+     */
     @ApiOperation("购买商标详情")
-    @PostMapping("/buy/detail/{brandId}")
-    public Brand.Detail buyDetail(@PathVariable("brandId") String brandId) {
+    @PostMapping("/buy/detail/{brandName}")
+    public Brand.Detail buyDetail(@PathVariable("brandName") String brandName) {
         Brand.Detail result = new Brand.Detail();
 
-        result.setImgUrl("http://pic.5tu.cn/uploads/allimg/1607/pic_5tu_big_201607221326573826.jpg");
-        result.setPrePrice("999");
-        result.setCategoryName("测试分类");
+        //获取商标list
+        TrademarkDTO.MdBrand req = new TrademarkDTO.MdBrand();
+        req.setBrandName(brandName);
+        BaseResponse<TrademarkDTO.QueryResp> response = frontClient.find(req);
+        if (!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+            throw new ServiceException(response.getStatus(), response.getMessage());
+        }
+        List<Brand.TrademarkCate> trademarkCates = new ArrayList<>();
+        if(!CollectionUtils.isEmpty(response.getResult().getMdBrands())){
+            response.getResult().getMdBrands().forEach(e -> {
+                Brand.TrademarkCate res = new Brand.TrademarkCate();
+                res.setCateCode(e.getCategory());
+                res.setCateName("todo");
+                res.setDeposit("666");
+                res.setId(e.getId());
+                res.setName(e.getBrandName());
+                res.setPic(e.getImageUrl());
+                trademarkCates.add(res);
+
+                result.setColor(e.getThemeColor());
+                result.setLikeCate(e.getGroup());
+                result.setFirstDate(e.getFirstCheckTime().toString());
+                result.setFirstNo(e.getFirstCheckId());
+                result.setEndDate("todo");
+                result.setSignUpDate(e.getRegisterCheckTime().toString());
+                result.setSignUpNo(e.getRegisterCheckId());
+                result.setUsage("todo");
+            });
+        }
+        result.setTrademarkCateList(trademarkCates);
+
+        //获取咨询人信息
+        TrademarkDTO.Consultation consultation = new TrademarkDTO.Consultation();
+        consultation.setId("");
+        BaseResponse<TrademarkDTO.ConsultationResp> responsePerson = frontClient.consultation(consultation);
+        if (!responsePerson.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+            throw new ServiceException(responsePerson.getStatus(), responsePerson.getMessage());
+        }
+
+        Brand.Person person = new Brand.Person();
+        //todo img
+        person.setHeadImg(responsePerson.getResult().getNickname());
+        person.setName(responsePerson.getResult().getNickname());
+        person.setPhone(responsePerson.getResult().getMobile());
+        person.setQq(responsePerson.getResult().getQqAccount());
+        result.setPerson(person);
+
         return result;
-
-//        TrademarkDTO.Purchase req = new TrademarkDTO.Purchase();
-//        req.setId(brandId);
-//        BaseResponse<TrademarkDTO.PurchaseResp> response = frontClient.detail(req);
-//        if (!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
-//            throw new ServiceException(response.getStatus(), response.getMessage());
-//        }
-//        result.setImgUrl(response.getResult().getBigPic());
-//        result.setPrePrice(response.getResult().getDeposit());
-//        result.setCategoryName(response.getResult().getConcept());
-//        return result;
-
     }
 
     private Brand.Person getPerson() {
