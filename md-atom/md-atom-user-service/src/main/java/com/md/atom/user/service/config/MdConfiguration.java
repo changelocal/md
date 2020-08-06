@@ -48,6 +48,7 @@ public class MdConfiguration implements WebMvcConfigurer, EnvironmentAware {
 		registration.addUrlPatterns("/api/*");
 		registration.addUrlPatterns("/adminuser/*");
 		registration.addUrlPatterns("/brand/*");
+		registration.addUrlPatterns("/mdbrand/*");
 		registration.addUrlPatterns("/wxuser/*");
 		return registration;
 	}
