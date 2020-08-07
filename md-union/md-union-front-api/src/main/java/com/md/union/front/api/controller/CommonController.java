@@ -3,7 +3,6 @@ package com.md.union.front.api.controller;
 
 import com.arc.common.ServiceException;
 import com.arc.util.file.oss.OssClientTool;
-import com.arc.util.file.oss.OssProperties;
 import com.arc.util.http.BaseResponse;
 import com.md.union.front.api.vo.Consultation;
 import com.md.union.front.api.vo.OssFileInfo;
@@ -29,8 +28,8 @@ public class CommonController {
 
     @Autowired
     private FrontClient frontClient;
-
-    private OssClientTool ossClientTool = new OssClientTool(new OssProperties());
+    @Autowired
+    private OssClientTool ossClientTool;
 
     private String realPath = "md";
 

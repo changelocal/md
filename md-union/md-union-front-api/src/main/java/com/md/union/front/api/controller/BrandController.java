@@ -2,6 +2,7 @@ package com.md.union.front.api.controller;
 
 import com.arc.common.ServiceException;
 import com.arc.util.http.BaseResponse;
+import com.md.union.front.api.Enums.BrandTypeEnums;
 import com.md.union.front.api.Enums.ChangeEnums;
 import com.md.union.front.api.Enums.DealEnums;
 import com.md.union.front.api.Enums.RegisterEnums;
@@ -17,8 +18,11 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/front/brand")
@@ -28,6 +32,7 @@ public class BrandController {
 
     @Autowired
     private FrontClient frontClient;
+    SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @ApiOperation("热门商标分类")
     @GetMapping("/hot/category")
@@ -198,8 +203,8 @@ public class BrandController {
      * @return
      */
     @ApiOperation("购买商标详情")
-    @PostMapping("/buy/detail/{brandName}")
-    public Brand.Detail buyDetail(@PathVariable("brandName") String brandName) {
+    @PostMapping("/buy/detail")
+    public Brand.Detail buyDetail( String brandName) {
         Brand.Detail result = new Brand.Detail();
 
         //获取商标list
@@ -209,26 +214,39 @@ public class BrandController {
         if (!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(response.getStatus(), response.getMessage());
         }
+        //得到45大类
+        BaseResponse<TrademarkDTO.RootBrandResp> responseCate = frontClient.root();
+        if (!responseCate.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+            throw new ServiceException(responseCate.getStatus(), responseCate.getMessage());
+        }
+        Map<Integer,String> name = responseCate.getResult().getCates().stream().collect(Collectors.toMap(p->p.getCode(), q->q.getCategoryName()));
+
         List<Brand.TrademarkCate> trademarkCates = new ArrayList<>();
         if(!CollectionUtils.isEmpty(response.getResult().getMdBrands())){
             response.getResult().getMdBrands().forEach(e -> {
                 Brand.TrademarkCate res = new Brand.TrademarkCate();
                 res.setCateCode(e.getCategory());
-                res.setCateName("todo");
+                res.setCateName(name.get(e.getCategory()));
                 res.setDeposit("666");
                 res.setId(e.getId());
                 res.setName(e.getBrandName());
                 res.setPic(e.getImageUrl());
                 trademarkCates.add(res);
 
-                result.setColor(e.getThemeColor());
-                result.setLikeCate(e.getGroup());
-                result.setFirstDate(e.getFirstCheckTime().toString());
+                result.setFirstDate(null == e.getFirstCheckTime()?"":timeFormat.format(e.getFirstCheckTime()));
                 result.setFirstNo(e.getFirstCheckId());
-                result.setEndDate("todo");
-                result.setSignUpDate(e.getRegisterCheckTime().toString());
+                result.setEndDate(null ==e.getTimeLimitEnd()?"":timeFormat.format(e.getTimeLimitEnd()));
+                result.setSignUpDate(null == e.getRegisterCheckTime()?"":timeFormat.format(e.getRegisterCheckTime()));
                 result.setSignUpNo(e.getRegisterCheckId());
-                result.setUsage("todo");
+                result.setTrademarkType(BrandTypeEnums.valueType(e.getComType()).getTitle());
+
+                result.setLikeCate(e.getGroup());
+                result.setUsage(e.getFitProjects());
+                result.setColor(e.getThemeColor());
+
+                result.setBigPic(e.getImageUrl());
+                result.setConcept("设计理念");
+
             });
         }
         result.setTrademarkCateList(trademarkCates);

@@ -186,7 +186,6 @@ public class TrademarkDTO {
         private int code;
         private String categoryName;
         private String des;
-
     }
 
     @Data
