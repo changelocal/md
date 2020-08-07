@@ -204,12 +204,12 @@ public class BrandController {
      */
     @ApiOperation("购买商标详情")
     @PostMapping("/buy/detail")
-    public Brand.Detail buyDetail( String brandName) {
+    public Brand.Detail buyDetail(@RequestBody Category.BuyDetailReq request) {
         Brand.Detail result = new Brand.Detail();
 
         //获取商标list
         TrademarkDTO.MdBrand req = new TrademarkDTO.MdBrand();
-        req.setBrandName(brandName);
+        req.setBrandName(request.getBrandName());
         BaseResponse<TrademarkDTO.QueryResp> response = frontClient.find(req);
         if (!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(response.getStatus(), response.getMessage());

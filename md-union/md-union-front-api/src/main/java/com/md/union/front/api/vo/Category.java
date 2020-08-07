@@ -33,7 +33,12 @@ public class Category {
         @ApiModelProperty("商标id")
         private String brandId;
     }
-
+    @Data
+    @ApiModel("商标分类详情购买展示")
+    public static class BuyDetailReq{
+        @ApiModelProperty("商标id")
+        private String brandName;
+    }
     @Data
     @ApiModel("商标分类查询结果")
     public static class SearchRes{
