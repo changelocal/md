@@ -54,11 +54,11 @@ public class BrandController {
             Brand.HotRes brand = new Brand.HotRes();
             brand.setCategoryName(e.getCategoryName());
             brand.setCode(e.getCode());
-            brand.setIcon(e.getIcon());
+            brand.setIcon("http://47.92.65.35:8082/file/brand_class/"+e.getCode()+".png");
             brand.setTypeName(e.getCode()+"类");
             result.add(brand);
 
-            Brand.GroupRes list = list(e.getCode());
+            Brand.GroupRes list = list(e.getCode(),e.getCategoryName());
             groups.add(list);
         });
         res.setCate(result);
@@ -72,10 +72,7 @@ public class BrandController {
      * @param code
      * @return
      */
-//    @ApiOperation("商标严选")
-//    @GetMapping("/list/{code}")
-    private Brand.GroupRes list(int code) {
-
+    private Brand.GroupRes list(int code,String cateName) {
         //获取商标list
         TrademarkDTO.MdBrand req = new TrademarkDTO.MdBrand();
         req.setCategory(code);
@@ -93,6 +90,7 @@ public class BrandController {
 
         Brand.GroupRes brand = new Brand.GroupRes();
         brand.setCode(code);
+        brand.setName(cateName);
         List<Brand.SpecialRes> specialRes = new ArrayList<>();
         if(!CollectionUtils.isEmpty(response.getResult().getMdBrands())){
             response.getResult().getMdBrands().forEach(e->{
@@ -328,7 +326,12 @@ public class BrandController {
             response.getResult().getMdBrands().forEach(e -> {
                 Brand.TrademarkCateSearch res = new Brand.TrademarkCateSearch();
                 res.setCateCode(e.getCategory());
-                res.setCateName(e.getCategory()+"类 "+name.get(e.getCategory()));
+                if(e.getCategory()<10){
+                    res.setCateName("0"+e.getCategory()+"-"+name.get(e.getCategory()));
+                }else{
+                    res.setCateName(e.getCategory()+"-"+name.get(e.getCategory()));
+                }
+
                 res.setId(e.getId());
                 res.setName(e.getBrandName());
                 trademarkCates.add(res);
@@ -349,7 +352,11 @@ public class BrandController {
             }
             Brand.TrademarkCateSearch res = new Brand.TrademarkCateSearch();
             res.setCateCode(cate.getCode());
-            res.setCateName(cate.getCode() + "类 " + cate.getCategoryName());
+            if(cate.getCode()<10){
+                res.setCateName("0"+cate.getCode()+"-"+name.get(cate.getCode()));
+            }else{
+                res.setCateName(cate.getCode()+"-"+name.get(cate.getCode()));
+            }
             trademarkCatesUnRegist.add(res);
         }
         result.setTrademarkCateListUnRegist(trademarkCatesUnRegist);

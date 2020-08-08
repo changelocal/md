@@ -29,6 +29,8 @@ public class Brand {
     public static class GroupRes {
         @ApiModelProperty("分组id")
         private int code;
+        @ApiModelProperty("分组名字")
+        private String name;
         @ApiModelProperty("分组商标列表")
         private List<SpecialRes> list;
     }

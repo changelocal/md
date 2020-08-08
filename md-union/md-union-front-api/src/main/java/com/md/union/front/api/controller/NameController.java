@@ -5,13 +5,11 @@ import com.md.union.front.client.feign.FrontClient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @RestController
 @RequestMapping("/front/name")
@@ -20,8 +18,23 @@ public class NameController {
     @Autowired
     private FrontClient frontClient;
 
+
+    @ApiOperation("热门商标字")
+    @GetMapping("/hot")
+    public List<String> hotName() {
+        String[] chars = {"美","雄","雷","魔","星","阳","宝","飞","顶","齐","龙","电","丹"
+                ,"田","东","豪","世","好","丸","丰","海","罗","中","丰","丹","本","主","丽"
+                ,"上","下","不","专","叶","史","杰","吉","可","古","有","原","友","参","厦"};
+        List<String> names = new ArrayList<>();
+        Random random = new Random();
+        for(int i=0;i<16;i++){
+            int j = random.nextInt(chars.length);
+            names.add(chars[j]);
+        }
+        return names;
+    }
     /**
-     * 有成功率的查商标
+     * 起名的查商标
      * @param request
      * @return
      */
@@ -40,32 +53,6 @@ public class NameController {
         }
         result.setCount(5);
         return result;
-
-//        NameDTO.SearchReq req = new NameDTO.SearchReq();
-//        req.setCategory(request.getCategory());
-//        req.setInput(request.getInput());
-//        req.setStatus(request.getStatus());
-//        req.setWordCnt(request.getWordCnt());
-//
-//        BaseResponse<NameDTO.SearchRes> response = frontClient.searchName(req);
-//        if(!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)){
-//            throw new ServiceException(response.getStatus(),response.getMessage());
-//        }
-//        List<Name.Info> infos = new ArrayList<>();
-//        response.getResult().getList().forEach(e->{
-//            Name.Info info = new Name.Info();
-//            info.setBrand(e.getBrand());
-//            info.setBuyOrRegist(e.getBuyOrRegist());
-//            info.setId(e.getId());
-//            info.setSuccessRate(e.getSuccessRate());
-//
-//            infos.add(info);
-//        });
-//
-//        result.setList(infos);
-//        result.setCount(response.getResult().getCount());
-//
-//        return result;
     }
 
 }
