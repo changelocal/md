@@ -71,9 +71,18 @@ public class MdBrandDao extends BaseDao  {
 		if(!Strings.isNullOrEmpty(mdBrandParam.getLockedOrderId())){
 			filter=filter.and(f("locked_order_id",mdBrandParam.getLockedOrderId()));
 		}
+        if(mdBrandParam.getComType()>0){
+            filter=filter.and(f("com_type",mdBrandParam.getComType()));
+        }
 		if(mdBrandParam.getBrandNameLength()>0){
-			filter=filter.and(f("brand_name_length",mdBrandParam.getBrandNameLength()));
-		}
+            filter=filter.and(f("brand_name_length",mdBrandParam.getBrandNameLength()));
+        }
+        if(mdBrandParam.getBrandNameLengthLow()>0){
+            filter=filter.and(f("brand_name_length",FilterType.GTE,mdBrandParam.getBrandNameLengthLow()));
+        }
+        if(mdBrandParam.getBrandNameLengthHigh()>0){
+            filter=filter.and(f("brand_name_length",FilterType.LTE,mdBrandParam.getBrandNameLengthHigh()));
+        }
 		if(!Strings.isNullOrEmpty(mdBrandParam.getSubTitle())){
 			filter=filter.and(f("sub_title",mdBrandParam.getSubTitle()));
 		}
@@ -129,6 +138,9 @@ public class MdBrandDao extends BaseDao  {
 	public List<MdBrand> find(MdBrandParam mdBrandParam) {
 		Filter filter= Filter.create();
 
+        if(mdBrandParam.getIsQuality()>0){
+            filter=filter.and(f("is_quality",mdBrandParam.getIsQuality()));
+        }
 		if(!Strings.isNullOrEmpty(mdBrandParam.getBrandName())){
 			filter=filter.and(f("brand_name",mdBrandParam.getBrandName()));
 		}

@@ -238,7 +238,14 @@ public class MdBrand {
 	 * 商标名称长度
 	 */
 	private int brandNameLength;
-
+    /**
+     * 商标名称长度
+     */
+    private int brandNameLengthLow;
+    /**
+     * 商标名称长度
+     */
+    private int brandNameLengthHigh;
 	/**
 	 * 副标题
 	 */

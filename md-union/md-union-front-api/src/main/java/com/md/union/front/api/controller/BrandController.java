@@ -55,56 +55,33 @@ public class BrandController {
     }
 
     @ApiOperation("商标严选")
-    @GetMapping("/list")
-    public List<Brand.GroupRes> list() {
+    @GetMapping("/list/{code}")
+    public List<Brand.GroupRes> list(@PathVariable("code") int code) {
         List<Brand.GroupRes> result = new ArrayList<>();
-//        BaseResponse<TrademarkDTO.HotClickResp> response = frontClient.hotClick();
-//        if (!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
-//            throw new ServiceException(response.getStatus(), response.getMessage());
-//        }
-//        response.getResult().getHotTrademarks().forEach(e -> {
-//            Brand.GroupRes brand = new Brand.GroupRes();
-//            brand.setName(e.getName());
-//            List<Brand.SpecialRes> specialRes = new ArrayList<>();
-//            e.getTrademarks().forEach(f -> {
-//
-//                Brand.SpecialRes res = new Brand.SpecialRes();
-//                res.setId(f.getId());
-//                res.setBrandName(f.getName());
-//                res.setImgUrl(f.getPic());
-//                res.setMaxPrice(f.getMaxPrice());
-//                res.setMinPrice(f.getMinPrice());
-//                res.setSpecial(f.isSpecialPrice());
-//
-//                specialRes.add(res);
-//            });
 
-
-
-//        });
-        Brand.GroupRes brand = new Brand.GroupRes();
-        brand.setName("燃料油脂");
-        List<Brand.SpecialRes> specialRes = new ArrayList<>();
-        for(int i=0;i<5;i++){
-            Brand.SpecialRes res = new Brand.SpecialRes();
-            res.setId("id"+i);
-            res.setBrandName("name"+i);
-            res.setImgUrl("http://ytmd-library.oss-cn-beijing.aliyuncs.com/26/0001-4c11-8cd7-5a926ecab9ac-cd30428fecf0-9a342.gif");
-            res.setMaxPrice("12345");
-            res.setMinPrice("123");
-            res.setSpecial(true);
-
-            specialRes.add(res);
-
+        //获取商标list
+        TrademarkDTO.MdBrand req = new TrademarkDTO.MdBrand();
+        req.setCategory(code);
+        req.setIsQuality(2);
+        BaseResponse<TrademarkDTO.QueryResp> response = frontClient.find(req);
+        if (!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+            throw new ServiceException(response.getStatus(), response.getMessage());
         }
-        brand.setList(specialRes);
-        result.add(brand);
-        brand = new Brand.GroupRes();
-        brand.setName("金属材料");
-        brand.setList(specialRes);
-        result.add(brand);
-        brand = new Brand.GroupRes();
-        brand.setName("机械设备");
+
+        Brand.GroupRes brand = new Brand.GroupRes();
+        brand.setName("");
+        List<Brand.SpecialRes> specialRes = new ArrayList<>();
+        response.getResult().getMdBrands().forEach(e->{
+            Brand.SpecialRes res = new Brand.SpecialRes();
+            res.setId(e.getId());
+            res.setBrandName(e.getBrandName());
+            res.setImgUrl(e.getImageUrl());
+            res.setMaxPrice(e.getPrice().toString());
+            res.setMinPrice(e.getPrice().toString());
+            res.setSpecial(true);
+            specialRes.add(res);
+        });
+
         brand.setList(specialRes);
         result.add(brand);
         return result;
@@ -121,11 +98,30 @@ public class BrandController {
         Brand.SearchRes result = new Brand.SearchRes();
 
         TrademarkDTO.MdBrand req = new TrademarkDTO.MdBrand();
+        //名字
         req.setBrandName(request.getBrandName());
+        //分类
         req.setCategory(request.getCategoryNo());
+        //字符数
         req.setBrandNameLength(request.getBrandSize());
+        if(request.getBrandSize()==1){
+            req.setBrandNameLengthLow(1);
+            req.setBrandNameLengthHigh(2);
+        }
+        else if (request.getBrandSize()==2){
+            req.setBrandNameLength(3);
+        }
+        else if (request.getBrandSize()==3){
+            req.setBrandNameLength(4);
+        }
+        else if (request.getBrandSize()==4){
+            req.setBrandNameLengthLow(5);
+            req.setBrandNameLengthHigh(99);
+        }
+
+        //组合  0 不限
         req.setComType(request.getUnionType());
-//        req.setPrice(request.getPriceType());
+        //价格
         if(request.getPriceType()==1){
             req.setPriceLow(new BigDecimal(1));
             req.setPriceHigh(new BigDecimal(2000000));
@@ -135,10 +131,10 @@ public class BrandController {
         }else if (request.getPriceType()==3) {
             req.setPriceLow(new BigDecimal(10000));
             req.setPriceHigh(new BigDecimal(20000));
-        }else if (request.getPriceType()==3) {
+        }else if (request.getPriceType()==4) {
             req.setPriceLow(new BigDecimal(20000));
             req.setPriceHigh(new BigDecimal(50000));
-        }else if (request.getPriceType()==3) {
+        }else if (request.getPriceType()==5) {
             req.setPriceLow(new BigDecimal(50000));
             req.setPriceHigh(new BigDecimal(2000000));
         }
@@ -150,12 +146,19 @@ public class BrandController {
         if (!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(response.getStatus(), response.getMessage());
         }
+        //得到45大类
+        BaseResponse<TrademarkDTO.RootBrandResp> responseCate = frontClient.root();
+        if (!responseCate.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+            throw new ServiceException(responseCate.getStatus(), responseCate.getMessage());
+        }
+        Map<Integer,String> name = responseCate.getResult().getCates().stream().collect(Collectors.toMap(p->p.getCode(), q->q.getCategoryName()));
+
         List<Brand.SpecialRes> specialRes = new ArrayList<>();
         if(!CollectionUtils.isEmpty(response.getResult().getMdBrands())){
             response.getResult().getMdBrands().forEach(e -> {
                 Brand.SpecialRes res = new Brand.SpecialRes();
                 res.setBrandName(e.getBrandName());
-                res.setCategoryName(e.getCategory()+"");
+                res.setCategoryName(e.getCategory()+"类 "+name.get(e.getCategory()));
                 res.setId(e.getId());
                 res.setImgUrl(e.getImageUrl());
                 res.setSpecial(e.getPromoteFlag()==1);
@@ -226,7 +229,7 @@ public class BrandController {
             response.getResult().getMdBrands().forEach(e -> {
                 Brand.TrademarkCate res = new Brand.TrademarkCate();
                 res.setCateCode(e.getCategory());
-                res.setCateName(name.get(e.getCategory()));
+                res.setCateName(e.getCategory()+"类 "+name.get(e.getCategory()));
                 res.setDeposit("666");
                 res.setId(e.getId());
                 res.setName(e.getBrandName());
