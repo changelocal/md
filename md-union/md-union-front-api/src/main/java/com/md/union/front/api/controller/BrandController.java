@@ -34,6 +34,10 @@ public class BrandController {
     private FrontClient frontClient;
     SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+    /**
+     * 八大热门分类
+     * @return
+     */
     @ApiOperation("热门商标分类")
     @GetMapping("/hot/category")
     public List<Brand.HotRes> hotCategory() {
@@ -54,6 +58,11 @@ public class BrandController {
         return result;
     }
 
+    /**
+     * 点击热门分类后获取几个热门商标
+     * @param code
+     * @return
+     */
     @ApiOperation("商标严选")
     @GetMapping("/list/{code}")
     public List<Brand.GroupRes> list(@PathVariable("code") int code) {
@@ -67,6 +76,12 @@ public class BrandController {
         if (!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(response.getStatus(), response.getMessage());
         }
+        //得到45大类
+        BaseResponse<TrademarkDTO.RootBrandResp> responseCate = frontClient.root();
+        if (!responseCate.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+            throw new ServiceException(responseCate.getStatus(), responseCate.getMessage());
+        }
+        Map<Integer,String> name = responseCate.getResult().getCates().stream().collect(Collectors.toMap(p->p.getCode(), q->q.getCategoryName()));
 
         Brand.GroupRes brand = new Brand.GroupRes();
         brand.setName("");
@@ -74,6 +89,7 @@ public class BrandController {
         response.getResult().getMdBrands().forEach(e->{
             Brand.SpecialRes res = new Brand.SpecialRes();
             res.setId(e.getId());
+            res.setCategoryName(e.getCategory()+"类 "+name.get(e.getCategory()));
             res.setBrandName(e.getBrandName());
             res.setImgUrl(e.getImageUrl());
             res.setMaxPrice(e.getPrice().toString());
