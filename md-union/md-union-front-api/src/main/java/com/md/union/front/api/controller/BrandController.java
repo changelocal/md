@@ -199,7 +199,7 @@ public class BrandController {
 
     /**
      * 查到商标以后，点击购买
-     * @param brandName
+     * @param request
      * @return
      */
     @ApiOperation("购买商标详情")
@@ -283,21 +283,21 @@ public class BrandController {
         Brand.DealDetail result = new Brand.DealDetail();
         if (brandType == 1) {
             RegisterEnums register = RegisterEnums.valueType(id);
-            result.setImgUrl(register.getImg());
+            result.setImgUrl(register.getIcon());
             result.setBuyPrice("￥" + register.getPrice());
             result.setMarketPrice("￥" + (register.getPrice() + 500));
             result.setTotal(10);
             result.setPerson(getPerson());
         } else if (brandType == 2) {
             DealEnums deal = DealEnums.valueType(id);
-            result.setImgUrl(deal.getImg());
+            result.setImgUrl(deal.getIcon());
             result.setBuyPrice("￥" + deal.getPrice());
             result.setMarketPrice("￥" + (deal.getPrice() + 500));
             result.setTotal(20);
             result.setPerson(getPerson());
         } else if (brandType == 3) {
             ChangeEnums change = ChangeEnums.valueType(id);
-            result.setImgUrl(change.getImg());
+            result.setImgUrl(change.getIcon());
             result.setBuyPrice("￥" + change.getPrice());
             result.setMarketPrice("￥" + (change.getPrice() + 500));
             result.setTotal(30);
