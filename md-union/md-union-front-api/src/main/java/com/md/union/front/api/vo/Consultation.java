@@ -27,6 +27,8 @@ public class Consultation {
         private String tel;
         @ApiModelProperty("qq")
         private String qq;
+        @ApiModelProperty("头像")
+        private String avatar;
     }
 
     @Data

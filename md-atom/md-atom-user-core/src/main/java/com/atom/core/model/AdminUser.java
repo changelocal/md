@@ -96,5 +96,6 @@ public class AdminUser {
 	 * 微信二维码名片
 	 */
 	private String wxQrcode;
+	private String title;
 
 }

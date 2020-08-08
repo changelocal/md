@@ -20,6 +20,11 @@ public class NameController {
     @Autowired
     private FrontClient frontClient;
 
+    /**
+     * 有成功率的查商标
+     * @param request
+     * @return
+     */
     @ApiOperation("商标起名查询")
     @PostMapping("/search")
     public Name.SearchRes brandSearch(@RequestBody Name.SearchReq request) {

@@ -106,8 +106,8 @@ public class CommonController {
         result.setName(response.getResult().getNickname());
         result.setQq(response.getResult().getQqAccount());
         result.setTel(response.getResult().getMobile());
-        result.setTitle(response.getResult().getRole());
-
+        result.setTitle(response.getResult().getTitle());
+        result.setAvatar(response.getResult().getAvatar());
         //应该记录一下咨询记录 todo
 
 

@@ -27,8 +27,8 @@ public class Brand {
     @Data
     @ApiModel("商标严选")
     public static class GroupRes {
-        @ApiModelProperty("分组名称")
-        private String name;
+        @ApiModelProperty("分组id")
+        private int code;
         @ApiModelProperty("分组商标列表")
         private List<SpecialRes> list;
     }
@@ -78,6 +78,14 @@ public class Brand {
         private List<SpecialRes> list;
         @ApiModelProperty("总条数")
         private int total;
+    }
+    @Data
+    @ApiModel("购买商标查询结果")
+    public static class HotList {
+        @ApiModelProperty("八大分类")
+        private List<Brand.HotRes> cate;
+        @ApiModelProperty("各分类下的商标")
+        private List<Brand.GroupRes> group;
     }
 
     @Data
@@ -218,6 +226,40 @@ public class Brand {
         private Brand.Person person;
 
     }
+
+    @Data
+    @ApiModel("展示查商标的详情")
+    public static class SearchDetail{
+        @ApiModelProperty("成功率")
+        private String success;
+        @ApiModelProperty("总数")
+        private int total;
+
+        @ApiModelProperty("商标分类列表")
+        private List<TrademarkCateSearch> trademarkCateListRegist;
+        @ApiModelProperty("注册了的分类")
+        private int registCount;
+        @ApiModelProperty("商标分类列表")
+        private List<TrademarkCateSearch> trademarkCateListUnRegist;
+        @ApiModelProperty("未注册了的分类")
+        private int unRegistCount;
+
+        @ApiModelProperty("相似商标")
+        private List<SpecialRes> familiar;
+    }
+    @Data
+    @ApiModel("商标注册详情")
+    public static class TrademarkCateSearch {
+        @ApiModelProperty("商标id")
+        private String id;
+        @ApiModelProperty("商标名字")
+        private String name;
+        @ApiModelProperty("商标分类id")
+        private int cateCode;
+        @ApiModelProperty("商标分类名字")
+        private String cateName;
+    }
+
     @Data
     @ApiModel("商标注册详情")
     public static class TrademarkCate {

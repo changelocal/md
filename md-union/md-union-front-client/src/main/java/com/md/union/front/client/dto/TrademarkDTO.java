@@ -95,12 +95,16 @@ public class TrademarkDTO {
     public static class ConsultationResp{
         @ApiModelProperty("姓名")
         private String nickname;
-        @ApiModelProperty("头衔")
+        @ApiModelProperty("角色")
         private String role;
         @ApiModelProperty("电话")
         private String mobile;
         @ApiModelProperty("qq")
         private String qqAccount;
+        @ApiModelProperty("头衔")
+        private String title;
+        @ApiModelProperty("头像")
+        private String avatar;
     }
     @Data
     @ApiModel("购买")

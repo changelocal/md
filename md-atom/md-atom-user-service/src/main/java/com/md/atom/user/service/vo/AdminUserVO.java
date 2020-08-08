@@ -93,6 +93,7 @@ public class AdminUserVO {
          * 微信二维码名片
          */
         private String wxQrcode;
+        private String title;
 
         /**
          * 当前页

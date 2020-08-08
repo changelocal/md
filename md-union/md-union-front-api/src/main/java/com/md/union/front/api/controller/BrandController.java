@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -40,13 +41,15 @@ public class BrandController {
      */
     @ApiOperation("热门商标分类")
     @GetMapping("/hot/category")
-    public List<Brand.HotRes> hotCategory() {
+    public Brand.HotList hotCategory() {
+        Brand.HotList res = new Brand.HotList();
         List<Brand.HotRes> result = new ArrayList<>();
 
         BaseResponse<TrademarkDTO.HotResp> response = frontClient.hot();
         if (!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(response.getStatus(), response.getMessage());
         }
+        List<Brand.GroupRes> groups = new ArrayList<>();
         response.getResult().getCates().forEach(e -> {
             Brand.HotRes brand = new Brand.HotRes();
             brand.setCategoryName(e.getCategoryName());
@@ -54,8 +57,14 @@ public class BrandController {
             brand.setIcon(e.getIcon());
             brand.setTypeName(e.getCode()+"类");
             result.add(brand);
+
+            Brand.GroupRes list = list(e.getCode());
+            groups.add(list);
         });
-        return result;
+        res.setCate(result);
+        res.setGroup(groups);
+
+        return res;
     }
 
     /**
@@ -63,10 +72,9 @@ public class BrandController {
      * @param code
      * @return
      */
-    @ApiOperation("商标严选")
-    @GetMapping("/list/{code}")
-    public List<Brand.GroupRes> list(@PathVariable("code") int code) {
-        List<Brand.GroupRes> result = new ArrayList<>();
+//    @ApiOperation("商标严选")
+//    @GetMapping("/list/{code}")
+    private Brand.GroupRes list(int code) {
 
         //获取商标list
         TrademarkDTO.MdBrand req = new TrademarkDTO.MdBrand();
@@ -84,23 +92,23 @@ public class BrandController {
         Map<Integer,String> name = responseCate.getResult().getCates().stream().collect(Collectors.toMap(p->p.getCode(), q->q.getCategoryName()));
 
         Brand.GroupRes brand = new Brand.GroupRes();
-        brand.setName("");
+        brand.setCode(code);
         List<Brand.SpecialRes> specialRes = new ArrayList<>();
-        response.getResult().getMdBrands().forEach(e->{
-            Brand.SpecialRes res = new Brand.SpecialRes();
-            res.setId(e.getId());
-            res.setCategoryName(e.getCategory()+"类 "+name.get(e.getCategory()));
-            res.setBrandName(e.getBrandName());
-            res.setImgUrl(e.getImageUrl());
-            res.setMaxPrice(e.getPrice().toString());
-            res.setMinPrice(e.getPrice().toString());
-            res.setSpecial(true);
-            specialRes.add(res);
-        });
-
+        if(!CollectionUtils.isEmpty(response.getResult().getMdBrands())){
+            response.getResult().getMdBrands().forEach(e->{
+                Brand.SpecialRes res = new Brand.SpecialRes();
+                res.setId(e.getId());
+                res.setCategoryName(e.getCategory()+"类 "+name.get(e.getCategory()));
+                res.setBrandName(e.getBrandName());
+                res.setImgUrl(e.getImageUrl());
+                res.setMaxPrice(e.getPrice().toString());
+                res.setMinPrice(e.getPrice().toString());
+                res.setSpecial(true);
+                specialRes.add(res);
+            });
+        }
         brand.setList(specialRes);
-        result.add(brand);
-        return result;
+        return brand;
     }
 
     /**
@@ -288,6 +296,100 @@ public class BrandController {
 
         return result;
     }
+
+    /**
+     * 首页查商标的详情，有成功率的
+     * @param request
+     * @return
+     */
+    @ApiOperation("首页查商标的详情")
+    @PostMapping("/home/search")
+    public Brand.SearchDetail searchDetail(@RequestBody Category.BuyDetailReq request) {
+        Brand.SearchDetail result = new Brand.SearchDetail();
+
+        //获取商标list
+        TrademarkDTO.MdBrand req = new TrademarkDTO.MdBrand();
+        req.setBrandName(request.getBrandName());
+        BaseResponse<TrademarkDTO.QueryResp> response = frontClient.find(req);
+        if (!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+            throw new ServiceException(response.getStatus(), response.getMessage());
+        }
+        //得到45大类
+        BaseResponse<TrademarkDTO.RootBrandResp> responseCate = frontClient.root();
+        if (!responseCate.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+            throw new ServiceException(responseCate.getStatus(), responseCate.getMessage());
+        }
+        Map<Integer,String> name = responseCate.getResult().getCates().stream().collect(Collectors.toMap(p->p.getCode(), q->q.getCategoryName()));
+
+        Map<String,String> ids = new HashMap<>();
+        Map<Integer,String> codes = new HashMap<>();
+        List<Brand.TrademarkCateSearch> trademarkCates = new ArrayList<>();
+        if(!CollectionUtils.isEmpty(response.getResult().getMdBrands())){
+            response.getResult().getMdBrands().forEach(e -> {
+                Brand.TrademarkCateSearch res = new Brand.TrademarkCateSearch();
+                res.setCateCode(e.getCategory());
+                res.setCateName(e.getCategory()+"类 "+name.get(e.getCategory()));
+                res.setId(e.getId());
+                res.setName(e.getBrandName());
+                trademarkCates.add(res);
+            });
+            ids = response.getResult().getMdBrands().stream().collect(Collectors.toMap(p->p.getId(), q->q.getId()));
+            codes = response.getResult().getMdBrands().stream().collect(Collectors.toMap(p->p.getCategory(), q->q.getId()));
+        }
+        result.setTrademarkCateListRegist(trademarkCates);
+        result.setRegistCount(trademarkCates.size());
+        result.setTotal(trademarkCates.size());
+        result.setSuccess("34");
+
+        //未注册的
+        List<Brand.TrademarkCateSearch> trademarkCatesUnRegist = new ArrayList<>();
+        for (TrademarkDTO.Cate cate : responseCate.getResult().getCates()) {
+            if (codes.containsKey(cate.getCode())) {
+                continue;
+            }
+            Brand.TrademarkCateSearch res = new Brand.TrademarkCateSearch();
+            res.setCateCode(cate.getCode());
+            res.setCateName(cate.getCode() + "类 " + cate.getCategoryName());
+            trademarkCatesUnRegist.add(res);
+        }
+        result.setTrademarkCateListUnRegist(trademarkCatesUnRegist);
+        result.setUnRegistCount(trademarkCatesUnRegist.size());
+
+        //相似商标
+        TrademarkDTO.MdBrand requestFamilar = new TrademarkDTO.MdBrand();
+        requestFamilar.setBrandName(request.getBrandName());
+        requestFamilar.setPriceHigh(new BigDecimal(0));
+        requestFamilar.setPriceLow(new BigDecimal(0));
+        requestFamilar.setPageIndex(1);
+        requestFamilar.setPageSize(10);
+        BaseResponse<TrademarkDTO.QueryResp> responseFamilar = frontClient.search(requestFamilar);
+        if (!responseFamilar.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+            throw new ServiceException(responseFamilar.getStatus(), responseFamilar.getMessage());
+        }
+        List<Brand.SpecialRes> trademarkCatesFamilar = new ArrayList<>();
+        if(!CollectionUtils.isEmpty(responseFamilar.getResult().getMdBrands())){
+            for (TrademarkDTO.MdBrand e : responseFamilar.getResult().getMdBrands()) {
+                if (ids.containsKey(e.getId())) {
+                    continue;
+                }
+                Brand.SpecialRes res = new Brand.SpecialRes();
+                res.setId(e.getId());
+                res.setCategoryName(e.getCategory() + "类 " + name.get(e.getCategory()));
+                res.setBrandName(e.getBrandName());
+                res.setImgUrl(e.getImageUrl());
+                res.setMinPrice(e.getPrice().toString());
+                res.setMaxPrice(e.getPrice().toString());
+                res.setSpecial(e.getPromoteFlag()==1);
+                trademarkCatesFamilar.add(res);
+            }
+        }
+        result.setFamiliar(trademarkCatesFamilar);
+
+        return result;
+    }
+
+
+
 
     private Brand.Person getPerson() {
         Brand.Person person = new Brand.Person();
