@@ -14,7 +14,7 @@ public class Name {
     @ApiModel("商标起名详情展示")
     public static class Info{
         @ApiModelProperty("商标编号")
-        private int id;
+        private String id;
         @ApiModelProperty("商标名称")
         private String brand;
         @ApiModelProperty("成功率")

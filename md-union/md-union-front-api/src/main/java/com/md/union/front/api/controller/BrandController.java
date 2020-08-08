@@ -33,7 +33,7 @@ public class BrandController {
 
     @Autowired
     private FrontClient frontClient;
-    SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     /**
      * 八大热门分类
@@ -252,7 +252,8 @@ public class BrandController {
                 Brand.TrademarkCate res = new Brand.TrademarkCate();
                 res.setCateCode(e.getCategory());
                 res.setCateName(e.getCategory()+"类 "+name.get(e.getCategory()));
-                res.setDeposit("666");
+                res.setDeposit(e.getPrice().multiply(new BigDecimal(0.2)).toString());
+                res.setPrice(e.getPrice().toString());
                 res.setId(e.getId());
                 res.setName(e.getBrandName());
                 res.setPic(e.getImageUrl());

@@ -273,6 +273,8 @@ public class Brand {
         private String pic;
         @ApiModelProperty("定金")
         private String deposit;
+        @ApiModelProperty("价格")
+        private String price;
         @ApiModelProperty("商标分类id")
         private int cateCode;
         @ApiModelProperty("商标分类名字")
