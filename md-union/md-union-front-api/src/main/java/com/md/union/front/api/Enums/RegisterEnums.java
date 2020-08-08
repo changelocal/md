@@ -8,19 +8,19 @@ import com.arc.util.http.BaseResponse;
  */
 public enum RegisterEnums {
 
-    BRAND_NOMAL_RGISTER(1, "商标普通注册", "专家预审，通过率高，不成功退全款", 580,""),
-    BRAND_FAST_RGISTER(2, "商标加急注册", "不成功退全款，免费再注册一次", 680,""),
-    BRAND_GUARANT_RGISTER(3, "商标担保注册", "59分钟急速注册，省心担保，注册不成功退全款", 1180,""),
-    BRAND_SHANRE_RGISTER(4, "商标设计+注册双享套餐", "包含LOGO设计，商标加急注册，设计满意为止", 1580,""),
-    BRAND_PERSON_RGISTER(5, "个体营业执照+商标注册", "代办个体营业执照只需要身份证", 980,""),
+    BRAND_NOMAL_RGISTER(1, "商标普通注册", "专家预审，通过率高，不成功退全款", 580,"http://47.92.65.35:8082/file/brand-register/1.png"),
+    BRAND_FAST_RGISTER(2, "商标加急注册", "不成功退全款，免费再注册一次", 680,"http://47.92.65.35:8082/file/brand-register/2.png"),
+    BRAND_GUARANT_RGISTER(3, "商标担保注册", "59分钟急速注册，省心担保，注册不成功退全款", 1180,"http://47.92.65.35:8082/file/brand-register/3.png"),
+    BRAND_SHANRE_RGISTER(4, "商标设计+注册双享套餐", "包含LOGO设计，商标加急注册，设计满意为止", 1580,"http://47.92.65.35:8082/file/brand-register/4.png"),
+    BRAND_PERSON_RGISTER(5, "个体营业执照+商标注册", "代办个体营业执照只需要身份证", 980,"http://47.92.65.35:8082/file/brand-register/5.png"),
     ;
 
-    RegisterEnums(int type, String title, String brief, int price,String img) {
+    RegisterEnums(int type, String title, String brief, int price,String icon) {
         this.type = type;
         this.title = title;
         this.brief = brief;
         this.price = price;
-        this.img = img;
+        this.icon = icon;
     }
 
     public int getType() {
@@ -39,12 +39,11 @@ public enum RegisterEnums {
         return price;
     }
 
-    public String getImg() {
-        return img==null?def_img:img;
+    public String getIcon() {
+        return icon;
     }
 
 
-    private String def_img = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1595638504208&di=754606fdcb88e6b4ee9ea1476f4c2a5f&imgtype=0&src=http%3A%2F%2Fimage-ali.bianjiyi.com%2F1%2F2018%2F0710%2F14%2F15312043093853.jpg";
 
     //维权类型
     private int type;
@@ -55,7 +54,7 @@ public enum RegisterEnums {
     //价格
     private int price;
     //图片
-    private String img;
+    private String icon;
 
     public static RegisterEnums valueType(int id) {
         for (RegisterEnums item : RegisterEnums.values()) {

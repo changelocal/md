@@ -31,6 +31,7 @@ public class DealController {
             item.setTitle(p.getTitle());
             item.setBrief(p.getBrief());
             item.setPriceDesc("￥" + p.getPrice() + "/件fd");
+            item.setIcon(p.getIcon());
             result.add(item);
         });
         return result;
@@ -58,7 +59,7 @@ public class DealController {
             item.setId(p.getType());
             item.setBrandType(2);
             item.setTitle(p.getTitle());
-            item.setImg(img);
+            item.setImg(p.getIcon());
             item.setBrief(p.getBrief());
             item.setId(p.getType());
             item.setPriceDesc("￥" + p.getPrice() + "/件");
@@ -69,7 +70,7 @@ public class DealController {
             item.setId(p.getType());
             item.setBrandType(3);
             item.setTitle(p.getTitle());
-            item.setImg(img);
+            item.setImg(p.getIcon());
             item.setBrief(p.getBrief());
             item.setId(p.getType());
             item.setPriceDesc("￥" + p.getPrice() + "/件");

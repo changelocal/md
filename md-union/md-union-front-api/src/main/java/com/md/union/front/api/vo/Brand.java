@@ -140,6 +140,8 @@ public class Brand {
         private int brandType;
         @ApiModelProperty("主键id")
         private int id;
+        @ApiModelProperty("icon")
+        private String icon;
     }
 
     @Data
