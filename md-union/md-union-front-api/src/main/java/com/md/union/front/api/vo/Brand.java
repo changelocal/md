@@ -120,11 +120,17 @@ public class Brand {
         private String phone;
         @ApiModelProperty("QQ号码")
         private String qq;
+        @ApiModelProperty("头衔")
+        private String title;
     }
 
     @Data
     @ApiModel("商标购买详情")
     public static class DealDetail {
+        @ApiModelProperty("title")
+        private String title;
+        @ApiModelProperty("subTitle")
+        private String subTitle;
         @ApiModelProperty("图片url")
         private String imgUrl;
         @ApiModelProperty("品牌顾问信息")
@@ -135,6 +141,8 @@ public class Brand {
         public String marketPrice;
         @ApiModelProperty("累计成交")
         public int total;
+        @ApiModelProperty("详细")
+        public String des;
     }
 
     @Data

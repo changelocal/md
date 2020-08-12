@@ -402,9 +402,10 @@ public class BrandController {
     private Brand.Person getPerson() {
         Brand.Person person = new Brand.Person();
         person.setHeadImg("http://pic.5tu.cn/uploads/allimg/1607/pic_5tu_big_201607221326573826.jpg");
-        person.setName("客服1");
+        person.setName("张三");
         person.setPhone("15688706317");
         person.setQq("571660498");
+        person.setTitle("客服");
         return person;
     }
 
@@ -412,6 +413,8 @@ public class BrandController {
         Brand.DealDetail result = new Brand.DealDetail();
         if (brandType == 1) {
             RegisterEnums register = RegisterEnums.valueType(id);
+            result.setTitle("商标普通注册");
+            result.setSubTitle("申请提交后1-2工作日内进行网上商标申报");
             result.setImgUrl(register.getIcon());
             result.setBuyPrice("￥" + register.getPrice());
             result.setMarketPrice("￥" + (register.getPrice() + 500));
@@ -419,6 +422,8 @@ public class BrandController {
             result.setPerson(getPerson());
         } else if (brandType == 2) {
             DealEnums deal = DealEnums.valueType(id);
+            result.setTitle("商标普通注册2");
+            result.setSubTitle("申请提交后1-2工作日内进行网上商标申报2");
             result.setImgUrl(deal.getIcon());
             result.setBuyPrice("￥" + deal.getPrice());
             result.setMarketPrice("￥" + (deal.getPrice() + 500));
@@ -426,6 +431,8 @@ public class BrandController {
             result.setPerson(getPerson());
         } else if (brandType == 3) {
             ChangeEnums change = ChangeEnums.valueType(id);
+            result.setTitle("商标普通注册3");
+            result.setSubTitle("申请提交后1-2工作日内进行网上商标申报3");
             result.setImgUrl(change.getIcon());
             result.setBuyPrice("￥" + change.getPrice());
             result.setMarketPrice("￥" + (change.getPrice() + 500));

@@ -104,4 +104,9 @@ public interface FrontClient {
 
     @PostMapping(value = "/adminuser/update", headers = { "Content-Type=application/json" })
     BaseResponse<AdminUserDTO.Resp> update(@RequestBody AdminUserDTO.AdminUser request);
+
+    /**********************************service***********************************/
+    @GetMapping(value = "/service/get/{code}", headers = { "Content-Type=application/json" })
+    BaseResponse<ServiceDTO.Service> getService(@PathVariable("code") String code);
+
 }
