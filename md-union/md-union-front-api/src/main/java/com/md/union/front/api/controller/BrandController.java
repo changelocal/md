@@ -8,6 +8,7 @@ import com.md.union.front.api.Enums.DealEnums;
 import com.md.union.front.api.Enums.RegisterEnums;
 import com.md.union.front.api.vo.Brand;
 import com.md.union.front.api.vo.Category;
+import com.md.union.front.client.dto.ServiceDTO;
 import com.md.union.front.client.dto.TrademarkDTO;
 import com.md.union.front.client.feign.FrontClient;
 import io.swagger.annotations.Api;
@@ -410,6 +411,11 @@ public class BrandController {
     }
 
     private Brand.DealDetail getBrandDetail(int brandType, int id) {
+        BaseResponse<ServiceDTO.Service> responseFamilar = frontClient.getService("4477-43e3-93a5-5c3ebf52453a-8f569a58f591-d41d8");
+        if (!responseFamilar.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+            throw new ServiceException(responseFamilar.getStatus(), responseFamilar.getMessage());
+        }
+
         Brand.DealDetail result = new Brand.DealDetail();
         if (brandType == 1) {
             RegisterEnums register = RegisterEnums.valueType(id);
@@ -420,6 +426,7 @@ public class BrandController {
             result.setMarketPrice("￥" + (register.getPrice() + 500));
             result.setTotal(10);
             result.setPerson(getPerson());
+            result.setDes(responseFamilar.getResult().getDes());
         } else if (brandType == 2) {
             DealEnums deal = DealEnums.valueType(id);
             result.setTitle("商标普通注册2");
@@ -429,6 +436,7 @@ public class BrandController {
             result.setMarketPrice("￥" + (deal.getPrice() + 500));
             result.setTotal(20);
             result.setPerson(getPerson());
+            result.setDes(responseFamilar.getResult().getDes());
         } else if (brandType == 3) {
             ChangeEnums change = ChangeEnums.valueType(id);
             result.setTitle("商标普通注册3");
@@ -438,6 +446,7 @@ public class BrandController {
             result.setMarketPrice("￥" + (change.getPrice() + 500));
             result.setTotal(30);
             result.setPerson(getPerson());
+            result.setDes(responseFamilar.getResult().getDes());
         } else {
             throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "商标类型不存在");
         }

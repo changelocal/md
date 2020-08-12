@@ -114,7 +114,7 @@ public class ServiceDTO {
         /**
          *
          */
-        private int suid;
+        private long suid;
 
     }
 

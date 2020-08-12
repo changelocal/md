@@ -114,7 +114,7 @@ public class ServiceVO {
         /**
          *
          */
-        private int suid;
+        private long suid;
 
     }
 

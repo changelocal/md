@@ -117,6 +117,6 @@ public class Service {
 	/**
 	 * 
 	 */
-	private int suid;
+	private long suid;
 
 }
