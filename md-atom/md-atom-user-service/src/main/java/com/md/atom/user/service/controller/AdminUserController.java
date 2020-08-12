@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Random;
 
 @Api(tags = {"管理人员 "}, description = "接口负责人：sxj")
 @RestController
@@ -60,7 +61,8 @@ public class AdminUserController {
 
         List<AdminUser> list = adminUserDao.find(para);
         if(!CollectionUtils.isEmpty(list)){
-            BeanUtils.copyProperties(list.get(0), result);
+            Random random = new Random();
+            BeanUtils.copyProperties(list.get(random.nextInt(list.size())), result);
         }
 
         return result;

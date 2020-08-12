@@ -6,6 +6,7 @@ import com.arc.util.file.oss.OssClientTool;
 import com.arc.util.http.BaseResponse;
 import com.md.union.front.api.vo.Consultation;
 import com.md.union.front.api.vo.OssFileInfo;
+import com.md.union.front.client.dto.ServiceDTO;
 import com.md.union.front.client.dto.TrademarkDTO;
 import com.md.union.front.client.feign.FrontClient;
 import io.swagger.annotations.Api;
@@ -109,7 +110,15 @@ public class CommonController {
         result.setTitle(response.getResult().getTitle());
         result.setAvatar(response.getResult().getAvatar());
         //应该记录一下咨询记录 todo
+        ServiceDTO.Consultation consultation1 = new ServiceDTO.Consultation();
+        consultation1.setOpUserId(response.getResult().getId());
+        consultation1.setOrderNo(id);
+        consultation1.setOpenId("openid");
 
+        BaseResponse<ServiceDTO.Resp> responseAdd = frontClient.addConsultation(consultation1);
+        if (!responseAdd.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+            throw new ServiceException(responseAdd.getStatus(), responseAdd.getMessage());
+        }
 
         return result;
     }

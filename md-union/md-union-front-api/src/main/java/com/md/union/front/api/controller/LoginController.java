@@ -45,6 +45,9 @@ public class LoginController {
             //add
             wxUser.setCreateTime(new Date());
             wxUser.setUnionId(minUser.getUnionId());
+            wxUser.setOpenId(minUser.getOpenId());
+            wxUser.setMinId(minUser.getMinId());
+            wxUser.setMobile(minUser.getMobile());
             frontClient.add(wxUser);
         }
         return minUser;

@@ -1,6 +1,8 @@
 package com.md.atom.user.service.controller;
 
+import com.atom.core.dao.ConsultationDao;
 import com.atom.core.dao.ServiceDao;
+import com.atom.core.model.Consultation;
 import com.atom.core.model.Service;
 import com.atom.core.model.ServiceParam;
 import com.md.atom.user.service.vo.ServiceVO;
@@ -9,11 +11,9 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Api(tags = {"服务类订单 "}, description = "接口负责人：sxj")
@@ -23,6 +23,8 @@ import java.util.List;
 public class ServiceController {
     @Autowired
     private ServiceDao serviceDao;
+    @Autowired
+    private ConsultationDao consultationDao;
 
     @ApiOperation(value = "获得", notes = "获得")
     @GetMapping("/get/{code}")
@@ -37,5 +39,18 @@ public class ServiceController {
         return ret;
     }
 
+    @ApiOperation(value = "增加咨询记录", notes = "增加咨询记录")
+    @PostMapping("/add/consultation")
+    public ServiceVO.Service addConsultation(@RequestBody Consultation con) {
+        ServiceVO.Service ret = new ServiceVO.Service();
+
+        Consultation consultation = new Consultation();
+        BeanUtils.copyProperties(con, consultation);
+        consultation.setCreateTime(new Date());
+
+        int add = consultationDao.add(consultation);
+
+        return ret;
+    }
 
 }
