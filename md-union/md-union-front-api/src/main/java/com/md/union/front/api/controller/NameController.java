@@ -27,7 +27,7 @@ public class NameController {
     @GetMapping("/hot")
     public List<String> hotName() {
         String[] chars = {"美","雄","雷","魔","星","阳","宝","飞","顶","齐","龙","电","丹"
-                ,"田","东","豪","世","好","丸","丰","海","罗","中","丰","丹","本","主","丽"
+                ,"田","东","豪","世","好","丸","丰","海","罗","中","丰","申","本","主","丽"
                 ,"上","下","不","专","叶","史","杰","吉","可","古","有","原","友","参","厦"};
         List<String> names = new ArrayList<>();
         Random random = new Random();

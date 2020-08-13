@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.Map;
 
 @RestController
-@RequestMapping("api")
+@RequestMapping("wx")
 @Api(tags = {"微信，小程序管理服务,目前没用以后用"})
 public class WxController {
 
