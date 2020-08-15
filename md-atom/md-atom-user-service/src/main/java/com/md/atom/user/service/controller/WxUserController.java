@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Api(tags = {"管理微信用户 "}, description = "接口负责人：sxj")
 @RestController
 @RequestMapping("wxuser")
@@ -36,7 +39,14 @@ public class WxUserController {
         PageResult<WxUser> list = wxUserDao.query(para);
 
         if(!CollectionUtils.isEmpty(list)){
-            BeanUtils.copyProperties(list, result);
+            List<WxUserVO.WxUser> wxUsers = new ArrayList<>();
+            list.forEach(p->{
+                WxUserVO.WxUser vo = new WxUserVO.WxUser();
+                BeanUtils.copyProperties(p, vo);
+                wxUsers.add(vo);
+            });
+            result.setItems(wxUsers);
+            result.setTotalCount(list.getTotalCount());
         }
 
         return result;
@@ -47,9 +57,7 @@ public class WxUserController {
     public WxUserVO.AddResp add(@RequestBody WxUserVO.WxUser request) {
 
         WxUser wxUser = new WxUser();
-        wxUser.setMobile(request.getMobile());
-        wxUser.setNickName(request.getNickName());
-        wxUser.setOpenId(request.getOpenId());
+        BeanUtils.copyProperties(request, wxUser);
         long id = wxUserDao.add(wxUser);
 
         WxUserVO.AddResp result = new WxUserVO.AddResp();
