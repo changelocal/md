@@ -7,6 +7,7 @@ import com.md.union.front.client.dto.WxUserDTO;
 import com.md.union.front.client.feign.FrontClient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("wx")
 @Api(tags = {"微信，小程序管理服务,目前没用以后用"})
+@Slf4j
 public class WxController {
 
     @Autowired
@@ -26,6 +28,7 @@ public class WxController {
 
     @GetMapping(value = "/reply")
     public void wechatVerify(@RequestParam Map<String, String> reqMap, HttpServletResponse response) throws IOException {
+        log.info("wx message:",reqMap);
         if (reqMap.containsKey("signature")) {
             //非企业号
             String signature = reqMap.get("signature");

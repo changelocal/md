@@ -1,11 +1,14 @@
 package com.md.union.front.api.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.arc.common.ServiceException;
 import com.arc.util.http.BaseResponse;
 import com.md.union.front.api.Enums.BrandTypeEnums;
 import com.md.union.front.api.Enums.ChangeEnums;
 import com.md.union.front.api.Enums.DealEnums;
 import com.md.union.front.api.Enums.RegisterEnums;
+import com.md.union.front.api.facade.ConfigTemplate;
+import com.md.union.front.api.facade.MinCommon;
 import com.md.union.front.api.vo.Brand;
 import com.md.union.front.api.vo.Category;
 import com.md.union.front.client.dto.ServiceDTO;
@@ -13,6 +16,7 @@ import com.md.union.front.client.dto.TrademarkDTO;
 import com.md.union.front.client.feign.FrontClient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
@@ -31,11 +35,36 @@ import java.util.stream.Collectors;
 @Api(tags = {"商标管理服务"})
 @Slf4j
 public class BrandController {
-
+    @Autowired
+    private MinCommon minCommon;
     @Autowired
     private FrontClient frontClient;
     SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd");
 
+    @GetMapping("/test")
+    public void test() {
+
+        JSONObject data = new JSONObject();
+        data.put("touser", "openid");
+        data.put("template_id", ConfigTemplate.Buy_Brand_TmpId);
+        data.put("page", "pages/insuranceDetail/insuranceDetail?insuranceId=" + "id");
+        data.put("form_id", "formid");
+        JSONObject content = new JSONObject();
+        content.put("keyword1", new Template("国内快件丢失保险（快递保）"));
+        content.put("keyword2", new Template("iddd"));
+        content.put("keyword3", new Template("idddd"));
+        content.put("keyword4", new Template("您可登录燕赵财险官网查询理赔进度，服务电话：4000-000-123"));
+        data.put("data", content);
+        minCommon.sendMinTip(data);
+    }
+    @Data
+    public class Template {
+        Template(String value) {
+            this.value = value;
+        }
+
+        private String value;
+    }
     /**
      * 八大热门分类
      * @return
@@ -254,7 +283,8 @@ public class BrandController {
                 res.setCateCode(e.getCategory());
                 res.setCateName(e.getCategory()+"类 "+name.get(e.getCategory()));
                 res.setDeposit(e.getPrice().multiply(new BigDecimal(0.2)).toString());
-                res.setPrice(e.getPrice().toString());
+                res.setPriceLow(e.getPrice().toString());
+                res.setPriceHigh(e.getPrice().toString());
                 res.setId(e.getId());
                 res.setName(e.getBrandName());
                 res.setPic(e.getImageUrl());
@@ -288,7 +318,7 @@ public class BrandController {
 
         Brand.Person person = new Brand.Person();
         //todo img
-        person.setHeadImg(responsePerson.getResult().getNickname());
+        person.setHeadImg(responsePerson.getResult().getAvatar());
         person.setName(responsePerson.getResult().getNickname());
         person.setPhone(responsePerson.getResult().getMobile());
         person.setQq(responsePerson.getResult().getQqAccount());
