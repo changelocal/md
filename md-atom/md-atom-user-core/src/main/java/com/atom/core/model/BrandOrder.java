@@ -79,4 +79,9 @@ public class BrandOrder {
 	 */
 	private Date overTime;
 
+	/**
+	 * 产品编号
+	 */
+	private String productNo;
+
 }

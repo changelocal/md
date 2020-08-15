@@ -20,7 +20,7 @@ public class ServiceLocatorAutoConfig {
         // default ctor
     }
 
-    @Bean(name = "larkServiceLocator")
+    @Bean(name = "serviceLocator")
     @ConditionalOnMissingBean
     public ServiceLocator serviceLocator() {
         SpringServiceLocator l = new SpringServiceLocator();

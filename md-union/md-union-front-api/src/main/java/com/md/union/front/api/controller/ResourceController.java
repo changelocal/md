@@ -4,7 +4,7 @@ import com.arc.common.ServiceException;
 import com.arc.util.http.BaseResponse;
 import com.md.union.front.api.vo.Common;
 import com.md.union.front.client.dto.RefDTO;
-import com.md.union.front.client.feign.FrontOrderClient;
+import com.md.union.front.client.feign.OrderRefClient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import java.util.List;
 
 public class ResourceController {
     @Autowired
-    FrontOrderClient frontOrderClient;
+    OrderRefClient orderRefClient;
 
     @ApiOperation("权威认证的图片")
     @GetMapping("/auth")
@@ -39,14 +39,14 @@ public class ResourceController {
     public Common.CommitRes commit(@RequestBody Common.CommitReq request) {
         Common.CommitRes res = new Common.CommitRes();
 
-        if(CollectionUtils.isEmpty(request.getRefs())){
+        if (CollectionUtils.isEmpty(request.getRefs())) {
             throw new ServiceException(BaseResponse.STATUS_HANDLE_SUCCESS, "提交资料不可为空");
         }
         //覆盖之前文件信息
         RefDTO.OrderRefFile orderRefFile = new RefDTO.OrderRefFile();
         orderRefFile.setOrderNo(request.getId());
         orderRefFile.setDel(1);
-        frontOrderClient.update(orderRefFile);
+        orderRefClient.update(orderRefFile);
 
         //保存文件信息
         for (Common.Ref p : request.getRefs()) {
@@ -55,10 +55,9 @@ public class ResourceController {
             orderRefFile.setFileSource(request.getModel());
             orderRefFile.setFileId(p.getRefId());
             orderRefFile.setFileType(p.getType());
-            frontOrderClient.add(orderRefFile);
+            orderRefClient.add(orderRefFile);
         }
         //修改订单状态
-
 
 
         return res;

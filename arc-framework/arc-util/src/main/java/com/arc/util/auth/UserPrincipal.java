@@ -13,7 +13,7 @@ public interface UserPrincipal extends Principal {
 
     class InnerHelper {
         //
-        public static final String IC_KEY_CURRENT_PRINCIPAL = "CurrentPrincipal";
+        public static final String IC_KEY_CURRENT_PRINCIPAL = "com.arc.util.auth.CurrentPrincipal";
     }
 
     public static void setPrincipal(UserPrincipal principal) {

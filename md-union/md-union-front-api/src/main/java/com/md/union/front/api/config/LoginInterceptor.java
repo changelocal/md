@@ -1,10 +1,8 @@
 package com.md.union.front.api.config;
 
-import com.arc.common.ServiceException;
 import com.arc.util.auth.Anonymous;
 import com.arc.util.auth.AppUserPrincipal;
 import com.arc.util.auth.UserPrincipal;
-import com.arc.util.lang.StrKit;
 import com.md.union.front.api.vo.MinUser;
 import com.md.union.front.client.feign.UserClient;
 import lombok.extern.slf4j.Slf4j;
@@ -18,9 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 
 @Slf4j
 public class LoginInterceptor implements HandlerInterceptor {
-
-    @Autowired
-    private UserClient userClient;
 
 
     @Override
@@ -67,7 +62,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             principal.setAppId(minUser.getAppId());
             principal.setId(minUser.getId());
             principal.setMinId(minUser.getMinId());
-        }else{
+        } else {
             principal.setAppId("111");
             principal.setMinId("111");
             principal.setId(1L);

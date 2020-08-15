@@ -1,10 +1,13 @@
 package com.md.union.front.api.controller;
 
+import com.arc.util.auth.AppUserPrincipal;
 import com.md.union.front.api.vo.Brand;
 import com.md.union.front.api.vo.Category;
 import com.md.union.front.api.vo.Order;
+import com.md.union.front.client.feign.OrderClient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -12,12 +15,16 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/front/order")
-@Api(tags = {"订单管理服务"}, description = "接口负责人：田秀全")
+@Api(tags = {"订单管理服务"})
 public class OrderController {
+
+    @Autowired
+    private OrderClient orderClient;
 
     @ApiOperation("我的订单列表")
     @PostMapping("list")
     public Order.ListRes list(@RequestBody Order.SearchReq request) {
+        //String aa = AppUserPrincipal.getPrincipal().getToken();
         Order.ListRes result = new Order.ListRes();
         result.setList(getOrder());
         result.setTotal(10);

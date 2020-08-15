@@ -1,4 +1,4 @@
-package com.md.union.order.service.vo;
+package com.md.union.front.client.dto;
 
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 @ApiModel("订单相关")
-public class OrderVO {
+public class OrderDTO {
 
     @Data
     @ApiModel("订单列表返回结果")
