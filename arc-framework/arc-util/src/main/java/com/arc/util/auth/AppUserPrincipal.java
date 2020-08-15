@@ -6,13 +6,6 @@ package com.arc.util.auth;
 
 public class AppUserPrincipal implements UserPrincipal {
 
-    public String getSign() {
-        return sign;
-    }
-
-    public void setSign(String sign) {
-        this.sign = sign;
-    }
 
     public String getVersion() {
         return version;
@@ -22,8 +15,12 @@ public class AppUserPrincipal implements UserPrincipal {
         this.version = version;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public String getAppId() {
+        return appId;
+    }
+
+    public void setAppId(String appId) {
+        this.appId = appId;
     }
 
     public String getOpenId() {
@@ -50,12 +47,29 @@ public class AppUserPrincipal implements UserPrincipal {
         this.token = token;
     }
 
-    private String sign;
+    public String getMinId() {
+        return minId;
+    }
+
+    public void setMinId(String minId) {
+        this.minId = minId;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     private String version;
-    private String userId;
+    private String appId;
     private String openId;
     private String unionId;
     private String token;
+    private String minId;
+    private long id;
 
 
     public static AppUserPrincipal getPrincipal() {

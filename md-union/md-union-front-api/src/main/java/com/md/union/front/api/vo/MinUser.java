@@ -24,6 +24,8 @@ public class MinUser {
     private int type;
     @ApiModelProperty("手机号")
     private String mobile;
+    @ApiModelProperty("主键id")
+    private long id;
 
 
 }

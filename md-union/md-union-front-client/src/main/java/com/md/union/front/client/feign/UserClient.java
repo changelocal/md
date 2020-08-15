@@ -28,7 +28,7 @@ public interface UserClient {
 
     @ApiOperation(value = "查询微信用户记录", notes = "查询微信用户记录")
     @PostMapping("/get/by/condtion")
-    BaseResponse<WxUserDTO.WxUser> getByCondition(WxUserDTO.QueryWxUser request);
+    BaseResponse<WxUserDTO.WxUser> getByCondition(@RequestBody WxUserDTO.QueryWxUser request);
 
 
 }

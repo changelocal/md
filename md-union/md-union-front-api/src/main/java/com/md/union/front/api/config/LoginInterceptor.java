@@ -1,12 +1,14 @@
 package com.md.union.front.api.config;
 
-import com.alibaba.fastjson.JSON;
 import com.arc.common.ServiceException;
 import com.arc.util.auth.Anonymous;
 import com.arc.util.auth.AppUserPrincipal;
 import com.arc.util.auth.UserPrincipal;
 import com.arc.util.lang.StrKit;
+import com.md.union.front.api.vo.MinUser;
+import com.md.union.front.client.feign.UserClient;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -16,6 +18,9 @@ import javax.servlet.http.HttpServletResponse;
 
 @Slf4j
 public class LoginInterceptor implements HandlerInterceptor {
+
+    @Autowired
+    private UserClient userClient;
 
 
     @Override
@@ -53,11 +58,15 @@ public class LoginInterceptor implements HandlerInterceptor {
         principal.setToken(request.getHeader("x-token"));
         //request.getSession().getAttribute("")
         log.info("初始化header成功 :{}", principal);
+        Object object = request.getSession().getAttribute(principal.getToken());
+        if (object != null) {
+            MinUser minUser = (MinUser) object;
+            principal.setOpenId(minUser.getOpenId());
+            principal.setAppId(minUser.getAppId());
+            principal.setId(minUser.getId());
+            principal.setMinId(minUser.getMinId());
+        }
         return principal;
-    }
-
-    private void loadUser(){
-
     }
 
 

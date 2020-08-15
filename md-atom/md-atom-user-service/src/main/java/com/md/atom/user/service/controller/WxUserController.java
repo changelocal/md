@@ -35,7 +35,7 @@ public class WxUserController {
 
     @ApiOperation(value = "查询所有微信用户", notes = "查询所有微信用户")
     @PostMapping("/query")
-    public WxUserVO.QueryResp query(WxUserVO.QueryWxUser user) {
+    public WxUserVO.QueryResp query(@RequestBody WxUserVO.QueryWxUser user) {
         WxUserVO.QueryResp result = new WxUserVO.QueryResp();
         List<WxUserVO.WxUser> list = new ArrayList<>();
         PageResult<WxUser> pageResult = wxUserDao.query(convert(user));
@@ -54,7 +54,8 @@ public class WxUserController {
     public void add(@RequestBody WxUserVO.WxUser request) {
         log.info("com.md.atom.user.service.controller.WxUserController.add param:{}", JSON.toJSONString(request));
         WxUser wxUser = new WxUser();
-        wxUser.setAppId(String.valueOf(new Date().getTime()));
+        wxUser.setAppId(request.getAppId());
+        wxUser.setOpenId(request.getOpenId());
         wxUser.setMobile(request.getMobile());
         wxUser.setNickName(request.getNickName());
         wxUser.setMinId(request.getMinId());
@@ -85,11 +86,8 @@ public class WxUserController {
 
     @ApiOperation(value = "查询微信用户记录", notes = "查询微信用户记录")
     @PostMapping("/get/by/condtion")
-    public WxUserVO.WxUser getByCondition(WxUserVO.QueryWxUser request) {
+    public WxUserVO.WxUser getByCondition(@RequestBody WxUserVO.QueryWxUser request) {
         List<WxUser> users = wxUserDao.find(convert(request));
-        if (CollectionUtils.isEmpty(users)) {
-            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "用户不存在");
-        }
         if (users.size() > 1) {
             throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "用户不唯一");
         }
