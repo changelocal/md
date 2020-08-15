@@ -6,6 +6,7 @@ import com.arc.util.http.BaseResponse;
 import com.atom.core.dao.BrandOrderDao;
 import com.atom.core.model.BrandOrder;
 import com.google.common.base.Strings;
+import com.md.union.order.service.enums.OrderStatus;
 import com.md.union.order.service.vo.OrderVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,18 @@ public class BrandOrderController {
 
     private BrandOrder convertAdd(OrderVO.BrandOrderVO request) {
         BrandOrder result = new BrandOrder();
-
+        result.setOrderNo(request.getOrderNo());
+        result.setStatus(OrderStatus.PRE_PAY.getType());
+        result.setOrderNo(request.getOrderNo());
+        result.setOrderNo(request.getOrderNo());
+        result.setOrderNo(request.getOrderNo());
+        result.setOrderNo(request.getOrderNo());
+        result.setOrderNo(request.getOrderNo());
+        result.setOrderNo(request.getOrderNo());
+        result.setOrderNo(request.getOrderNo());
+        result.setOrderNo(request.getOrderNo());
+        result.setOrderNo(request.getOrderNo());
+        result.setOrderNo(request.getOrderNo());
         return result;
     }
 

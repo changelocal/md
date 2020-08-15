@@ -58,9 +58,6 @@ public class WxUserDao extends BaseDao  {
 		if(!Strings.isNullOrEmpty(wxUserParam.getAddress())){
 			filter=filter.and(f("address",wxUserParam.getAddress()));
 		}
-		if(!Strings.isNullOrEmpty(wxUserParam.getShareNo())){
-			filter=filter.and(f("share_no",wxUserParam.getShareNo()));
-		}
 		if(!Strings.isNullOrEmpty(wxUserParam.getBusinessNo())){
 			filter=filter.and(f("business_no",wxUserParam.getBusinessNo()));
 		}
@@ -107,9 +104,6 @@ public class WxUserDao extends BaseDao  {
 		}
 		if(!Strings.isNullOrEmpty(wxUserParam.getAddress())){
 			filter=filter.and(f("address",wxUserParam.getAddress()));
-		}
-		if(!Strings.isNullOrEmpty(wxUserParam.getShareNo())){
-			filter=filter.and(f("share_no",wxUserParam.getShareNo()));
 		}
 		if(!Strings.isNullOrEmpty(wxUserParam.getBusinessNo())){
 			filter=filter.and(f("business_no",wxUserParam.getBusinessNo()));
@@ -161,9 +155,6 @@ public class WxUserDao extends BaseDao  {
 		}
 		if(!Strings.isNullOrEmpty(wxUser.getAddress())){
 			updateValues.add("address",wxUser.getAddress());
-		}
-		if(!Strings.isNullOrEmpty(wxUser.getShareNo())){
-			updateValues.add("share_no",wxUser.getShareNo());
 		}
 		if(!Strings.isNullOrEmpty(wxUser.getBusinessNo())){
 			updateValues.add("business_no",wxUser.getBusinessNo());

@@ -74,14 +74,14 @@ public class WxUser {
 	private String address;
 
 	/**
-	 * 推广快递员编号
+	 * 关注时间
 	 */
-	private String shareNo;
+	private Date createTime;
 
 	/**
 	 * 关注时间
 	 */
-	private Date createTime;
+	private Date updateTime;
 
 	/**
 	 * 商户编号
