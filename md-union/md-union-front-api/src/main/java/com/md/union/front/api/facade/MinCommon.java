@@ -5,6 +5,7 @@ import com.arc.common.ServiceException;
 import com.arc.util.http.BaseResponse;
 import com.arc.util.http.HttpRequest;
 import com.arc.util.lang.EncryptUtil;
+import com.arc.util.lang.FaultException;
 import com.md.union.front.api.config.MinProperties;
 import com.md.union.front.api.vo.MinUser;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +33,7 @@ public class MinCommon {
      * @return
      */
     public MinUser minLogin(String code) {
-        String url = properties.getRouteHoust() + "/sns/jscode2session?appid=" + properties.getMinAppId() + "&secret=" + properties.getMinSecret() + "&js_code=" + code + "&grant_type=authorization_code";
+        String url = properties.getRouteHost() + "/sns/jscode2session?appid=" + properties.getMinAppId() + "&secret=" + properties.getMinSecret() + "&js_code=" + code + "&grant_type=authorization_code";
         log.info("minLogin req url :{}", url);
         HttpRequest httpRequest = HttpRequest.get(url);
         String result = httpRequest.body();
@@ -112,4 +113,40 @@ public class MinCommon {
         return minUser;
     }
 
+
+    /**
+     * 发送保单消息
+     *
+     * @param request
+     */
+    public  void sendMinTip(JSONObject request) {
+        String accessToken = getMinAccessToken();
+        String url = properties.getRouteHost() + "/cgi-bin/message/wxopen/template/send?access_token=" + accessToken;
+        log.info("sendMinTip url:{} data:{}", url, request.toJSONString());
+        String result = HttpRequest.post(url).header("Content-Type", HttpRequest.CONTENT_TYPE_JSON)
+                                   .send(request.toJSONString()).body();
+        log.info("sendMinTip result {}", result);
+    }
+    /**
+     * 微信公众号获取token
+     *
+     * @return 返回token
+     */
+    public  String getMinAccessToken() {
+//        String tokenCache = "WXP_TEMPLATE_" + properties.getMinAppId();
+//        if (redisClient.exists(tokenCache)) {
+//            return redisClient.get(tokenCache);
+//        }
+        String accessTokenUrl = properties.getRouteHost() + "/cgi-bin/token?grant_type=client_credential&appid=" + properties.getMinAppId() + "&secret=" + properties.getMinSecret();
+        log.info("getMinAccessToken req url {}", accessTokenUrl);
+        String result = HttpRequest.get(accessTokenUrl).body();
+        log.info("common getMinAccessToken result:{}", result);
+        JSONObject resp = JSONObject.parseObject(result);
+        if (resp.containsKey("errcode") && resp.getIntValue("errcode") != 0) {
+            throw new FaultException("获取minAccessToken失败" + resp.getString("errmsg"));
+        }
+        String accessToken = resp.getString("access_token");
+//        redisClient.set(tokenCache, accessToken, (resp.getIntValue("expires_in") - 10));
+        return accessToken;
+    }
 }

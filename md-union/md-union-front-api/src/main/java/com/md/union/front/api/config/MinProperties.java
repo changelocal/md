@@ -7,7 +7,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "weixin.min")
 public class MinProperties {
 
-    private String routeHoust;
+    private String routeHost;
     private String minAppId ;
     private String minSecret ;
+    private String tmpIdBrandBuy ;
 }
