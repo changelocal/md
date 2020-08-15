@@ -73,16 +73,19 @@ public class WxUser {
 	 */
 	private String address;
 
-
 	/**
 	 * 关注时间
 	 */
 	private Date createTime;
 
-    /**
-     * 关注时间
-     */
-    private Date updateTime;
+	/**
+	 * 关注时间
+	 */
+	private Date updateTime;
 
+	/**
+	 * 商户编号
+	 */
+	private String businessNo;
 
 }

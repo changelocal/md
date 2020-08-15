@@ -86,8 +86,8 @@ public interface FrontClient {
     @PostMapping(value = "/name/search", headers = { "Content-Type=application/json" })
     BaseResponse<NameDTO.SearchRes> searchName(@RequestBody NameDTO.SearchReq request);
     /**********************************微信用户相关***********************************/
-    @PostMapping(value = "/wxuser/add", headers = { "Content-Type=application/json" })
-    BaseResponse<WxUserDTO.Resp> add(@RequestBody WxUserDTO.WxUser request);
+    /*@PostMapping(value = "/wxuser/add", headers = { "Content-Type=application/json" })
+    BaseResponse<WxUserDTO.Resp> add(@RequestBody WxUserDTO.WxUser request);*/
 
     @PostMapping(value = "/wxuser/query", headers = { "Content-Type=application/json" })
     BaseResponse<WxUserDTO.QueryResp> query(@RequestBody WxUserDTO.WxUser request);

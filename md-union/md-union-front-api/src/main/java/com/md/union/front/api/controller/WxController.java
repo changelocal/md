@@ -50,8 +50,6 @@ public class WxController {
     public WxUserDTO.QueryResp test() throws IOException {
         WxUserDTO.QueryResp resp = new WxUserDTO.QueryResp();
         WxUserDTO.WxUser wxUser = new WxUserDTO.WxUser();
-        wxUser.setPageIndex(1);
-        wxUser.setPageSize(10);
         BaseResponse<WxUserDTO.QueryResp> response =frontClient.query(wxUser);
         if (!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(response.getStatus(), response.getMessage());
