@@ -109,6 +109,9 @@ public interface FrontClient {
     @GetMapping(value = "/service/get/{code}", headers = { "Content-Type=application/json" })
     BaseResponse<ServiceDTO.Service> getService(@PathVariable("code") String code);
 
+    @PostMapping(value = "/service/find", headers = { "Content-Type=application/json" })
+    BaseResponse<ServiceDTO.FindResp> findService(@RequestBody ServiceDTO.Service service);
+
     @PostMapping(value = "/service/add/consultation", headers = { "Content-Type=application/json" })
     BaseResponse<ServiceDTO.Resp> addConsultation(@RequestBody ServiceDTO.Consultation consultation );
 }

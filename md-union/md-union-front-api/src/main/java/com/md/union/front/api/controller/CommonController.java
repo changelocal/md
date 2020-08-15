@@ -2,6 +2,7 @@ package com.md.union.front.api.controller;
 
 
 import com.arc.common.ServiceException;
+import com.arc.util.auth.AppUserPrincipal;
 import com.arc.util.file.oss.OssClientTool;
 import com.arc.util.http.BaseResponse;
 import com.md.union.front.api.vo.Consultation;
@@ -95,6 +96,7 @@ public class CommonController {
     @ApiOperation("咨询按钮接口")
     @GetMapping("/consultation/{id}")
     public Consultation.ConsultationResp dealDtail(@PathVariable("id") String id) {
+
         Consultation.ConsultationResp result = new Consultation.ConsultationResp();
 
         TrademarkDTO.Consultation consultation = new TrademarkDTO.Consultation();
@@ -114,7 +116,7 @@ public class CommonController {
         consultation1.setOpUserId(response.getResult().getId());
         consultation1.setOrderNo(id);
         consultation1.setStatus(1);
-        consultation1.setOpenId("openid");
+        consultation1.setOpenId(AppUserPrincipal.getPrincipal().getOpenId());
 
         BaseResponse<ServiceDTO.Resp> responseAdd = frontClient.addConsultation(consultation1);
         if (!responseAdd.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {

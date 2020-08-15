@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @ApiModel("服务相关")
 public class ServiceDTO {
@@ -12,7 +13,10 @@ public class ServiceDTO {
     public static class Resp {
         private int code;
     }
-
+    @Data
+    public static class FindResp{
+        private List<Service> serviceList;
+    }
     @Data
     public static class Service {
         /**
@@ -69,6 +73,7 @@ public class ServiceDTO {
          * 视频是否是默认图 1 = 否，2 = 是
          */
         private int isVideoDefault;
+
 
         /**
          * 设计理念

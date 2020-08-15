@@ -166,7 +166,7 @@ public class Brand {
     @ApiModel("商标维权报价介绍信息详情")
     public static class BrandRight {
         @ApiModelProperty("主键id")
-        private int id;
+        private String id;
         @ApiModelProperty("介绍图片")
         private String img;
         @ApiModelProperty("主题")
