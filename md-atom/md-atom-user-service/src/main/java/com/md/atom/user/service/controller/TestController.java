@@ -1,6 +1,6 @@
 package com.md.atom.user.service.controller;
 
-import com.atom.core.dao.OrderDao;
+import com.atom.core.dao.BrandOrderDao;
 import com.md.atom.user.service.vo.SampleVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class TestController {
 
     @Autowired
-    private OrderDao orderDao;
+    private BrandOrderDao brandOrderDao;
 
     @GetMapping("/hello")
     public String hello() {
