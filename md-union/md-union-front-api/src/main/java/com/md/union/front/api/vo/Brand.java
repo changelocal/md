@@ -183,7 +183,7 @@ public class Brand {
     @ApiModel("商标维权-品牌权益")
     public static class BrandIcon{
         @ApiModelProperty("主键id")
-        private int id;
+        private String id;
         @ApiModelProperty("图标")
         private String icon;
         @ApiModelProperty("标题")
