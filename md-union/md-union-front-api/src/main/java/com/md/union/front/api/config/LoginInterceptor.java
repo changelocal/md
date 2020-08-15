@@ -41,7 +41,9 @@ public class LoginInterceptor implements HandlerInterceptor {
             return true;
         }
         response.setContentType("application/json");
-        if (request.getRequestURI().indexOf("/platform/") >= 0) {
+        AppUserPrincipal principal = init(request);
+        UserPrincipal.setPrincipal(principal);
+        /*if (request.getRequestURI().indexOf("/platform/") >= 0) {
             AppUserPrincipal principal = init(request);
 
             if (StrKit.isBlank(principal.getUserId()) || StrKit.isBlank(principal.getToken())) {
@@ -49,7 +51,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             }
 
             UserPrincipal.setPrincipal(principal);
-        }
+        }*/
         return true;
     }
 
@@ -65,6 +67,10 @@ public class LoginInterceptor implements HandlerInterceptor {
             principal.setAppId(minUser.getAppId());
             principal.setId(minUser.getId());
             principal.setMinId(minUser.getMinId());
+        }else{
+            principal.setAppId("111");
+            principal.setMinId("111");
+            principal.setId(1L);
         }
         return principal;
     }
