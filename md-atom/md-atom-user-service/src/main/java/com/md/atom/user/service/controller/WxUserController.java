@@ -88,6 +88,9 @@ public class WxUserController {
     @PostMapping("/get/by/condtion")
     public WxUserVO.WxUser getByCondition(@RequestBody WxUserVO.QueryWxUser request) {
         List<WxUser> users = wxUserDao.find(convert(request));
+        if(CollectionUtils.isEmpty(users)){
+            return null;
+        }
         if (users.size() > 1) {
             throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "用户不唯一");
         }

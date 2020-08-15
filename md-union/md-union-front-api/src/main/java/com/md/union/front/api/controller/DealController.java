@@ -121,7 +121,7 @@ public class DealController {
                 item.setId(p.getId());
                 item.setBrandType(2);
                 item.setTitle(p.getServiceName());
-                item.setIcon(p.getImageUrl());
+                item.setIcon("http://47.92.65.35:8082/file/icon/message.png");
                 result.add(item);
 
             });
@@ -141,7 +141,7 @@ public class DealController {
                 item.setId(p.getId());
                 item.setBrandType(2);
                 item.setTitle(p.getServiceName());
-                item.setIcon(p.getImageUrl());
+                item.setIcon("http://47.92.65.35:8082/file/icon/note.png");
                 result.add(item);
 
             });
