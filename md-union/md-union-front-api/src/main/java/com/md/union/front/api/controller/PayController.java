@@ -1,6 +1,7 @@
 package com.md.union.front.api.controller;
 
 import com.arc.util.MD5.MD5Util;
+import com.arc.util.auth.AppUserPrincipal;
 import com.arc.util.http.HttpRequest;
 import com.md.union.front.api.config.MinProperties;
 import io.swagger.annotations.Api;
@@ -73,7 +74,7 @@ public class PayController {
             dataMap.put("trade_type", "JSAPI");
             //交易类型
 //            dataMap.put("openid", openid);
-            dataMap.put("openid", "");
+            dataMap.put("openid", AppUserPrincipal.getPrincipal().getOpenId());
             //商户号
             //生成签名
 //            String signature = WXPayUtil.generateSignature(dataMap, weixinKey);

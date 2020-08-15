@@ -2,8 +2,10 @@ package com.md.union.front.api.controller;
 
 
 import com.arc.common.ServiceException;
+import com.arc.util.auth.AppUserPrincipal;
 import com.arc.util.http.BaseResponse;
 import com.md.union.front.api.vo.Consultation;
+import com.md.union.front.client.dto.ServiceDTO;
 import com.md.union.front.client.dto.TrademarkDTO;
 import com.md.union.front.client.feign.FrontClient;
 import io.swagger.annotations.Api;
@@ -106,16 +108,16 @@ public class CommonController {
         result.setTitle(response.getResult().getTitle());
         result.setAvatar(response.getResult().getAvatar());
         //应该记录一下咨询记录 todo
-//        ServiceDTO.Consultation consultation1 = new ServiceDTO.Consultation();
-//        consultation1.setOpUserId(response.getResult().getId());
-//        consultation1.setOrderNo(id);
-//        consultation1.setStatus(1);
-//        consultation1.setOpenId(AppUserPrincipal.getPrincipal().getOpenId());
-//
-//        BaseResponse<ServiceDTO.Resp> responseAdd = frontClient.addConsultation(consultation1);
-//        if (!responseAdd.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
-//            throw new ServiceException(responseAdd.getStatus(), responseAdd.getMessage());
-//        }
+        ServiceDTO.Consultation consultation1 = new ServiceDTO.Consultation();
+        consultation1.setOpUserId(response.getResult().getId());
+        consultation1.setOrderNo(id==null?"":id);
+        consultation1.setStatus(1);
+        consultation1.setOpenId(AppUserPrincipal.getPrincipal().getMinId());
+
+        BaseResponse<ServiceDTO.Resp> responseAdd = frontClient.addConsultation(consultation1);
+        if (!responseAdd.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+            throw new ServiceException(responseAdd.getStatus(), responseAdd.getMessage());
+        }
 
         return result;
     }

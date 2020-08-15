@@ -2,7 +2,6 @@ package com.md.union.front.api.controller;
 
 import com.arc.common.ServiceException;
 import com.arc.util.http.BaseResponse;
-import com.md.union.front.api.Enums.DealEnums;
 import com.md.union.front.api.Enums.RegisterEnums;
 import com.md.union.front.api.vo.Brand;
 import com.md.union.front.client.dto.ServiceDTO;
@@ -106,19 +105,47 @@ public class DealController {
     @GetMapping("/power/brand")
     public List<Brand.BrandIcon> powerBrand() {
         List<Brand.BrandIcon> result = new ArrayList<>();
-        Brand.BrandIcon item1 = new Brand.BrandIcon();
-        item1.setId(1);
-        item1.setIcon("http://47.92.65.35:8082/file/icon/message.png");
-        item1.setBrandType(DealEnums.BRAND_REFUSE_DEAL.getType());
-        item1.setTitle(DealEnums.BRAND_REFUSE_DEAL.getTitle());
-        result.add(item1);
 
-        Brand.BrandIcon item2 = new Brand.BrandIcon();
-        item2.setId(2);
-        item2.setIcon("http://47.92.65.35:8082/file/icon/note.png");
-        item2.setBrandType(DealEnums.BRAND_DISCUSS_DEAL.getType());
-        item2.setTitle(DealEnums.BRAND_DISCUSS_DEAL.getTitle());
-        result.add(item2);
+        ServiceDTO.Service service = new ServiceDTO.Service();
+        service.setIsChecked(1);
+        service.setIsEnable(2);
+//        service.setServiceTypeId("1");
+        service.setServiceName("商标驳回复审");
+        BaseResponse<ServiceDTO.FindResp> service1 = frontClient.findService(service);
+        if (!service1.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+            throw new ServiceException(service1.getStatus(), service1.getMessage());
+        }
+        if(!CollectionUtils.isEmpty(service1.getResult().getServices())){
+            service1.getResult().getServices().forEach(p->{
+                Brand.BrandIcon item = new Brand.BrandIcon();
+                item.setId(p.getId());
+                item.setBrandType(2);
+                item.setTitle(p.getServiceName());
+                item.setIcon(p.getImageUrl());
+                result.add(item);
+
+            });
+        }
+        service = new ServiceDTO.Service();
+        service.setIsChecked(1);
+        service.setIsEnable(2);
+//        service.setServiceTypeId("1");
+        service.setServiceName("商标异议答辩");
+        service1 = frontClient.findService(service);
+        if (!service1.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+            throw new ServiceException(service1.getStatus(), service1.getMessage());
+        }
+        if(!CollectionUtils.isEmpty(service1.getResult().getServices())){
+            service1.getResult().getServices().forEach(p->{
+                Brand.BrandIcon item = new Brand.BrandIcon();
+                item.setId(p.getId());
+                item.setBrandType(2);
+                item.setTitle(p.getServiceName());
+                item.setIcon(p.getImageUrl());
+                result.add(item);
+
+            });
+        }
         return result;
     }
 
