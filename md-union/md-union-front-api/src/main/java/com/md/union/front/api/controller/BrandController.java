@@ -46,7 +46,7 @@ public class BrandController {
 
         JSONObject data = new JSONObject();
         data.put("touser", "openid");
-        data.put("template_id", ConfigTemplate.Buy_Brand_TmpId);
+        data.put("template_id", ConfigTemplate.To_Pay_TmpId);
         data.put("page", "pages/insuranceDetail/insuranceDetail?insuranceId=" + "id");
         data.put("form_id", "formid");
         JSONObject content = new JSONObject();

@@ -113,6 +113,7 @@ public class CommonController {
         ServiceDTO.Consultation consultation1 = new ServiceDTO.Consultation();
         consultation1.setOpUserId(response.getResult().getId());
         consultation1.setOrderNo(id);
+        consultation1.setStatus(1);
         consultation1.setOpenId("openid");
 
         BaseResponse<ServiceDTO.Resp> responseAdd = frontClient.addConsultation(consultation1);

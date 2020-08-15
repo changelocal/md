@@ -163,5 +163,7 @@ public class ServiceDTO {
          * 修改时间
          */
         private Date updateTime;
+
+        private String note;
     }
 }
