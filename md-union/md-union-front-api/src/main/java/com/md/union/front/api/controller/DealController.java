@@ -1,11 +1,16 @@
 package com.md.union.front.api.controller;
 
-import com.md.union.front.api.Enums.ChangeEnums;
+import com.arc.common.ServiceException;
+import com.arc.util.http.BaseResponse;
 import com.md.union.front.api.Enums.DealEnums;
 import com.md.union.front.api.Enums.RegisterEnums;
 import com.md.union.front.api.vo.Brand;
+import com.md.union.front.client.dto.ServiceDTO;
+import com.md.union.front.client.feign.FrontClient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +24,8 @@ import java.util.List;
 @Api(tags = {"客户服务咨询管理"})
 public class DealController {
 
+    @Autowired
+    private FrontClient frontClient;
 
     @ApiOperation("商标注册介绍")
     @GetMapping("/register")
@@ -40,44 +47,58 @@ public class DealController {
     @ApiOperation("商标维权介绍")
     @GetMapping("/power")
     public Brand.DealRight power() {
-        String img = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1595638504208&di=754606fdcb88e6b4ee9ea1476f4c2a5f&imgtype=0&src=http%3A%2F%2Fimage-ali.bianjiyi.com%2F1%2F2018%2F0710%2F14%2F15312043093853.jpg";
         Brand.DealRight result = new Brand.DealRight();
-        Brand.Person person = new Brand.Person();
+//        Brand.Person person = new Brand.Person();
+
         List<Brand.BrandRight> rights = new ArrayList<>();
         List<Brand.BrandRight> changes = new ArrayList<>();
-        result.setPerson(person);
+
+        ServiceDTO.Service service = new ServiceDTO.Service();
+        service.setIsChecked(1);
+        service.setIsEnable(2);
+        service.setServiceTypeId("1");
+        BaseResponse<ServiceDTO.FindResp> service1 = frontClient.findService(service);
+        if (!service1.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+            throw new ServiceException(service1.getStatus(), service1.getMessage());
+        }
+        if(!CollectionUtils.isEmpty(service1.getResult().getServices())){
+            service1.getResult().getServices().forEach(p->{
+                Brand.BrandRight item = new Brand.BrandRight();
+                item.setId(p.getId());
+                item.setBrandType(2);
+                item.setTitle(p.getServiceName());
+                item.setImg(p.getImageUrl());
+                item.setBrief(p.getSubTitle());
+                item.setPriceDesc("￥" + p.getPrice() + "/件");
+                rights.add(item);
+
+            });
+        }
+
+        ServiceDTO.Service serviceChg = new ServiceDTO.Service();
+        serviceChg.setIsChecked(1);
+        serviceChg.setIsEnable(2);
+        serviceChg.setServiceTypeId("4");
+        BaseResponse<ServiceDTO.FindResp> serviceRet = frontClient.findService(serviceChg);
+        if (!serviceRet.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+            throw new ServiceException(serviceRet.getStatus(), serviceRet.getMessage());
+        }
+        if(!CollectionUtils.isEmpty(serviceRet.getResult().getServices())){
+            serviceRet.getResult().getServices().forEach(p->{
+                Brand.BrandRight item = new Brand.BrandRight();
+                item.setId(p.getId());
+                item.setBrandType(2);
+                item.setTitle(p.getServiceName());
+                item.setImg(p.getImageUrl());
+                item.setBrief(p.getSubTitle());
+                item.setPriceDesc("￥" + p.getPrice() + "/件");
+                changes.add(item);
+            });
+        }
+
+//        result.setPerson(person);
         result.setRights(rights);
         result.setChanges(changes);
-
-        person.setHeadImg("http://pic.5tu.cn/uploads/allimg/1607/pic_5tu_big_201607221326573826.jpg");
-        person.setName("客服1");
-        person.setPhone("15688706317");
-        person.setQq("571660498");
-
-        Arrays.stream(DealEnums.values()).forEach(p -> {
-            Brand.BrandRight item = new Brand.BrandRight();
-            item.setId(p.getType());
-            item.setBrandType(2);
-            item.setTitle(p.getTitle());
-            item.setImg(p.getIcon());
-            item.setBrief(p.getBrief());
-            item.setId(p.getType());
-            item.setPriceDesc("￥" + p.getPrice() + "/件");
-            rights.add(item);
-        });
-        Arrays.stream(ChangeEnums.values()).forEach(p -> {
-            Brand.BrandRight item = new Brand.BrandRight();
-            item.setId(p.getType());
-            item.setBrandType(3);
-            item.setTitle(p.getTitle());
-            item.setImg(p.getIcon());
-            item.setBrief(p.getBrief());
-            item.setId(p.getType());
-            item.setPriceDesc("￥" + p.getPrice() + "/件");
-            changes.add(item);
-        });
-
-
         return result;
     }
 

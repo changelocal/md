@@ -4,9 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.arc.common.ServiceException;
 import com.arc.util.http.BaseResponse;
 import com.md.union.front.api.Enums.BrandTypeEnums;
-import com.md.union.front.api.Enums.ChangeEnums;
-import com.md.union.front.api.Enums.DealEnums;
-import com.md.union.front.api.Enums.RegisterEnums;
 import com.md.union.front.api.facade.ConfigTemplate;
 import com.md.union.front.api.facade.MinCommon;
 import com.md.union.front.api.vo.Brand;
@@ -46,7 +43,7 @@ public class BrandController {
 
         JSONObject data = new JSONObject();
         data.put("touser", "openid");
-        data.put("template_id", ConfigTemplate.Buy_Brand_TmpId);
+        data.put("template_id", ConfigTemplate.To_Pay_TmpId);
         data.put("page", "pages/insuranceDetail/insuranceDetail?insuranceId=" + "id");
         data.put("form_id", "formid");
         JSONObject content = new JSONObject();
@@ -246,7 +243,7 @@ public class BrandController {
 
     @ApiOperation("购买商标维权详情信息(服务类订单) brandType(1商标注册2维权3信息变更) 主键")
     @GetMapping("/deal/detail/{brandType}/{id}")
-    public Brand.DealDetail dealDtail(@PathVariable("brandType") int brandType, @PathVariable("id") int id) {
+    public Brand.DealDetail dealDtail(@PathVariable("brandType") int brandType, @PathVariable("id") String id) {
         //Brand.DealDetail result = new Brand.DealDetail();
 
         return getBrandDetail(brandType, id);
@@ -427,59 +424,37 @@ public class BrandController {
         return result;
     }
 
+    private Brand.DealDetail getBrandDetail(int brandType, String id) {
+        Brand.DealDetail result = new Brand.DealDetail();
 
-
-
-    private Brand.Person getPerson() {
-        Brand.Person person = new Brand.Person();
-        person.setHeadImg("http://pic.5tu.cn/uploads/allimg/1607/pic_5tu_big_201607221326573826.jpg");
-        person.setName("张三");
-        person.setPhone("15688706317");
-        person.setQq("571660498");
-        person.setTitle("客服");
-        return person;
-    }
-
-    private Brand.DealDetail getBrandDetail(int brandType, int id) {
-        BaseResponse<ServiceDTO.Service> responseFamilar = frontClient.getService("4477-43e3-93a5-5c3ebf52453a-8f569a58f591-d41d8");
+        BaseResponse<ServiceDTO.Service> responseFamilar = frontClient.getService(id);
         if (!responseFamilar.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(responseFamilar.getStatus(), responseFamilar.getMessage());
         }
 
-        Brand.DealDetail result = new Brand.DealDetail();
-        if (brandType == 1) {
-            RegisterEnums register = RegisterEnums.valueType(id);
-            result.setTitle("商标普通注册");
-            result.setSubTitle("申请提交后1-2工作日内进行网上商标申报");
-            result.setImgUrl(register.getIcon());
-            result.setBuyPrice("￥" + register.getPrice());
-            result.setMarketPrice("￥" + (register.getPrice() + 500));
-            result.setTotal(10);
-            result.setPerson(getPerson());
-            result.setDes(responseFamilar.getResult().getDes());
-        } else if (brandType == 2) {
-            DealEnums deal = DealEnums.valueType(id);
-            result.setTitle("商标普通注册2");
-            result.setSubTitle("申请提交后1-2工作日内进行网上商标申报2");
-            result.setImgUrl(deal.getIcon());
-            result.setBuyPrice("￥" + deal.getPrice());
-            result.setMarketPrice("￥" + (deal.getPrice() + 500));
-            result.setTotal(20);
-            result.setPerson(getPerson());
-            result.setDes(responseFamilar.getResult().getDes());
-        } else if (brandType == 3) {
-            ChangeEnums change = ChangeEnums.valueType(id);
-            result.setTitle("商标普通注册3");
-            result.setSubTitle("申请提交后1-2工作日内进行网上商标申报3");
-            result.setImgUrl(change.getIcon());
-            result.setBuyPrice("￥" + change.getPrice());
-            result.setMarketPrice("￥" + (change.getPrice() + 500));
-            result.setTotal(30);
-            result.setPerson(getPerson());
-            result.setDes(responseFamilar.getResult().getDes());
-        } else {
-            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "商标类型不存在");
+        TrademarkDTO.Consultation consultation = new TrademarkDTO.Consultation();
+        consultation.setId(id);
+        BaseResponse<TrademarkDTO.ConsultationResp> response = frontClient.consultation(consultation);
+        if (!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+            throw new ServiceException(response.getStatus(), response.getMessage());
         }
+        Brand.Person person = new Brand.Person();
+        person.setTitle(response.getResult().getTitle());
+        person.setQq(response.getResult().getQqAccount());
+        person.setPhone(response.getResult().getMobile());
+        person.setHeadImg(response.getResult().getAvatar());
+        person.setName(response.getResult().getNickname());
+
+
+        result.setTitle(responseFamilar.getResult().getServiceName());
+        result.setSubTitle(responseFamilar.getResult().getSubTitle());
+        result.setImgUrl(responseFamilar.getResult().getImageUrl());
+        result.setBuyPrice("￥" + responseFamilar.getResult().getPrice());
+        result.setMarketPrice("￥" + (responseFamilar.getResult().getPrice().add(new BigDecimal(500))));
+        result.setTotal(10);
+        result.setPerson(person);
+        result.setDes(responseFamilar.getResult().getDes());
+
         return result;
     }
 

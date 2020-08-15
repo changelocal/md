@@ -1,23 +1,19 @@
 package com.atom.core.dao;
 
-import com.google.common.base.Strings;
-import com.atom.core.dao.BaseDao;
-import com.atom.core.dao.ServiceDao;
-import com.atom.core.model.Service;
-import com.atom.core.model.ServiceParam;
-import org.springframework.stereotype.Repository;
 import com.arc.db.jsd.Filter;
 import com.arc.db.jsd.SortType;
 import com.arc.db.jsd.Sorters;
 import com.arc.db.jsd.UpdateValues;
 import com.arc.util.data.PageResult;
+import com.atom.core.model.Service;
+import com.atom.core.model.ServiceParam;
+import com.google.common.base.Strings;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.arc.db.jsd.Shortcut.count;
-import static com.arc.db.jsd.Shortcut.f;
-import static com.arc.db.jsd.Shortcut.t;
+import static com.arc.db.jsd.Shortcut.*;
 
 /**
  * Created by md on 2020/07/25.
@@ -93,6 +89,12 @@ public class ServiceDao extends BaseDao  {
 		if(serviceParam.getTotalBuyCount()>0){
 			filter=filter.and(f("total_buy_count",serviceParam.getTotalBuyCount()));
 		}
+        if(serviceParam.getIsEnable()>0){
+            filter=filter.and(f("is_enable",serviceParam.getIsEnable()));
+        }
+        if(serviceParam.getIsChecked()>0){
+            filter=filter.and(f("is_checked",serviceParam.getIsChecked()));
+        }
 		if(!Strings.isNullOrEmpty(serviceParam.getServiceTypeId())){
 			filter=filter.and(f("service_type_id",serviceParam.getServiceTypeId()));
 		}

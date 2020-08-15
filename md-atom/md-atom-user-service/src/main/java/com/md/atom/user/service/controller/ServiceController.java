@@ -11,8 +11,10 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -49,6 +51,27 @@ public class ServiceController {
         consultation.setCreateTime(new Date());
 
         int add = consultationDao.add(consultation);
+
+        return ret;
+    }
+
+    @ApiOperation(value = "增加咨询记录", notes = "增加咨询记录")
+    @PostMapping("/find")
+    public ServiceVO.FindResp find(@RequestBody ServiceVO.Service con) {
+        ServiceVO.FindResp ret = new ServiceVO.FindResp();
+
+        ServiceParam param = new ServiceParam();
+        BeanUtils.copyProperties(con, param);
+        List<Service> services = serviceDao.find(param);
+        if(!CollectionUtils.isEmpty(services)){
+            List<ServiceVO.Service> services1 = new ArrayList<>();
+            services.forEach(p->{
+                ServiceVO.Service vo = new ServiceVO.Service();
+                BeanUtils.copyProperties(p, vo);
+                services1.add(vo);
+            });
+            ret.setServices(services1);
+        }
 
         return ret;
     }

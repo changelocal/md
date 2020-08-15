@@ -89,24 +89,25 @@ public class PayController {
 //        return mapStr;
 //    }
 //
-//    /**
-//     * 异步回调(必须有,得发布到外网)
-//     *
-//     * @param unifiedorderUrl
-//     * @param requestXml
-//     * @return
-//     */
-//    @RequestMapping("/notifyUrl")
-//    public String notifyUrl(String unifiedorderUrl, String requestXml) {
-//        System.out.print("进入支付h5回调=====================");
-//
-//        //判断接受到的result_code是不是SUCCESS,如果是,则返回成功,具体业务具体分析,修改订单状态
-//
-//        // 通知微信.异步确认成功.必写.不然会一直通知后台.
-//        String resXml = "<xml>" + "<return_code><![CDATA[SUCCESS]]></return_code>" +
-//                "<return_msg><![CDATA[OK]]></return_msg>" + "</xml> ";
-//        return resXml; //或者 return "success";
-//    }
+    /**
+     * 异步回调(必须有,得发布到外网)
+     *
+     * @param unifiedorderUrl
+     * @param requestXml
+     * @return
+     */
+    @RequestMapping("/notifyUrl")
+    public String notifyUrl(String unifiedorderUrl, String requestXml) {
+
+
+        //判断接受到的result_code是不是SUCCESS,如果是,则返回成功,具体业务具体分析,修改订单状态
+
+        // 通知微信.异步确认成功.必写.不然会一直通知后台.
+        String resXml = "<xml>" + "<return_code><![CDATA[SUCCESS]]></return_code>" +
+                "<return_msg><![CDATA[OK]]></return_msg>" + "</xml> ";
+        return resXml;
+        //或者 return "success";
+    }
 
 
 }

@@ -10,5 +10,5 @@ public class MinProperties {
     private String routeHost;
     private String minAppId ;
     private String minSecret ;
-    private String tmpIdBrandBuy ;
+    private String mchId;
 }
