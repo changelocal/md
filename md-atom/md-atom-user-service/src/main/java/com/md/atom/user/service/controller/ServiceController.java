@@ -65,7 +65,11 @@ public class ServiceController {
         List<Service> services = serviceDao.find(param);
         if(!CollectionUtils.isEmpty(services)){
             List<ServiceVO.Service> services1 = new ArrayList<>();
-            BeanUtils.copyProperties(services, services1);
+            services.forEach(p->{
+                ServiceVO.Service vo = new ServiceVO.Service();
+                BeanUtils.copyProperties(p, vo);
+                services1.add(vo);
+            });
             ret.setServices(services1);
         }
 

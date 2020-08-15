@@ -61,8 +61,8 @@ public class DealController {
         if (!service1.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(service1.getStatus(), service1.getMessage());
         }
-        if(CollectionUtils.isEmpty(service1.getResult().getServiceList())){
-            service1.getResult().getServiceList().forEach(p->{
+        if(!CollectionUtils.isEmpty(service1.getResult().getServices())){
+            service1.getResult().getServices().forEach(p->{
                 Brand.BrandRight item = new Brand.BrandRight();
                 item.setId(p.getId());
                 item.setBrandType(2);
@@ -83,8 +83,8 @@ public class DealController {
         if (!serviceRet.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(serviceRet.getStatus(), serviceRet.getMessage());
         }
-        if(CollectionUtils.isEmpty(serviceRet.getResult().getServiceList())){
-            serviceRet.getResult().getServiceList().forEach(p->{
+        if(!CollectionUtils.isEmpty(serviceRet.getResult().getServices())){
+            serviceRet.getResult().getServices().forEach(p->{
                 Brand.BrandRight item = new Brand.BrandRight();
                 item.setId(p.getId());
                 item.setBrandType(2);

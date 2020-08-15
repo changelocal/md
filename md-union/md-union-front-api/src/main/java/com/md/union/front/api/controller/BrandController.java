@@ -424,8 +424,6 @@ public class BrandController {
         return result;
     }
 
-
-
     private Brand.DealDetail getBrandDetail(int brandType, String id) {
         Brand.DealDetail result = new Brand.DealDetail();
 
@@ -434,13 +432,27 @@ public class BrandController {
             throw new ServiceException(responseFamilar.getStatus(), responseFamilar.getMessage());
         }
 
+        TrademarkDTO.Consultation consultation = new TrademarkDTO.Consultation();
+        consultation.setId(id);
+        BaseResponse<TrademarkDTO.ConsultationResp> response = frontClient.consultation(consultation);
+        if (!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+            throw new ServiceException(response.getStatus(), response.getMessage());
+        }
+        Brand.Person person = new Brand.Person();
+        person.setTitle(response.getResult().getTitle());
+        person.setQq(response.getResult().getQqAccount());
+        person.setPhone(response.getResult().getMobile());
+        person.setHeadImg(response.getResult().getAvatar());
+        person.setName(response.getResult().getNickname());
+
+
         result.setTitle(responseFamilar.getResult().getServiceName());
         result.setSubTitle(responseFamilar.getResult().getSubTitle());
         result.setImgUrl(responseFamilar.getResult().getImageUrl());
         result.setBuyPrice("￥" + responseFamilar.getResult().getPrice());
         result.setMarketPrice("￥" + (responseFamilar.getResult().getPrice().add(new BigDecimal(500))));
         result.setTotal(10);
-//        result.setPerson(getPerson());
+        result.setPerson(person);
         result.setDes(responseFamilar.getResult().getDes());
 
         return result;

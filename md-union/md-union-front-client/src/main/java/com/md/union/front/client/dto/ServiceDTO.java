@@ -15,7 +15,7 @@ public class ServiceDTO {
     }
     @Data
     public static class FindResp{
-        private List<Service> serviceList;
+        private List<Service> services;
     }
     @Data
     public static class Service {

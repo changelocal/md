@@ -1,7 +1,5 @@
 package com.md.union.front.api.controller;
 
-import com.arc.common.ServiceException;
-import com.arc.util.http.BaseResponse;
 import com.md.union.front.api.facade.MinCommon;
 import com.md.union.front.api.vo.MinUser;
 import com.md.union.front.client.dto.WxUserDTO;
@@ -9,13 +7,10 @@ import com.md.union.front.client.feign.FrontClient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Date;
 
 @RestController
 @RequestMapping("/front/login")
@@ -37,19 +32,19 @@ public class LoginController {
         wxUser.setPageIndex(0);
         wxUser.setMinId(minUser.getMinId());
         //find
-        BaseResponse<WxUserDTO.QueryResp> response = frontClient.query(wxUser);
-        if (!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
-            throw new ServiceException(response.getStatus(), response.getMessage());
-        }
-        if(CollectionUtils.isEmpty(response.getResult().getItems())){
-            //add
-            wxUser.setCreateTime(new Date());
-            wxUser.setUnionId(minUser.getUnionId());
-            wxUser.setOpenId(minUser.getOpenId());
-            wxUser.setMinId(minUser.getMinId());
-            wxUser.setMobile(minUser.getMobile());
-            frontClient.add(wxUser);
-        }
+//        BaseResponse<WxUserDTO.QueryResp> response = frontClient.query(wxUser);
+//        if (!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+//            throw new ServiceException(response.getStatus(), response.getMessage());
+//        }
+//        if(CollectionUtils.isEmpty(response.getResult().getItems())){
+//            //add
+//            wxUser.setCreateTime(new Date());
+//            wxUser.setUnionId(minUser.getUnionId());
+//            wxUser.setOpenId(minUser.getOpenId());
+//            wxUser.setMinId(minUser.getMinId());
+//            wxUser.setMobile(minUser.getMobile());
+//            frontClient.add(wxUser);
+//        }
         return minUser;
     }
 }
