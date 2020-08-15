@@ -1,23 +1,20 @@
 package com.atom.core.dao;
 
-import com.google.common.base.Strings;
-import com.atom.core.dao.BaseDao;
-import com.atom.core.dao.WxUserDao;
-import com.atom.core.model.WxUser;
-import com.atom.core.model.WxUserParam;
-import org.springframework.stereotype.Repository;
 import com.arc.db.jsd.Filter;
 import com.arc.db.jsd.SortType;
 import com.arc.db.jsd.Sorters;
 import com.arc.db.jsd.UpdateValues;
 import com.arc.util.data.PageResult;
+import com.atom.core.model.WxUser;
+import com.atom.core.model.WxUserParam;
+import com.google.common.base.Strings;
+import org.springframework.stereotype.Repository;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.arc.db.jsd.Shortcut.count;
-import static com.arc.db.jsd.Shortcut.f;
-import static com.arc.db.jsd.Shortcut.t;
+import static com.arc.db.jsd.Shortcut.*;
 
 /**
  * Created by md on 2020/07/25.
@@ -120,8 +117,8 @@ public class WxUserDao extends BaseDao  {
 	}
 
 	public long add(WxUser wxUser) {
-		long id = (long) DB().insert(wxUser).result(true).getKeys().get(0);
-		return (int)id;
+		BigInteger id = (BigInteger) DB().insert(wxUser).result(true).getKeys().get(0);
+		return id.longValue();
 	}
 
 	public void update(WxUser wxUser) {
