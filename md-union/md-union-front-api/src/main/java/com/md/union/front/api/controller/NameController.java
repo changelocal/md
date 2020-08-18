@@ -27,13 +27,15 @@ public class NameController {
     @GetMapping("/hot")
     public List<String> hotName() {
         String[] chars = {"美","雄","雷","魔","星","阳","宝","飞","顶","齐","龙","电","丹"
-                ,"田","东","豪","世","好","丸","丰","海","罗","中","丰","申","本","主","丽"
+                ,"田","东","豪","世","好","丸","丰","海","罗","中","米","申","本","主","丽"
                 ,"上","下","不","专","叶","史","杰","吉","可","古","有","原","友","参","厦"};
         List<String> names = new ArrayList<>();
         Random random = new Random();
-        for(int i=0;i<16;i++){
-            int j = random.nextInt(chars.length);
-            names.add(chars[j]);
+        while(names.size() < 17) {
+            int num = random.nextInt(chars.length);
+            if(!names.contains(chars[num])) {
+                names.add(chars[num]); //往集合里面添加数据。
+            }
         }
         return names;
     }

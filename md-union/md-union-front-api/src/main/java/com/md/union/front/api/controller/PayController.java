@@ -197,6 +197,7 @@ public class PayController {
      * @throws Exception
      */
     public static Map<String, String> getMapFromXML(String strXML) throws Exception {
+        log.info("pay notif:", strXML);
         try {
             Map<String, String> data = new HashMap<String, String>();
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
