@@ -314,7 +314,7 @@ public class BrandController {
         }
 
         Brand.Person person = new Brand.Person();
-        //todo img
+        person.setTitle(responsePerson.getResult().getTitle());
         person.setHeadImg(responsePerson.getResult().getAvatar());
         person.setName(responsePerson.getResult().getNickname());
         person.setPhone(responsePerson.getResult().getMobile());
