@@ -14,6 +14,10 @@ public class WxUserDTO {
         private String id;
     }
     @Data
+    public static class Resp{
+        private String id;
+    }
+    @Data
     public static class QueryResp{
         private List<WxUser> items;
         private int totalCount;

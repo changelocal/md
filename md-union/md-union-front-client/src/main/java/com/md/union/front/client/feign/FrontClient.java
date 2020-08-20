@@ -92,6 +92,9 @@ public interface FrontClient {
     @PostMapping(value = "/wxuser/query", headers = { "Content-Type=application/json" })
     BaseResponse<WxUserDTO.QueryResp> query(@RequestBody WxUserDTO.WxUser request);
 
+    @PostMapping(value = "/wxuser/update", headers = { "Content-Type=application/json" })
+    BaseResponse<WxUserDTO.Resp> update(@RequestBody WxUserDTO.WxUser request);
+
     /**********************************系统用户相关***********************************/
     @PostMapping(value = "/adminuser/add", headers = { "Content-Type=application/json" })
     BaseResponse<AdminUserDTO.Resp> add(@RequestBody AdminUserDTO.AdminUser request);
