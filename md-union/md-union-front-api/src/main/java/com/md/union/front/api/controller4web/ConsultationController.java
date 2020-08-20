@@ -2,8 +2,8 @@ package com.md.union.front.api.controller4web;
 
 import com.arc.common.ServiceException;
 import com.arc.util.http.BaseResponse;
-import com.md.union.front.api.vo4web.Wxuser;
-import com.md.union.front.client.dto.WxUserDTO;
+import com.md.union.front.api.vo4web.Consultation;
+import com.md.union.front.client.dto.ConsultationDTO;
 import com.md.union.front.client.feign.FrontClient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,19 +26,19 @@ public class ConsultationController {
     private FrontClient frontClient;
     @ApiOperation("商标起名查询")
     @PostMapping("/query")
-    public Wxuser.SearchRes query(@RequestBody Wxuser.SearchReq request) {
-        Wxuser.SearchRes ret = new Wxuser.SearchRes();
-        WxUserDTO.WxUser adminUser = new WxUserDTO.WxUser();
+    public Consultation.SearchRes query(@RequestBody Consultation.SearchReq request) {
+        Consultation.SearchRes ret = new Consultation.SearchRes();
+        ConsultationDTO.Info adminUser = new ConsultationDTO.Info();
         BeanUtils.copyProperties(request, adminUser);
-        BaseResponse<WxUserDTO.QueryResp> query = frontClient.query(adminUser);
+        BaseResponse<ConsultationDTO.QueryResp> query = frontClient.query(adminUser);
         if (!query.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(query.getStatus(), query.getMessage());
         }
-        if(!CollectionUtils.isEmpty(query.getResult().getItems())){
-            List<Wxuser.Info> infos = new ArrayList<>();
-            BeanUtils.copyProperties(query.getResult().getItems(), infos);
+        if(!CollectionUtils.isEmpty(query.getResult().getInfos())){
+            List<Consultation.Info> infos = new ArrayList<>();
+            BeanUtils.copyProperties(query.getResult().getInfos(), infos);
             ret.setList(infos);
-            ret.setCount(query.getResult().getItems().size());
+            ret.setCount(query.getResult().getInfos().size());
         }else{
             ret.setCount(0);
         }
@@ -46,10 +46,10 @@ public class ConsultationController {
     }
 
     @PostMapping("/update")
-    public void update(@RequestBody Wxuser.Info request) {
-        WxUserDTO.WxUser adminUser = new WxUserDTO.WxUser();
-        BeanUtils.copyProperties(request, adminUser);
-        BaseResponse<WxUserDTO.Resp> query = frontClient.update(adminUser);
+    public void update(@RequestBody Consultation.Info request) {
+        ConsultationDTO.Info info = new ConsultationDTO.Info();
+        BeanUtils.copyProperties(request, info);
+        BaseResponse<ConsultationDTO.Resp> query = frontClient.update(info);
         if (!query.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(query.getStatus(), query.getMessage());
         }

@@ -117,4 +117,11 @@ public interface FrontClient {
 
     @PostMapping(value = "/service/add/consultation", headers = { "Content-Type=application/json" })
     BaseResponse<ServiceDTO.Resp> addConsultation(@RequestBody ServiceDTO.Consultation consultation );
+
+    /**********************************consultation***********************************/
+    @PostMapping(value = "/consultation/query", headers = { "Content-Type=application/json" })
+    BaseResponse<ConsultationDTO.QueryResp> query(@RequestBody ConsultationDTO.Info request);
+
+    @PostMapping(value = "/consultation/update", headers = { "Content-Type=application/json" })
+    BaseResponse<ConsultationDTO.Resp> update(@RequestBody ConsultationDTO.Info request);
 }
