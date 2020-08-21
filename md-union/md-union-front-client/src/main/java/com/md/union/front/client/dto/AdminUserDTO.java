@@ -1,5 +1,6 @@
 package com.md.union.front.client.dto;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.Date;
@@ -93,6 +94,10 @@ public class AdminUserDTO {
          * 微信二维码名片
          */
         private String wxQrcode;
+        @ApiModelProperty("当前页")
+        private int pageIndex;
+        @ApiModelProperty("每页显示条数")
+        private int pageSize;
     }
 
     @Data

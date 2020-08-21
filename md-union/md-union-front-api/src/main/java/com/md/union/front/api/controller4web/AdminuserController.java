@@ -36,7 +36,12 @@ public class AdminuserController {
         }
         if(!CollectionUtils.isEmpty(query.getResult().getAdminUsers())){
             List<Adminuser.Info> infos = new ArrayList<>();
-            BeanUtils.copyProperties(query.getResult().getAdminUsers(), infos);
+            query.getResult().getAdminUsers().forEach(p->{
+                Adminuser.Info info= new Adminuser.Info();
+                BeanUtils.copyProperties(p, info);
+                infos.add(info);
+            });
+
             ret.setList(infos);
             ret.setCount(query.getResult().getAdminUsers().size());
         }else{

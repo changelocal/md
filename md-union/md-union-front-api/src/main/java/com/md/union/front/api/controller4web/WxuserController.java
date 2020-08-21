@@ -36,7 +36,12 @@ public class WxuserController {
         }
         if(!CollectionUtils.isEmpty(query.getResult().getItems())){
             List<Wxuser.Info> infos = new ArrayList<>();
-            BeanUtils.copyProperties(query.getResult().getItems(), infos);
+            query.getResult().getItems().forEach(p->{
+                Wxuser.Info info = new Wxuser.Info();
+                BeanUtils.copyProperties(p, info);
+                infos.add(info);
+            });
+
             ret.setList(infos);
             ret.setCount(query.getResult().getItems().size());
         }else{

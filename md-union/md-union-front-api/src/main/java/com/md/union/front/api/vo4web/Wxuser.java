@@ -14,84 +14,75 @@ public class Wxuser {
     @Data
     @ApiModel("商标起名详情展示")
     public static class Info{
-        private String id;
-
         /**
-         *
+         * 主键
          */
-        private Date createTime;
+        private long id;
 
         /**
-         *
+         * 用户唯一标识id
          */
-        private String account;
+        private String appId;
 
         /**
-         *
+         * 联合id
          */
-        private String password;
+        private String unionId;
 
         /**
-         * 0=god,
+         * 微信公众号openId
          */
-        private int type;
-
-
+        private String openId;
 
         /**
-         * 角色
+         * 微信小程序openId
          */
-        private String role;
+        private String minId;
 
         /**
-         *
+         * 是否关注(1关注 2取消关注)
          */
-        private String email;
+        private int followStatus;
 
         /**
-         *
+         * 用户的性别，值为1时是男性，值为2时是女性，值为0时是未知
          */
-        private Date lastLoginTime;
+        private int sex;
 
         /**
-         * 手机号
+         * 昵称
+         */
+        private String nickName;
+
+        /**
+         * 真实姓名
+         */
+        private String realName;
+
+        /**
+         * 身份证号
+         */
+        private String idCard;
+
+        /**
+         * 手机
          */
         private String mobile;
 
         /**
-         * 微信-openid 用于微信二维码登录
+         * 联系地址
          */
-        private String wxId;
+        private String address;
 
         /**
-         *
+         * 关注时间
          */
-        private String avatar;
+        private Date createTime;
 
         /**
-         * 姓名
+         * 商户编号
          */
-        private String nickname;
-
-        /**
-         * 0=禁用，1=启用
-         */
-        private int isEnable;
-
-        /**
-         * 备注
-         */
-        private String remark;
-
-        /**
-         * QQ号
-         */
-        private String qqAccount;
-
-        /**
-         * 微信号
-         */
-        private String wxAccount;
+        private String businessNo;
 
     }
 
@@ -100,46 +91,56 @@ public class Wxuser {
     public static class SearchReq{
 
         /**
-         * 0=god,
+         * 微信公众号openId
          */
-        private int type;
+        private String openId;
 
         /**
-         * 角色
+         * 微信小程序openId
          */
-        private String role;
-
+        private String minId;
 
         /**
-         *
+         * 是否关注(1关注 2取消关注)
          */
-        private Date lastLoginTime;
+        private int followStatus;
 
         /**
-         * 手机号
+         * 用户的性别，值为1时是男性，值为2时是女性，值为0时是未知
+         */
+        private int sex;
+
+        /**
+         * 昵称
+         */
+        private String nickName;
+
+        /**
+         * 真实姓名
+         */
+        private String realName;
+
+        /**
+         * 身份证号
+         */
+        private String idCard;
+
+        /**
+         * 手机
          */
         private String mobile;
 
+        /**
+         * 联系地址
+         */
+        private String address;
 
         /**
-         * 姓名
+         * 关注时间
          */
-        private String nickname;
+        private Date createTime;
 
-        /**
-         * 0=禁用，1=启用
-         */
-        private int isEnable;
 
-        /**
-         * QQ号
-         */
-        private String qqAccount;
-
-        /**
-         * 微信号
-         */
-        private String wxAccount;
 
         @ApiModelProperty("当前页")
         public int pageIndex;

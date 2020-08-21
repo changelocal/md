@@ -10,10 +10,14 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Api(tags = {"管理人员 "}, description = "接口负责人：sxj")
 @RestController
@@ -31,7 +35,21 @@ public class ConsultationController {
         ConsultationParam para = new ConsultationParam();
         BeanUtils.copyProperties(adminUser, para);
         PageResult<Consultation> list = consultationDao.query(para);
-        BeanUtils.copyProperties(list, result);
+        List<ConsultationVO.Info> infos = new ArrayList<>();
+        if(!CollectionUtils.isEmpty(list.getItems())){
+
+            list.getItems().forEach(p->{
+                ConsultationVO.Info info = new ConsultationVO.Info();
+                BeanUtils.copyProperties(p, info);
+                infos.add(info);
+            });
+            result.setTotal(list.getTotalCount());
+            result.setInfos(infos);
+        }else{
+            result.setInfos(infos);
+            result.setTotal(0);
+        }
+
 
         return result;
     }

@@ -36,7 +36,12 @@ public class ConsultationController {
         }
         if(!CollectionUtils.isEmpty(query.getResult().getInfos())){
             List<Consultation.Info> infos = new ArrayList<>();
-            BeanUtils.copyProperties(query.getResult().getInfos(), infos);
+            query.getResult().getInfos().forEach(p->{
+                Consultation.Info info = new Consultation.Info();
+                BeanUtils.copyProperties(p, info);
+                infos.add(info);
+            });
+
             ret.setList(infos);
             ret.setCount(query.getResult().getInfos().size());
         }else{

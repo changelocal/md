@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -35,8 +36,18 @@ public class AdminUserController {
         AdminUserParam para = new AdminUserParam();
         BeanUtils.copyProperties(adminUser, para);
         PageResult<AdminUser> list = adminUserDao.query(para);
-        BeanUtils.copyProperties(list, result);
 
+        List<AdminUserVO.AdminUser> adminUsers = new ArrayList<>();
+        if(!CollectionUtils.isEmpty(list.getItems())){
+            list.getItems().forEach(p->{
+                AdminUserVO.AdminUser adminUser1 = new AdminUserVO.AdminUser();
+                BeanUtils.copyProperties(p, adminUser1);
+                adminUsers.add(adminUser1);
+            });
+        }
+
+        result.setAdminUsers(adminUsers);
+        result.setTotal(list.getTotalCount());
         return result;
     }
 
