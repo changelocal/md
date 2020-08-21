@@ -20,7 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/web/consultation")
-@Api(tags = {"管理人员"})
+@Api(tags = {"咨询"})
 public class ConsultationController {
     @Autowired
     private FrontClient frontClient;
