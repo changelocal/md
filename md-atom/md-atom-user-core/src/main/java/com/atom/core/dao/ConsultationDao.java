@@ -42,7 +42,7 @@ public class ConsultationDao extends BaseDao  {
 		if(!Strings.isNullOrEmpty(consultationParam.getOpUserId())){
 			filter=filter.and(f("op_user_id",consultationParam.getOpUserId()));
 		}
-		Sorters sorters = t("consultation").sorters(SortType.ASC,"id");
+		Sorters sorters = t("consultation").sorters(SortType.DESC,"create_time");
 		long total=(long)this.DB().select(count()).from("consultation").where(filter).result().value();
 		if(total>0){
 			List<Consultation> list = DB().select(Consultation.class).where(filter).orderBy(sorters)

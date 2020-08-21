@@ -25,6 +25,12 @@ public class AdminUserDao extends BaseDao  {
 		PageResult<AdminUser> result = new PageResult<>();
 		Filter filter= Filter.create();
 
+        if(0<(adminUserParam.getType())){
+            filter=filter.and(f("type",adminUserParam.getType()));
+        }
+        if(0<(adminUserParam.getIsEnable())){
+            filter=filter.and(f("is_enable",adminUserParam.getIsEnable()));
+        }
 		if(!Strings.isNullOrEmpty(adminUserParam.getAccount())){
 			filter=filter.and(f("account",adminUserParam.getAccount()));
 		}
@@ -61,7 +67,7 @@ public class AdminUserDao extends BaseDao  {
 		if(!Strings.isNullOrEmpty(adminUserParam.getWxQrcode())){
 			filter=filter.and(f("wx_qrcode",adminUserParam.getWxQrcode()));
 		}
-		Sorters sorters = t("admin_user").sorters(SortType.ASC,"id");
+		Sorters sorters = t("admin_user").sorters(SortType.DESC,"create_time");
 		long total=(long)this.DB().select(count()).from("admin_user").where(filter).result().value();
 		if(total>0){
 			List<AdminUser> list = DB().select(AdminUser.class).where(filter).orderBy(sorters)

@@ -40,6 +40,7 @@ public class AdminuserController {
             ret.setList(infos);
             ret.setCount(query.getResult().getAdminUsers().size());
         }else{
+            ret.setList(new ArrayList<>());
             ret.setCount(0);
         }
         return ret;

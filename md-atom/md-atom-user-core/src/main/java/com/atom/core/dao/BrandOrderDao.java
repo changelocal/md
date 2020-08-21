@@ -24,8 +24,11 @@ public class BrandOrderDao extends BaseDao {
     public PageResult<BrandOrder> query(BrandOrderParam brandOrderParam) {
         PageResult<BrandOrder> result = new PageResult<>();
         Filter filter = Filter.create();
-        if (brandOrderParam.getId() > 0) {
-            filter = filter.and(f("id", brandOrderParam.getId()));
+        if (brandOrderParam.getStatus() > 0) {
+            filter = filter.and(f("status", brandOrderParam.getStatus()));
+        }
+        if (brandOrderParam.getOrderType() > 0) {
+            filter = filter.and(f("order_type", brandOrderParam.getOrderType()));
         }
         if (!Strings.isNullOrEmpty(brandOrderParam.getOrderNo())) {
             filter = filter.and(f("order_no", brandOrderParam.getOrderNo()));
@@ -45,7 +48,7 @@ public class BrandOrderDao extends BaseDao {
         if (brandOrderParam.getOpUserId() > 0) {
             filter = filter.and(f("op_user_id", brandOrderParam.getOpUserId()));
         }
-        Sorters sorters = t("brand_order").sorters(SortType.ASC, "id");
+        Sorters sorters = t("brand_order").sorters(SortType.DESC, "create_time");
         long total = (long) this.DB().select(count()).from("brand_order").where(filter).result().value();
         if (total > 0) {
             List<BrandOrder> list = DB().select(BrandOrder.class).where(filter).orderBy(sorters)

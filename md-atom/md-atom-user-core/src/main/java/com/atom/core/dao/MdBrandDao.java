@@ -38,6 +38,9 @@ public class MdBrandDao extends BaseDao  {
 		if(mdBrandParam.getCategory()>0){
 			filter=filter.and(f("category",mdBrandParam.getCategory()));
 		}
+        if(mdBrandParam.getIsQuality()>0){
+            filter=filter.and(f("is_quality",mdBrandParam.getIsQuality()));
+        }
 		if(!Strings.isNullOrEmpty(mdBrandParam.getGroup())){
 			filter=filter.and(f("group",mdBrandParam.getGroup()));
 		}

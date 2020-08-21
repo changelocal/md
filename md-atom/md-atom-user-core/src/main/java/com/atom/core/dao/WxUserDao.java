@@ -58,7 +58,7 @@ public class WxUserDao extends BaseDao  {
 		if(!Strings.isNullOrEmpty(wxUserParam.getBusinessNo())){
 			filter=filter.and(f("business_no",wxUserParam.getBusinessNo()));
 		}
-		Sorters sorters = t("wx_user").sorters(SortType.ASC,"id");
+		Sorters sorters = t("wx_user").sorters(SortType.DESC,"create_time");
 		long total=(long)this.DB().select(count()).from("wx_user").where(filter).result().value();
 		if(total>0){
 			List<WxUser> list = DB().select(WxUser.class).where(filter).orderBy(sorters)
