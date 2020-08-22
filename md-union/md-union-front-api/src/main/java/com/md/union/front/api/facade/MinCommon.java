@@ -127,7 +127,6 @@ public class MinCommon {
         return minUser;
     }
 
-
     /**
      * 发送保单消息
      *
@@ -171,7 +170,9 @@ public class MinCommon {
      *
      * @return
      */
-    public String appletPay(String orderId,String openid) {
+    public String appletPay() {
+        String OrderId = "P" + System.currentTimeMillis();
+        String openId = AppUserPrincipal.getPrincipal().getMinId();
         String mapStr = "";
         //String unifiedorderUrl = "https://api.mch.weixin.qq.com/pay/unifiedorder";
         String unifiedorderUrl = properties.getRouteHost() + "/pay/unifiedorder";
@@ -187,7 +188,7 @@ public class MinCommon {
             //随机字符串，长度要求在32位以内。
             dataMap.put("body", "商标");
             //商品描述,通过订单id获得
-            dataMap.put("out_trade_no", "1231239892747972347");
+            dataMap.put("out_trade_no", OrderId);
             //商品订单号,用户下订单后台生成
             dataMap.put("total_fee", "0.1");
             //商品金,通过订单id获得
@@ -197,8 +198,7 @@ public class MinCommon {
             dataMap.put("notify_url", "https://pay.mdlogo.cn/front/pay/notifyUrl");
             dataMap.put("trade_type", "JSAPI");
             //交易类型
-            dataMap.put("openid", openid);
-            dataMap.put("openid", AppUserPrincipal.getPrincipal().getOpenId());
+            dataMap.put("openid", openId);
             //商户号
             //生成签名
             //String signature = WXPayUtil.generateSignature(dataMap, weixinKey);
