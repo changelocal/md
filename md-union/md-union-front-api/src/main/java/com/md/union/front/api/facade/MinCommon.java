@@ -8,7 +8,6 @@ import com.arc.util.http.BaseResponse;
 import com.arc.util.http.HttpRequest;
 import com.arc.util.lang.EncryptUtil;
 import com.arc.util.lang.FaultException;
-import com.arc.util.lang.IpUtil;
 import com.md.union.front.api.config.MinProperties;
 import com.md.union.front.api.vo.MinUser;
 import lombok.extern.slf4j.Slf4j;
@@ -211,8 +210,7 @@ public class MinCommon {
         sb.append("key=" + key);
         String text = sb.toString();
         log.info("sb result:{}", text);
-        //String sign = MD5Util.MD5Encode(text, "UTF-8").toUpperCase();
-        String sign = EncryptUtil.md5(text).toUpperCase();
+        String sign = MD5Util.MD5Encode(text, "UTF-8").toUpperCase();
         return sign;
     }
 
