@@ -51,6 +51,9 @@ public class ServiceDao extends BaseDao  {
 		if(serviceParam.getTotalBuyCountInc()>0){
 			filter=filter.and(f("total_buy_count_inc",serviceParam.getTotalBuyCountInc()));
 		}
+        if(serviceParam.getIsVideoDefault()>0){
+            filter=filter.and(f("is_video_default",serviceParam.getIsVideoDefault()));
+        }
 		if(serviceParam.getSuid()>0){
 			filter=filter.and(f("suid",serviceParam.getSuid()));
 		}
@@ -94,6 +97,9 @@ public class ServiceDao extends BaseDao  {
         }
         if(serviceParam.getIsChecked()>0){
             filter=filter.and(f("is_checked",serviceParam.getIsChecked()));
+        }
+        if(serviceParam.getIsVideoDefault()>0){
+            filter=filter.and(f("is_video_default",serviceParam.getIsVideoDefault()));
         }
 		if(!Strings.isNullOrEmpty(serviceParam.getServiceTypeId())){
 			filter=filter.and(f("service_type_id",serviceParam.getServiceTypeId()));
