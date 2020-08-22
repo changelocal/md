@@ -13,7 +13,6 @@ import com.md.union.front.api.vo.MinUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.codec.Utf8;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -149,6 +148,7 @@ public class MinCommon {
             String requestXml = mapToXml(dataMap);
             //发送参数,调用微信统一下单接口,返回xml
             String responseXml = HttpRequest.post(unifiedorderUrl).send(requestXml.getBytes()).body();
+            log.info("pay result :{}", responseXml);
             Map<String, String> responseMap = getMapFromXML(responseXml);
             if ("FAIL".equals(responseMap.get("return_code"))) {
                 mapStr = responseMap.get("return_msg");
@@ -208,7 +208,9 @@ public class MinCommon {
             }
         }
         sb.append("key=" + key);
-        String sign = MD5Util.MD5Encode(sb.toString(), "UTF-8").toUpperCase();
+        String text = sb.toString();
+        log.info("sb result:{}", text);
+        String sign = MD5Util.MD5Encode(text, "UTF-8").toUpperCase();
         return sign;
     }
 
