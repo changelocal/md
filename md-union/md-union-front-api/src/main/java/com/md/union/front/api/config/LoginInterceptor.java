@@ -60,8 +60,8 @@ public class LoginInterceptor implements HandlerInterceptor {
             principal.setId(minUser.getId());
             principal.setMinId(minUser.getMinId());
         } else {
-            principal.setAppId("111");
-            principal.setMinId("111");
+            principal.setAppId("wx65e9545021133e60");
+            principal.setMinId("o2zlA5RYnwP_QUOEUoaHpYTZKTa0");
             principal.setId(1L);
         }
         return principal;
