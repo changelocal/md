@@ -41,7 +41,7 @@ public class DealController {
             service1.getResult().getServices().forEach(p->{
                 Brand.BrandRegister item = new Brand.BrandRegister();
                 item.setId(p.getId());
-                item.setPriceDesc("￥" + p.getPrice() + "/件");
+                item.setPriceDesc(p.getPrice().toString() );
                 item.setTitle(p.getServiceName());
                 item.setIcon("http://47.92.65.35:8082/file/brand-register/"+p.getId()+".png");
                 item.setBrief(p.getSubTitle());
