@@ -40,7 +40,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         AppUserPrincipal principal = init(request);
         UserPrincipal.setPrincipal(principal);
         if (request.getRequestURI().indexOf("/front/pay/") >= 0) {
-            if (StrKit.isBlank(principal.getUserId()) || StrKit.isBlank(principal.getToken())
+            if (StrKit.isBlank(principal.getToken()) || principal.getId() == 0
                     || StrKit.isBlank(principal.getMinId()) || "111".equals(principal.getMinId())) {
                 throw new ServiceException("111111", "未登录");
             }

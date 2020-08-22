@@ -10,6 +10,7 @@ import com.md.union.front.client.dto.WxUserDTO;
 import com.md.union.front.client.feign.UserClient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +22,8 @@ import java.util.Date;
 
 @RestController
 @RequestMapping("/front/login")
-@Api(tags = {"登录管理"}, description = "接口负责人：田秀全")
+@Api(tags = {"登录管理"})
+@Slf4j
 public class LoginController {
 
     @Autowired
@@ -32,10 +34,13 @@ public class LoginController {
     @ApiOperation("小程序登录")
     @GetMapping("/min/{code}")
     public MinUser login(@PathVariable("code") String code, HttpServletRequest request) {
-        MinUser minUser = minCommon.minLogin(code);
+        MinUser minUser = new MinUser();//minCommon.minLogin(code);
+        minUser.setMinId("o2zlA5RYnwP_QUOEUoaHpYTZKTa0");
         WxUserDTO.QueryWxUser param = new WxUserDTO.QueryWxUser();
         param.setMinId(minUser.getMinId());
+        log.info("userClient.getByCondition param:{}", JSON.toJSONString(param));
         BaseResponse<WxUserDTO.WxUser> userResp = userClient.getByCondition(param);
+        log.info("userClient.getByCondition result:{}", JSON.toJSONString(userResp));
         if (!BaseResponse.STATUS_HANDLE_SUCCESS.equals(userResp.getStatus())) {
             throw new ServiceException(userResp.getStatus(), userResp.getMessage());
         }
@@ -49,6 +54,7 @@ public class LoginController {
 
         //放入缓存
         request.getSession().setAttribute(minUser.getSessionId(), JSON.toJSONString(minUser));
+        log.info("放入缓存的值:{}", JSON.toJSONString(minUser));
         return minUser;
     }
 
