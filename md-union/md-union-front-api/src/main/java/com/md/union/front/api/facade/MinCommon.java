@@ -8,6 +8,7 @@ import com.arc.util.http.BaseResponse;
 import com.arc.util.http.HttpRequest;
 import com.arc.util.lang.EncryptUtil;
 import com.arc.util.lang.FaultException;
+import com.arc.util.lang.IpUtil;
 import com.md.union.front.api.config.MinProperties;
 import com.md.union.front.api.vo.MinUser;
 import lombok.extern.slf4j.Slf4j;
@@ -130,9 +131,9 @@ public class MinCommon {
             //商品描述,通过订单id获得
             dataMap.put("out_trade_no", OrderId);
             //商品订单号,用户下订单后台生成
-            dataMap.put("total_fee", "0.1");
+            dataMap.put("total_fee", "1");
             //商品金,通过订单id获得
-            dataMap.put("spbill_create_ip", "");
+            dataMap.put("spbill_create_ip", "47.92.65.35");
             //客户端ip
             //通知地址(需要是外网可以访问的)
             dataMap.put("notify_url", "https://pay.mdlogo.cn/front/pay/notifyUrl");
@@ -147,7 +148,7 @@ public class MinCommon {
             //将类型为map的参数转换为xml
             String requestXml = mapToXml(dataMap);
             //发送参数,调用微信统一下单接口,返回xml
-            String responseXml = HttpRequest.post(unifiedorderUrl).send(requestXml.getBytes()).body();
+            String responseXml = HttpRequest.post(unifiedorderUrl).send(requestXml.getBytes("UTF-8")).body();
             log.info("pay result :{}", responseXml);
             Map<String, String> responseMap = getMapFromXML(responseXml);
             if ("FAIL".equals(responseMap.get("return_code"))) {
@@ -210,7 +211,8 @@ public class MinCommon {
         sb.append("key=" + key);
         String text = sb.toString();
         log.info("sb result:{}", text);
-        String sign = MD5Util.MD5Encode(text, "UTF-8").toUpperCase();
+        //String sign = MD5Util.MD5Encode(text, "UTF-8").toUpperCase();
+        String sign = EncryptUtil.md5(text).toUpperCase();
         return sign;
     }
 
@@ -293,4 +295,5 @@ public class MinCommon {
             throw ex;
         }
     }
+
 }
