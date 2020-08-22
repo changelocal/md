@@ -1,4 +1,4 @@
-package com.md.union.order.service.enums;
+package com.md.union.front.api.Enums;
 
 //订单状态 1待支付定金 2待提交资料 3委托受理 4待支付尾款 5已完成
 public enum OrderStatusEnums {

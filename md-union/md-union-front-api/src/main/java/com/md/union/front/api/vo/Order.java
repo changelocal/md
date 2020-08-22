@@ -59,6 +59,25 @@ public class Order {
     @ApiModel("我的订单列提交资料")
     @Data
     public static class SubmitOrder{
+        @ApiModelProperty("订单类型")
+        public int orderType;
+        @ApiModelProperty("预付款价格")
+        public String prePay;
+        @ApiModelProperty("尾款价格")
+        public String restPay;
+        @ApiModelProperty("总价")
+        public String totalPay;
+        @ApiModelProperty("购买用户id")
+        public int userId;
+        @ApiModelProperty("后台运营下单人id")
+        public int opUserId;
+        @ApiModelProperty("产品编号")
+        private String productNo;
+    }
+
+    @ApiModel("我的订单列提交资料")
+    @Data
+    public static class SubmitOrderFile{
         @ApiModelProperty("订单id")
         public String id;
         /*@ApiModelProperty("订单编号")
@@ -98,6 +117,13 @@ public class Order {
         private List<Category.Info> categroyList;
         @ApiModelProperty("订单完成时间")
         private String overTime;
+    }
+
+    @Data
+    @ApiModel("发起订单支付")
+    public static class PayParam{
+        @ApiModelProperty("订单编号")
+        private String orderNo;
     }
 
 

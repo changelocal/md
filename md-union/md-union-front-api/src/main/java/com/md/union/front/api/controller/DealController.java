@@ -96,8 +96,8 @@ public class DealController {
         if (!service1.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(service1.getStatus(), service1.getMessage());
         }
-        if(!CollectionUtils.isEmpty(service1.getResult().getServices())){
-            service1.getResult().getServices().forEach(p->{
+        if (!CollectionUtils.isEmpty(service1.getResult().getServices())) {
+            service1.getResult().getServices().forEach(p -> {
                 Brand.BrandRight item = new Brand.BrandRight();
                 item.setId(p.getId());
                 item.setBrandType(2);
@@ -118,8 +118,8 @@ public class DealController {
         if (!serviceRet.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(serviceRet.getStatus(), serviceRet.getMessage());
         }
-        if(!CollectionUtils.isEmpty(serviceRet.getResult().getServices())){
-            serviceRet.getResult().getServices().forEach(p->{
+        if (!CollectionUtils.isEmpty(serviceRet.getResult().getServices())) {
+            serviceRet.getResult().getServices().forEach(p -> {
                 Brand.BrandRight item = new Brand.BrandRight();
                 item.setId(p.getId());
                 item.setBrandType(2);
@@ -151,8 +151,8 @@ public class DealController {
         if (!service1.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(service1.getStatus(), service1.getMessage());
         }
-        if(!CollectionUtils.isEmpty(service1.getResult().getServices())){
-            service1.getResult().getServices().forEach(p->{
+        if (!CollectionUtils.isEmpty(service1.getResult().getServices())) {
+            service1.getResult().getServices().forEach(p -> {
                 Brand.BrandIcon item = new Brand.BrandIcon();
                 item.setId(p.getId());
                 item.setBrandType(2);
@@ -171,8 +171,8 @@ public class DealController {
         if (!service1.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(service1.getStatus(), service1.getMessage());
         }
-        if(!CollectionUtils.isEmpty(service1.getResult().getServices())){
-            service1.getResult().getServices().forEach(p->{
+        if (!CollectionUtils.isEmpty(service1.getResult().getServices())) {
+            service1.getResult().getServices().forEach(p -> {
                 Brand.BrandIcon item = new Brand.BrandIcon();
                 item.setId(p.getId());
                 item.setBrandType(2);
@@ -189,7 +189,7 @@ public class DealController {
     @GetMapping("/power/auth")
     public List<Brand.PowerAuth> powerAuth() {
         List<Brand.PowerAuth> result = new ArrayList<>();
-        String [] imgs = new String[]{
+        String[] imgs = new String[]{
                 "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=278311229,1239881690&fm=26&gp=0.jpg",
                 "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1596528776843&di=5437c3ebb293f41beba72910acce6df5&imgtype=0&src=http%3A%2F%2F2b.zol-img.com.cn%2Fproduct%2F121_500x2000%2F511%2FceoccsCV9o.gif",
                 "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1596528842606&di=ba4e365c2660234af731029a001737bc&imgtype=0&src=http%3A%2F%2Fimg.sm160.net%2FImg%2Fmarket%2F00%2F05%2F23%2F49%2F5234988.jpg",
@@ -198,7 +198,7 @@ public class DealController {
         };
         for (int i = 0; i < 5; i++) {
             Brand.PowerAuth item = new Brand.PowerAuth();
-            item.setId(i+1);
+            item.setId(i + 1);
             item.setImg(imgs[i]);
             item.setTitle("权威认证");
             result.add(item);
@@ -207,7 +207,6 @@ public class DealController {
 
         return result;
     }
-
 
 
 }

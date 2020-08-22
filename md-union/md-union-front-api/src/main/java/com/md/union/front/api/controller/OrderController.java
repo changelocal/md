@@ -1,9 +1,12 @@
 package com.md.union.front.api.controller;
 
 import com.arc.util.auth.AppUserPrincipal;
+import com.md.union.front.api.Enums.OrderStatusEnums;
+import com.md.union.front.api.facade.MinCommon;
 import com.md.union.front.api.vo.Brand;
 import com.md.union.front.api.vo.Category;
 import com.md.union.front.api.vo.Order;
+import com.md.union.front.client.dto.OrderDTO;
 import com.md.union.front.client.feign.OrderClient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -11,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -20,21 +24,30 @@ public class OrderController {
 
     @Autowired
     private OrderClient orderClient;
+    @Autowired
+    private MinCommon minCommon;
 
     @ApiOperation("我的订单列表")
     @PostMapping("list")
     public Order.ListRes list(@RequestBody Order.SearchReq request) {
-        //String aa = AppUserPrincipal.getPrincipal().getToken();
+        String aa = AppUserPrincipal.getPrincipal().getAppId();
         Order.ListRes result = new Order.ListRes();
         result.setList(getOrder());
         result.setTotal(10);
         return result;
     }
 
-    @ApiOperation("我的订单提交资料")
+    @ApiOperation("提交订单")
     @PostMapping("submit")
     public void submitOrder(@RequestBody Order.SubmitOrder request) {
-        //common 里已经有实现，可以拷贝
+        OrderDTO.BrandOrderVO order = convert(request);
+        orderClient.add(order);
+    }
+
+    @ApiOperation("我的订单提交资料")
+    @PostMapping("submit/file")
+    public void submitOrderFile(@RequestBody Order.SubmitOrder request) {
+
     }
 
     @ApiOperation("我的商品订单详情")
@@ -137,6 +150,24 @@ public class OrderController {
             item.setIcon("");
             result.add(item);
         }
+        return result;
+    }
+
+    private OrderDTO.BrandOrderVO convert(Order.SubmitOrder request) {
+        OrderDTO.BrandOrderVO result = new OrderDTO.BrandOrderVO();
+        result.setOrderNo("" + System.currentTimeMillis());
+        result.setStatus(OrderStatusEnums.PRE_PAY.getType());
+        result.setPrePay(Integer.parseInt(request.getPrePay()));
+        result.setRestPay(Integer.parseInt(request.getRestPay()));
+        result.setTotalPay(Integer.parseInt(request.getTotalPay()));
+        result.setUserId(1);
+        result.setOpUserId(1);
+        result.setCreateTime(new Date());
+        result.setUpdateTime(new Date());
+
+
+        result.setOrderType(request.getOrderType());
+        result.setProductNo(request.getProductNo());
         return result;
     }
 
