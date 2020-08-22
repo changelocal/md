@@ -46,7 +46,7 @@ public class MinCommon {
      * @param code 小程序客户端获取到的动态code
      * @return
      */
-    public MinUser minLogin(String code) {
+    public String minLogin(String code) {
         String url = properties.getRouteHost() + "/sns/jscode2session?appid=" + properties.getMinAppId() + "&secret=" + properties.getMinSecret() + "&js_code=" + code + "&grant_type=authorization_code";
         log.info("minLogin req url :{}", url);
         HttpRequest httpRequest = HttpRequest.get(url);
@@ -63,70 +63,9 @@ public class MinCommon {
         minUser.setType(2);
         minUser.setSessionId(EncryptUtil.md5("wxlogin" + new Date().getTime() + minUser.getMinId() + minUser.getSessionKey()));
 
-
-        //微信小程序
-        /*WXUserDto.MinUser minUserReq = new WXUserDto.MinUser();
-        minUserReq.setMinId(resp.getString("openid"));
-        WXUserDto.MinUser minUserResp = wxUserService.infoMinUser(minUserReq);
-        if (minUserResp != null) {
-            minUser.setMinId(minUserResp.getMinId());
-        }
-        //查询手机用户信息
-        WXUserDto.MobileUser mobileUserReq = new WXUserDto.MobileUser();
-        mobileUserReq.setUnionId(resp.getString("unionid"));
-        WXUserDto.MobileUser mobileUserResp = wxUserService.infoMobileUser(mobileUserReq);
-        if (mobileUserResp != null) {
-            if (Strings.isNullOrEmpty(minUser.getMobile())) {
-                minUser.setMobile(mobileUserResp.getMobile());
-            }
-        }
-        if (minUserResp == null) {
-            WXUserDto.MinUser minUserAdd = new WXUserDto.MinUser();
-            minUserAdd.setUnionId(resp.getString("unionid"));
-            minUserAdd.setMinId(resp.getString("openid"));
-            minUserAdd.setAppId(wpUserResp == null ? resp.getString("openid") : wpUserResp.getAppId());
-            minUser.setAppId(minUserAdd.getAppId());
-            minUser.setOpenId(wpUserResp == null ? "" : wpUserResp.getOpenId());
-            wxUserService.addMinUser(minUserAdd);
-        } else {
-            //关联微信公众号
-            if (wpUserResp != null) {
-                if (!minUserResp.getAppId().equals(wpUserResp.getAppId())) {
-                    WXUserDto.MinUser minUserUp = new WXUserDto.MinUser();
-                    minUserUp.setId(minUserResp.getId());
-                    minUserUp.setAppId(wpUserResp.getAppId());
-                    wxUserService.updateMinUser(minUserUp);
-                }
-                if (Strings.isNullOrEmpty(wpUserResp.getMinId())) {
-                    WXUserDto.WXUser wpUserUp = new WXUserDto.WXUser();
-                    wpUserUp.setId(wpUserResp.getId());
-                    wpUserUp.setMinId(resp.getString("openid"));
-                    wxUserService.update(wpUserUp);
-                }
-                minUser.setAppId(wpUserResp.getAppId());
-                minUser.setOpenId(wpUserResp.getOpenId());
-                minUser.setMobile(wpUserResp.getMobile());
-            }
-            //关联手机
-            if (mobileUserResp != null) {
-                if (wpUserResp != null && !mobileUserResp.getAppId().equals(wpUserResp.getAppId())) {
-                    WXUserDto.MobileUser mobileUserUp = new WXUserDto.MobileUser();
-                    mobileUserUp.setId(mobileUserResp.getId());
-                    mobileUserUp.setAppId(wpUserResp.getAppId());
-                    wxUserService.updateMobileUser(mobileUserUp);
-                }
-                if (Strings.isNullOrEmpty(minUser.getMobile())) {
-                    minUser.setMobile(mobileUserResp.getMobile());
-                }
-            }
-
-        }
-
-        redisClient.set(minUser.getSessionId(), JSON.toJSONString(minUser), 60 * 60 * 2);*/
         log.info("minLogin return===>{}", minUser);
-        return minUser;
+        return minUser.getSessionId();
     }
-
 
     /**
      * 发送保单消息
@@ -171,7 +110,9 @@ public class MinCommon {
      *
      * @return
      */
-    public String appletPay(String orderId,String openid) {
+    public String appletPay() {
+        String OrderId = "P" + System.currentTimeMillis();
+        String openId = AppUserPrincipal.getPrincipal().getMinId();
         String mapStr = "";
         //String unifiedorderUrl = "https://api.mch.weixin.qq.com/pay/unifiedorder";
         String unifiedorderUrl = properties.getRouteHost() + "/pay/unifiedorder";
@@ -187,7 +128,7 @@ public class MinCommon {
             //随机字符串，长度要求在32位以内。
             dataMap.put("body", "商标");
             //商品描述,通过订单id获得
-            dataMap.put("out_trade_no", "1231239892747972347");
+            dataMap.put("out_trade_no", OrderId);
             //商品订单号,用户下订单后台生成
             dataMap.put("total_fee", "0.1");
             //商品金,通过订单id获得
@@ -197,8 +138,7 @@ public class MinCommon {
             dataMap.put("notify_url", "https://pay.mdlogo.cn/front/pay/notifyUrl");
             dataMap.put("trade_type", "JSAPI");
             //交易类型
-            dataMap.put("openid", openid);
-            dataMap.put("openid", AppUserPrincipal.getPrincipal().getOpenId());
+            dataMap.put("openid", openId);
             //商户号
             //生成签名
             //String signature = WXPayUtil.generateSignature(dataMap, weixinKey);

@@ -1,6 +1,7 @@
 package com.md.union.front.api.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.arc.util.auth.AppUserPrincipal;
 import com.md.union.front.api.config.MinProperties;
 import com.md.union.front.api.facade.MinCommon;
 import com.md.union.front.api.vo.Order;
@@ -38,7 +39,7 @@ public class PayController {
     @PostMapping("/order")
     public String payOrder(@RequestBody Order.PayParam request) {
         log.info("prePay param:{}", JSON.toJSONString(request));
-        String prePay = minCommon.appletPay(request.getOrderNo(), "");
+        String prePay = minCommon.appletPay();
         log.info("prePay result:{}", prePay);
         return prePay;
     }
