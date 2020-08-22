@@ -13,6 +13,7 @@ import com.md.union.front.api.vo.MinUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.codec.Utf8;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -119,7 +120,7 @@ public class MinCommon {
         try {
             //**通过订单id可以拿到订单信息**
             //获得openid调用微信统一下单接口
-            HashMap<String, String> dataMap = new HashMap<>();
+            SortedMap<String, String> dataMap = new TreeMap<>();
             dataMap.put("appid", properties.getMinAppId());
             //公众账号ID
             dataMap.put("mch_id", properties.getMchId());
@@ -147,7 +148,7 @@ public class MinCommon {
             //将类型为map的参数转换为xml
             String requestXml = mapToXml(dataMap);
             //发送参数,调用微信统一下单接口,返回xml
-            String responseXml = HttpRequest.post(unifiedorderUrl).body(requestXml);
+            String responseXml = HttpRequest.post(unifiedorderUrl).send(requestXml.getBytes()).body();
             Map<String, String> responseMap = getMapFromXML(responseXml);
             if ("FAIL".equals(responseMap.get("return_code"))) {
                 mapStr = responseMap.get("return_msg");
@@ -165,7 +166,7 @@ public class MinCommon {
                 return "";
             }
             //成功之后,提取prepay_id,重点就是这个
-            HashMap<String, String> params = new HashMap<>();
+            SortedMap<String, String> params = new TreeMap<>();
             params.put("appId", properties.getMinAppId());
             params.put("nonceStr", UUID.randomUUID().toString().replaceAll("-", "").substring(0, 32));
             params.put("package", responseMap.get("prepay_id"));
@@ -192,7 +193,7 @@ public class MinCommon {
      * @param parameters
      * @return
      */
-    public static String createSign(HashMap<String, String> parameters, String key) {
+    public static String createSign(SortedMap<String, String> parameters, String key) {
         StringBuffer sb = new StringBuffer();
         Set es = parameters.entrySet();
         Iterator<?> it = es.iterator();
@@ -218,7 +219,7 @@ public class MinCommon {
      * @return Xml
      * @throws Exception
      */
-    public static String mapToXml(HashMap<String, String> map) throws Exception {
+    public static String mapToXml(SortedMap<String, String> map) throws Exception {
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         //防止XXE攻击
         documentBuilderFactory.setXIncludeAware(false);
