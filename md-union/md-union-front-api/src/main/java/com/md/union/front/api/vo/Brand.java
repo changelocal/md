@@ -157,7 +157,7 @@ public class Brand {
         @ApiModelProperty("商标分类")
         private int brandType;
         @ApiModelProperty("主键id")
-        private int id;
+        private String id;
         @ApiModelProperty("icon")
         private String icon;
     }

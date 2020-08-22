@@ -2,7 +2,6 @@ package com.md.union.front.api.controller;
 
 import com.arc.common.ServiceException;
 import com.arc.util.http.BaseResponse;
-import com.md.union.front.api.Enums.RegisterEnums;
 import com.md.union.front.api.vo.Brand;
 import com.md.union.front.client.dto.ServiceDTO;
 import com.md.union.front.client.feign.FrontClient;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -30,16 +28,27 @@ public class DealController {
     @GetMapping("/register")
     public List<Brand.BrandRegister> register() {
         List<Brand.BrandRegister> result = new ArrayList<>();
-        Arrays.stream(RegisterEnums.values()).forEach(p -> {
-            Brand.BrandRegister item = new Brand.BrandRegister();
-            item.setId(p.getType());
-            item.setBrandType(1);
-            item.setTitle(p.getTitle());
-            item.setBrief(p.getBrief());
-            item.setPriceDesc( String.valueOf(p.getPrice()) );
-            item.setIcon(p.getIcon());
-            result.add(item);
-        });
+
+        ServiceDTO.Service service = new ServiceDTO.Service();
+        service.setIsChecked(1);
+        service.setIsEnable(2);
+        service.setIsVideoDefault(2);
+        BaseResponse<ServiceDTO.FindResp> service1 = frontClient.findService(service);
+        if (!service1.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+            throw new ServiceException(service1.getStatus(), service1.getMessage());
+        }
+        if(!CollectionUtils.isEmpty(service1.getResult().getServices())){
+            service1.getResult().getServices().forEach(p->{
+                Brand.BrandRegister item = new Brand.BrandRegister();
+                item.setId(p.getId());
+                item.setPriceDesc("￥" + p.getPrice() + "/件");
+                item.setTitle(p.getServiceName());
+                item.setIcon("http://47.92.65.35:8082/file/brand-register/"+p.getId()+".png");
+                item.setBrief(p.getSubTitle());
+                result.add(item);
+            });
+        }
+
         return result;
     }
 
