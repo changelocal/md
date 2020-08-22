@@ -13,6 +13,7 @@ import com.md.union.front.api.vo.MinUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.codec.Utf8;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -147,7 +148,7 @@ public class MinCommon {
             //将类型为map的参数转换为xml
             String requestXml = mapToXml(dataMap);
             //发送参数,调用微信统一下单接口,返回xml
-            String responseXml = HttpRequest.post(unifiedorderUrl).body(requestXml);
+            String responseXml = HttpRequest.post(unifiedorderUrl).send(requestXml.getBytes()).body();
             Map<String, String> responseMap = getMapFromXML(responseXml);
             if ("FAIL".equals(responseMap.get("return_code"))) {
                 mapStr = responseMap.get("return_msg");
