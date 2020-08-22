@@ -46,7 +46,7 @@ public class MinCommon {
      * @param code 小程序客户端获取到的动态code
      * @return
      */
-    public String minLogin(String code) {
+    public MinUser minLogin(String code) {
         String url = properties.getRouteHost() + "/sns/jscode2session?appid=" + properties.getMinAppId() + "&secret=" + properties.getMinSecret() + "&js_code=" + code + "&grant_type=authorization_code";
         log.info("minLogin req url :{}", url);
         HttpRequest httpRequest = HttpRequest.get(url);
@@ -64,7 +64,7 @@ public class MinCommon {
         minUser.setSessionId(EncryptUtil.md5("wxlogin" + new Date().getTime() + minUser.getMinId() + minUser.getSessionKey()));
 
         log.info("minLogin return===>{}", minUser);
-        return minUser.getSessionId();
+        return minUser;
     }
 
     /**

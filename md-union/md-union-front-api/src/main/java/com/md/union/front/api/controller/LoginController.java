@@ -33,9 +33,6 @@ public class LoginController {
     @GetMapping("/min/{code}")
     public MinUser login(@PathVariable("code") String code, HttpServletRequest request) {
         MinUser minUser = minCommon.minLogin(code);
-       /* MinUser minUser = new MinUser();
-        minUser.setMobile("15652306317");
-        minUser.setMinId("uuueeueueue");*/
         WxUserDTO.QueryWxUser param = new WxUserDTO.QueryWxUser();
         param.setMinId(minUser.getMinId());
         BaseResponse<WxUserDTO.WxUser> userResp = userClient.getByCondition(param);
