@@ -180,6 +180,19 @@ public class Brand {
     }
 
     @Data
+    @ApiModel("商标维权报价介绍信息详情")
+    public static class BrandDesign {
+        @ApiModelProperty("主键id")
+        private String id;
+        @ApiModelProperty("icon")
+        private String icon;
+        @ApiModelProperty("主题")
+        private String title;
+        @ApiModelProperty("简介")
+        private String brief;
+    }
+
+    @Data
     @ApiModel("商标维权-品牌权益")
     public static class BrandIcon{
         @ApiModelProperty("主键id")
@@ -190,6 +203,13 @@ public class Brand {
         private String title;
         @ApiModelProperty("商标分类")
         private int brandType;
+    }
+
+    @Data
+    @ApiModel("设计介绍")
+    public static class Design {
+        @ApiModelProperty("品牌权益")
+        private List<BrandDesign> designs;
     }
 
     @Data
