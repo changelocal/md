@@ -1,5 +1,6 @@
 package com.md.union.front.api.config;
 
+import com.alibaba.fastjson.JSON;
 import com.arc.common.ServiceException;
 import com.arc.util.auth.Anonymous;
 import com.arc.util.auth.AppUserPrincipal;
@@ -51,7 +52,6 @@ public class LoginInterceptor implements HandlerInterceptor {
         AppUserPrincipal principal = new AppUserPrincipal();
         principal.setToken(request.getHeader("x-token"));
         //request.getSession().getAttribute("")
-        log.info("初始化header成功 :{}", principal);
         Object object = request.getSession().getAttribute(principal.getToken());
         if (object != null) {
             MinUser minUser = (MinUser) object;
@@ -60,10 +60,11 @@ public class LoginInterceptor implements HandlerInterceptor {
             principal.setId(minUser.getId());
             principal.setMinId(minUser.getMinId());
         } else {
-            principal.setAppId("111");
-            principal.setMinId("111");
+            principal.setAppId("wx65e9545021133e60");
+            principal.setMinId("o2zlA5RYnwP_QUOEUoaHpYTZKTa0");
             principal.setId(1L);
         }
+        log.info("登录用户上下文对象信息 :{}", JSON.toJSONString(principal));
         return principal;
     }
 
