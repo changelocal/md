@@ -207,7 +207,7 @@ public class MinCommon {
                 }
             }
         }
-        sb.append("key=" + key);
+        sb.append("key=" + "mtsb20201234567890mtsbmtsbmtsbmt");
         String text = sb.toString();
         log.info("sb result:{}", text);
         String sign = MD5Util.MD5Encode(text, "UTF-8").toUpperCase();
