@@ -1,6 +1,7 @@
 package com.md.union.front.client.dto;
 
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.Date;
@@ -95,6 +96,10 @@ public class WxUserDTO {
          * 商户编号
          */
         private String businessNo;
+        @ApiModelProperty("当前页")
+        private int pageIndex;
+        @ApiModelProperty("每页显示条数")
+        private int pageSize;
     }
 
     @Data

@@ -143,9 +143,9 @@ public class Wxuser {
 
 
         @ApiModelProperty("当前页")
-        public int pageIndex;
+        private int pageIndex;
         @ApiModelProperty("每页显示条数")
-        public int pageSize;
+        private int pageSize;
     }
 
     @Data

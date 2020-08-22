@@ -36,11 +36,38 @@ public class DealController {
             item.setBrandType(1);
             item.setTitle(p.getTitle());
             item.setBrief(p.getBrief());
-            item.setPriceDesc("￥" + p.getPrice() + "/件fd");
+            item.setPriceDesc( String.valueOf(p.getPrice()) );
             item.setIcon(p.getIcon());
             result.add(item);
         });
         return result;
+    }
+
+    @ApiOperation("商标设计list")
+    @GetMapping("/design")
+    public Brand.Design design() {
+        Brand.Design ret = new Brand.Design();
+        List<Brand.BrandDesign> brandDesigns = new ArrayList<>();
+        ServiceDTO.Service service = new ServiceDTO.Service();
+        service.setIsChecked(1);
+        service.setIsEnable(2);
+        service.setServiceTypeId("8");
+        BaseResponse<ServiceDTO.FindResp> service1 = frontClient.findService(service);
+        if (!service1.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+            throw new ServiceException(service1.getStatus(), service1.getMessage());
+        }
+        if(!CollectionUtils.isEmpty(service1.getResult().getServices())){
+            service1.getResult().getServices().forEach(p->{
+                Brand.BrandDesign item = new Brand.BrandDesign();
+                item.setId(p.getId());
+                item.setTitle(p.getServiceName());
+                item.setIcon("http://47.92.65.35:8082/file/brand-design/"+p.getId()+".png");
+                item.setBrief(p.getSubTitle());
+                brandDesigns.add(item);
+            });
+        }
+        ret.setDesigns(brandDesigns);
+        return ret;
     }
 
     @ApiOperation("商标维权介绍")
