@@ -4,10 +4,10 @@ package com.md.union.order.service.enums;
 public enum OrderStatusEnums {
 
     PRE_PAY(1, "待支付定金"),
-    PRE_SUB(1, "待提交资料"),
-    TRUST(1, "委托受理"),
-    END_PAY(1, "待支付尾款"),
-    END(1, "已完成"),
+    PRE_SUB(2, "待提交资料"),
+    TRUST(3, "委托受理"),
+    END_PAY(4, "待支付尾款"),
+    END(5, "已完成"),
     ;
 
     OrderStatusEnums(int type, String title) {

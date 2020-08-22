@@ -37,7 +37,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         }
         response.setContentType("application/json");
         AppUserPrincipal principal = init(request);
-        //UserPrincipal.setPrincipal(principal);
+        UserPrincipal.setPrincipal(principal);
         /*if (request.getRequestURI().indexOf("/platform/") >= 0) {
             AppUserPrincipal principal = init(request);
 
