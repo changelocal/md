@@ -120,7 +120,7 @@ public class MinCommon {
         try {
             //**通过订单id可以拿到订单信息**
             //获得openid调用微信统一下单接口
-            HashMap<String, String> dataMap = new HashMap<>();
+            SortedMap<String, String> dataMap = new TreeMap<>();
             dataMap.put("appid", properties.getMinAppId());
             //公众账号ID
             dataMap.put("mch_id", properties.getMchId());
@@ -166,7 +166,7 @@ public class MinCommon {
                 return "";
             }
             //成功之后,提取prepay_id,重点就是这个
-            HashMap<String, String> params = new HashMap<>();
+            SortedMap<String, String> params = new TreeMap<>();
             params.put("appId", properties.getMinAppId());
             params.put("nonceStr", UUID.randomUUID().toString().replaceAll("-", "").substring(0, 32));
             params.put("package", responseMap.get("prepay_id"));
@@ -193,7 +193,7 @@ public class MinCommon {
      * @param parameters
      * @return
      */
-    public static String createSign(HashMap<String, String> parameters, String key) {
+    public static String createSign(SortedMap<String, String> parameters, String key) {
         StringBuffer sb = new StringBuffer();
         Set es = parameters.entrySet();
         Iterator<?> it = es.iterator();
@@ -219,7 +219,7 @@ public class MinCommon {
      * @return Xml
      * @throws Exception
      */
-    public static String mapToXml(HashMap<String, String> map) throws Exception {
+    public static String mapToXml(SortedMap<String, String> map) throws Exception {
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         //防止XXE攻击
         documentBuilderFactory.setXIncludeAware(false);
