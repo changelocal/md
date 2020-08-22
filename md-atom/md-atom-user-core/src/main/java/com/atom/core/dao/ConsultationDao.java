@@ -10,6 +10,7 @@ import com.atom.core.model.ConsultationParam;
 import com.google.common.base.Strings;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,9 +83,9 @@ public class ConsultationDao extends BaseDao  {
 		return result;
 	}
 
-	public int add(Consultation consultation) {
-		long id = (long) DB().insert(consultation).result(true).getKeys().get(0);
-		return (int)id;
+	public long add(Consultation consultation) {
+        BigInteger id = (BigInteger) DB().insert(consultation).result(true).getKeys().get(0);
+		return id.longValue();
 	}
 
 	public void update(Consultation consultation) {

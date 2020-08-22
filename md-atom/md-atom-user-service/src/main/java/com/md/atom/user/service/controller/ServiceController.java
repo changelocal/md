@@ -50,7 +50,7 @@ public class ServiceController {
         BeanUtils.copyProperties(con, consultation);
         consultation.setCreateTime(new Date());
 
-        int add = consultationDao.add(consultation);
+        long add = consultationDao.add(consultation);
 
         return ret;
     }
