@@ -193,7 +193,7 @@ public class DealController {
         for (int i = 0; i < 22; i++) {
             Brand.PowerAuth item = new Brand.PowerAuth();
             item.setId(i + 1);
-            item.setImg("http://47.92.65.35:8082/file/enterprise/"+i+1+".png");
+            item.setImg("http://47.92.65.35:8082/file/enterprise/"+i+1+".jpg");
             item.setTitle("权威认证");
             result.add(item);
         }
