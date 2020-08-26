@@ -189,17 +189,11 @@ public class DealController {
     @GetMapping("/power/auth")
     public List<Brand.PowerAuth> powerAuth() {
         List<Brand.PowerAuth> result = new ArrayList<>();
-        String[] imgs = new String[]{
-                "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=278311229,1239881690&fm=26&gp=0.jpg",
-                "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1596528776843&di=5437c3ebb293f41beba72910acce6df5&imgtype=0&src=http%3A%2F%2F2b.zol-img.com.cn%2Fproduct%2F121_500x2000%2F511%2FceoccsCV9o.gif",
-                "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1596528842606&di=ba4e365c2660234af731029a001737bc&imgtype=0&src=http%3A%2F%2Fimg.sm160.net%2FImg%2Fmarket%2F00%2F05%2F23%2F49%2F5234988.jpg",
-                "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1596528859451&di=5cb55bef12920bd05b2a1cdc1c18657a&imgtype=0&src=http%3A%2F%2Fimgs.soufun.com%2Fnews%2F2011_06%2F29%2Fhome%2F1309340221537_000.jpg",
-                "https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2267034892,3785324037&fm=26&gp=0.jpg"
-        };
-        for (int i = 0; i < 5; i++) {
+
+        for (int i = 0; i < 22; i++) {
             Brand.PowerAuth item = new Brand.PowerAuth();
             item.setId(i + 1);
-            item.setImg(imgs[i]);
+            item.setImg("http://47.92.65.35:8082/file/enterprise/"+i+1+".png");
             item.setTitle("权威认证");
             result.add(item);
         }
