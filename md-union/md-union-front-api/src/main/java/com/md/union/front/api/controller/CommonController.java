@@ -6,6 +6,8 @@ import com.arc.common.ServiceException;
 import com.arc.util.auth.AppUserPrincipal;
 import com.arc.util.http.BaseResponse;
 import com.md.union.front.api.vo.Consultation;
+import com.md.union.front.client.dto.AdminUserDTO;
+import com.md.union.front.client.dto.ConsultationDTO;
 import com.md.union.front.client.dto.ServiceDTO;
 import com.md.union.front.client.dto.TrademarkDTO;
 import com.md.union.front.client.feign.FrontClient;
@@ -14,6 +16,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +29,7 @@ import java.security.AlgorithmParameters;
 import java.security.Security;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -103,30 +107,53 @@ public class CommonController {
     public Consultation.ConsultationResp dealDtail(@PathVariable("id") String id) {
         Consultation.ConsultationResp result = new Consultation.ConsultationResp();
         //判断最近什么时候咨询过
-//        ConsultationDTO.Info request
-//        frontClient.query();
-
-
-
-
-
-
-
-        TrademarkDTO.Consultation consultation = new TrademarkDTO.Consultation();
-        consultation.setId(id);
-        BaseResponse<TrademarkDTO.ConsultationResp> response = frontClient.consultation(consultation);
-        if (!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
-            throw new ServiceException(response.getStatus(), response.getMessage());
+        boolean hadConsultation = false;
+        ConsultationDTO.Info request  = new ConsultationDTO.Info();
+        request.setOpenId(AppUserPrincipal.getPrincipal().getMinId());
+        BaseResponse<ConsultationDTO.QueryResp> query = frontClient.query(request);
+        if (!query.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+            throw new ServiceException(query.getStatus(), query.getMessage());
         }
-        //返回任意销售信息
-        result.setName(response.getResult().getNickname());
-        result.setQq(response.getResult().getQqAccount());
-        result.setTel(response.getResult().getMobile());
-        result.setTitle(response.getResult().getTitle());
-        result.setAvatar(response.getResult().getAvatar());
-        //应该记录一下咨询记录
+        ConsultationDTO.Info info = null;
+        if(!CollectionUtils.isEmpty(query.getResult().getInfos())){
+             info = query.getResult().getInfos().get(0);
+            //一天内咨询过
+            if(info.getCreateTime().getTime()>new Date().getTime() - 24 * 60 * 60 * 1000*1){
+                hadConsultation = true;
+            }
+        }
         ServiceDTO.Consultation consultation1 = new ServiceDTO.Consultation();
-        consultation1.setOpUserId(response.getResult().getId());
+        //咨询过
+        if(hadConsultation){
+            AdminUserDTO.AdminUser adminUser = new AdminUserDTO.AdminUser();
+            adminUser.setId(info.getOpUserId());
+            BaseResponse<AdminUserDTO.QueryResp> queryRespBaseResponse = frontClient.find(adminUser);
+            result.setName(queryRespBaseResponse.getResult().getAdminUsers().get(0).getNickname());
+            result.setQq(queryRespBaseResponse.getResult().getAdminUsers().get(0).getQqAccount());
+            result.setTel(queryRespBaseResponse.getResult().getAdminUsers().get(0).getMobile());
+            result.setTitle(queryRespBaseResponse.getResult().getAdminUsers().get(0).getTitle());
+            result.setAvatar(queryRespBaseResponse.getResult().getAdminUsers().get(0).getAvatar());
+
+            consultation1.setOpUserId(info.getOpUserId());
+
+        }else {
+            TrademarkDTO.Consultation consultation = new TrademarkDTO.Consultation();
+            consultation.setId(id);
+            BaseResponse<TrademarkDTO.ConsultationResp> response = frontClient.consultation(consultation);
+            if (!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+                throw new ServiceException(response.getStatus(), response.getMessage());
+            }
+            //返回任意销售信息
+            result.setName(response.getResult().getNickname());
+            result.setQq(response.getResult().getQqAccount());
+            result.setTel(response.getResult().getMobile());
+            result.setTitle(response.getResult().getTitle());
+            result.setAvatar(response.getResult().getAvatar());
+
+            consultation1.setOpUserId(response.getResult().getId());
+        }
+
+        //应该记录一下咨询记录
         consultation1.setOrderNo(id==null?"":id);
         consultation1.setStatus(1);
         consultation1.setOpenId(AppUserPrincipal.getPrincipal().getMinId());
