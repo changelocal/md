@@ -46,7 +46,7 @@ public class PayController {
             else if("nonceStr".equals(key)){
                 result.setNonceStr(ret.get(key));
             }
-            else if("prePayId".equals(key)){
+            else if("package".equals(key)){
                 result.setPrePayId(ret.get(key));
             }
             else if("signType".equals(key)){
@@ -72,6 +72,7 @@ public class PayController {
      */
     @RequestMapping("/notifyUrl")
     public void xcxNotify(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        log.info("notifyUrl：" + request);
         InputStream inputStream = request.getInputStream();
         //获取请求输入流
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

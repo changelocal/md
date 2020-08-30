@@ -149,7 +149,7 @@ public class MinCommon {
             //将类型为map的参数转换为xml
             String requestXml = mapToXml(dataMap);
             //发送参数,调用微信统一下单接口,返回xml
-//            log.info("pay result :{}", requestXml);
+            log.info("requestXml :{}", requestXml);
             String responseXml = HttpRequest.post(unifiedorderUrl).send(requestXml.getBytes("UTF-8")).body();
             log.info("pay result :{}", responseXml);
             Map<String, String> responseMap = getMapFromXML(responseXml);
@@ -172,13 +172,13 @@ public class MinCommon {
 
             params.put("appId", properties.getMinAppId());
             params.put("nonceStr", UUID.randomUUID().toString().replaceAll("-", "").substring(0, 32));
-            params.put("prePayId", responseMap.get("prepay_id"));
+            params.put("package","prepay_id="+responseMap.get("prepay_id"));
             params.put("signType", "MD5");
 //            params.put("timeStamp", String.valueOf(System.currentTimeMillis() / 1000));
             params.put("timeStamp", Long.toString(System.currentTimeMillis() / 1000));
             //重新签名
 //            String paySign = WXPayUtil.generateSignature(params, weixinKey);
-            params.put("paySign", createSign(params, properties.getMinSecret()));
+            params.put("paySign", createSign(params, properties.getApiKey()));
             //传给前端页面
             //在微信浏览器里面打开H5网页中执行JS调起支付。接口输入输出数据格式为JSON。
             mapStr = params.toString();
@@ -214,7 +214,7 @@ public class MinCommon {
 //        sb.append("key=" + "mtsb20201234567890mtsbmtsbmtsbmt");
         sb.append("key=" + key);
         String text = sb.toString();
-//        log.info("sb result:{}", text);
+        log.info("sb result:{}", text);
         String sign = MD5Util.MD5Encode(text, "UTF-8").toUpperCase();
         return sign;
     }

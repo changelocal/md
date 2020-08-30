@@ -34,8 +34,7 @@ public class LoginController {
     @ApiOperation("小程序登录")
     @GetMapping("/min/{code}")
     public MinUser login(@PathVariable("code") String code, HttpServletRequest request) {
-        MinUser minUser = new MinUser();//minCommon.minLogin(code);
-        minUser.setMinId("o2zlA5RYnwP_QUOEUoaHpYTZKTa0");
+        MinUser minUser = minCommon.minLogin(code);
         WxUserDTO.QueryWxUser param = new WxUserDTO.QueryWxUser();
         param.setMinId(minUser.getMinId());
         log.info("userClient.getByCondition param:{}", JSON.toJSONString(param));
