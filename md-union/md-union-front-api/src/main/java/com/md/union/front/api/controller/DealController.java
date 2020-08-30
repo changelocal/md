@@ -223,7 +223,7 @@ public class DealController {
         }*/
 
         DealEnums[] dealEnums = DealEnums.values();
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 2; i++) {
             Brand.BrandIcon item = new Brand.BrandIcon();
             item.setId(dealEnums[i].getNo());
             item.setBrandType(dealEnums[i].getType());
@@ -231,6 +231,7 @@ public class DealController {
             item.setIcon(dealEnums[i].getIcon());
             result.add(item);
         }
+
 
         return result;
     }
