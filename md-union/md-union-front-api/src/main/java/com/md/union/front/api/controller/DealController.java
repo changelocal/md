@@ -222,16 +222,16 @@ public class DealController {
             });
         }*/
 
-        for (DealEnums value : DealEnums.values()) {
+        DealEnums[] dealEnums = DealEnums.values();
+        for (int i = 0; i < 1; i++) {
             Brand.BrandIcon item = new Brand.BrandIcon();
-            item.setId(value.getNo());
-            item.setBrandType(value.getType());
-            item.setTitle(value.getTitle());
-            item.setIcon(value.getIcon());
-            item.setTitle(value.getBrief());
-            //item.set("￥" + value.getPrice() + "/件");
+            item.setId(dealEnums[i].getNo());
+            item.setBrandType(dealEnums[i].getType());
+            item.setTitle(dealEnums[i].getTitle());
+            item.setIcon(dealEnums[i].getIcon());
             result.add(item);
         }
+
         return result;
     }
 
