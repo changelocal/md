@@ -27,6 +27,7 @@ public class AdminUserDTO {
          *
          */
         private String password;
+        private String title;
 
         /**
          * 0=god,
