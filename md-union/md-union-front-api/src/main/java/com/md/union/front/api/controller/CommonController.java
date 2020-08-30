@@ -186,7 +186,7 @@ public class CommonController {
 //        BeanUtils.copyProperties(response.getResult().getCates(), res);
         return res;
     }
-    @ApiOperation("45大分类详情")
+    @ApiOperation("小程序获取手机")
     @GetMapping("/min/phone")
     public Object getPhoneNumber(String encryptedData, String session_key, String iv)  {
         // 被加密的数据
