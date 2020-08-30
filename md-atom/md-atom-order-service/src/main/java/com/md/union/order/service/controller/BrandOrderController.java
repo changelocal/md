@@ -117,6 +117,8 @@ public class BrandOrderController {
         result.setUserId(request.getUserId());
         result.setOpUserId(request.getOpUserId());
         result.setProductNo(request.getProductNo());
+        result.setPageIndex(request.getPageIndex());
+        result.setPageSize(request.getPageSize());
         return result;
     }
 

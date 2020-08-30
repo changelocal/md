@@ -89,6 +89,14 @@ public class OrderVO {
          * 产品编号
          */
         private String productNo;
+        /**
+         * 当前页
+         */
+        private int pageIndex;
+        /**
+         * 每页显示条数
+         */
+        private int pageSize;
 
     }
 }

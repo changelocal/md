@@ -30,8 +30,14 @@ public class OrderController {
     @ApiOperation("我的订单列表")
     @PostMapping("list")
     public Order.ListRes list(@RequestBody Order.SearchReq request) {
-        String aa = AppUserPrincipal.getPrincipal().getAppId();
         Order.ListRes result = new Order.ListRes();
+        int userId = AppUserPrincipal.getPrincipal().getId();
+        OrderDTO.BrandOrderVO param = new OrderDTO.BrandOrderVO();
+        param.setUserId(userId);
+        param.setPageIndex(request.getPageIndex());
+        param.setPageSize(request.getPageSize());
+        //OrderDTO.QueryResp resp = orderClient.query(param);
+
         result.setList(getOrder());
         result.setTotal(10);
         return result;
