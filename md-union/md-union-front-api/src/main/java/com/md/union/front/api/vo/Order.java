@@ -18,8 +18,6 @@ public class Order {
         public int pageIndex;
         @ApiModelProperty("每页显示条数")
         public int pageSize;
-        @ApiModelProperty("用户id")
-        public int userId;
     }
 
     @ApiModel("用户购买商标的订单列表")
