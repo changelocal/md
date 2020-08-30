@@ -91,7 +91,7 @@ public class DealController {
         ServiceDTO.Service service = new ServiceDTO.Service();
         service.setIsChecked(1);
         service.setIsEnable(2);
-        service.setServiceTypeId("1");
+        service.setServiceTypeId("2");
         BaseResponse<ServiceDTO.FindResp> service1 = frontClient.findService(service);
         if (!service1.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(service1.getStatus(), service1.getMessage());
