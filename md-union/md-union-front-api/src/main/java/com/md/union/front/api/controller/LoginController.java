@@ -48,7 +48,7 @@ public class LoginController {
         if (userResp.getResult() == null) {
             addWxUser(minUser);
         }
-        minUser.setSessionId(EncryptUtil.md5(minUser.getMinId() + new Date().getTime()));
+        minUser.setSessionId(EncryptUtil.md5(minUser.getMinId() + minUser.getId()));
         minUser.setMobile(userResp.getResult().getMobile());
         minUser.setAppId(userResp.getResult().getAppId());
         minUser.setId(userResp.getResult().getId());
