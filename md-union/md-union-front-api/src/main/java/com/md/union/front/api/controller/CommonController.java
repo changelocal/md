@@ -101,8 +101,16 @@ public class CommonController {
     @ApiOperation("咨询按钮接口")
     @GetMapping("/consultation/{id}")
     public Consultation.ConsultationResp dealDtail(@PathVariable("id") String id) {
-
         Consultation.ConsultationResp result = new Consultation.ConsultationResp();
+        //判断最近什么时候咨询过
+//        ConsultationDTO.Info request
+//        frontClient.query();
+
+
+
+
+
+
 
         TrademarkDTO.Consultation consultation = new TrademarkDTO.Consultation();
         consultation.setId(id);
@@ -116,7 +124,7 @@ public class CommonController {
         result.setTel(response.getResult().getMobile());
         result.setTitle(response.getResult().getTitle());
         result.setAvatar(response.getResult().getAvatar());
-        //应该记录一下咨询记录 todo
+        //应该记录一下咨询记录
         ServiceDTO.Consultation consultation1 = new ServiceDTO.Consultation();
         consultation1.setOpUserId(response.getResult().getId());
         consultation1.setOrderNo(id==null?"":id);
