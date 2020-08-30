@@ -39,7 +39,10 @@ public class LoginInterceptor implements HandlerInterceptor {
         response.setContentType("application/json");
         AppUserPrincipal principal = init(request);
         UserPrincipal.setPrincipal(principal);
-        if (request.getRequestURI().indexOf("/front/pay/notifyUrl") < 0) {
+        if (request.getRequestURI().indexOf("/front/pay/notifyUrl") >= 0 ||
+                request.getRequestURI().indexOf("/front/login/min") >= 0 ) {
+
+        }else{
             if (StrKit.isBlank(principal.getToken()) || principal.getId() == 0
                     || StrKit.isBlank(principal.getMinId()) || "111".equals(principal.getMinId())) {
                 throw new ServiceException("111111", "未登录");
@@ -61,6 +64,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             principal.setMinId(minUser.getMinId());
         }
         log.info("登录用户上下文对象信息 :{}", JSON.toJSONString(principal));
+
         return principal;
     }
 
