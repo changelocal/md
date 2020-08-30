@@ -47,7 +47,8 @@ public class MinCommon {
      * @return
      */
     public MinUser minLogin(String code) {
-        String url = properties.getRouteHost() + "/sns/jscode2session?appid=" + properties.getMinAppId() + "&secret=" + properties.getMinSecret() + "&js_code=" + code + "&grant_type=authorization_code";
+        String url = properties.getRouteHost() + "/sns/jscode2session?appid=" + properties.getMinAppId() +
+                "&secret=" + properties.getMinSecret() + "&js_code=" + code + "&grant_type=authorization_code";
         log.info("minLogin req url :{}", url);
         HttpRequest httpRequest = HttpRequest.get(url);
         String result = httpRequest.body();
@@ -173,7 +174,8 @@ public class MinCommon {
             params.put("nonceStr", UUID.randomUUID().toString().replaceAll("-", "").substring(0, 32));
             params.put("prePayId", responseMap.get("prepay_id"));
             params.put("signType", "MD5");
-            params.put("timeStamp", String.valueOf(System.currentTimeMillis() / 1000));
+//            params.put("timeStamp", String.valueOf(System.currentTimeMillis() / 1000));
+            params.put("timeStamp", Long.toString(System.currentTimeMillis() / 1000));
             //重新签名
 //            String paySign = WXPayUtil.generateSignature(params, weixinKey);
             params.put("paySign", createSign(params, properties.getMinSecret()));
