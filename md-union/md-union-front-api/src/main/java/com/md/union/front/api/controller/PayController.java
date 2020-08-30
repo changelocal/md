@@ -40,7 +40,7 @@ public class PayController {
         log.info("prePay param:{}", JSON.toJSONString(request));
         Map<String,String> ret = minCommon.appletPay();
         for(String key : ret.keySet()){
-            if("".equals(key)){
+            if("appId".equals(key)){
                 result.setAppId(ret.get(key));
             }
             else if("nonceStr".equals(key)){
@@ -55,7 +55,7 @@ public class PayController {
             else if("timeStamp".equals(key)){
                 result.setTimeStamp(ret.get(key));
             }
-            else {
+            else  if("paySign".equals(key)){
                 result.setPaySign(ret.get(key));
             }
         }
