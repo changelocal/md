@@ -110,12 +110,13 @@ public class MinCommon {
      *
      * @return
      */
-    public String appletPay() {
+    public Map<String, String> appletPay() {
         String OrderId = "P" + System.currentTimeMillis();
         String openId = AppUserPrincipal.getPrincipal().getMinId();
         String mapStr = "";
         //String unifiedorderUrl = "https://api.mch.weixin.qq.com/pay/unifiedorder";
         String unifiedorderUrl = properties.getRouteHost() + "/pay/unifiedorder";
+        SortedMap<String, String> params = new TreeMap<>();
         try {
             //**通过订单id可以拿到订单信息**
             //获得openid调用微信统一下单接口
@@ -154,23 +155,23 @@ public class MinCommon {
             if ("FAIL".equals(responseMap.get("return_code"))) {
                 mapStr = responseMap.get("return_msg");
                 log.error(mapStr);
-                return "";
+                return null;
             }
             if ("FAIL".equals(responseMap.get("result_code"))) {
                 mapStr = responseMap.get("err_code_des");
                 log.error(mapStr);
-                return "";
+                return null;
             }
             if ("".equals(responseMap.get("prepay_id")) || responseMap.get("prepay_id") ==
                     null) {
                 log.error("prepay_id 为空");
-                return "";
+                return null;
             }
             //成功之后,提取prepay_id,重点就是这个
-            SortedMap<String, String> params = new TreeMap<>();
+
             params.put("appId", properties.getMinAppId());
             params.put("nonceStr", UUID.randomUUID().toString().replaceAll("-", "").substring(0, 32));
-            params.put("package", responseMap.get("prepay_id"));
+            params.put("prePayId", responseMap.get("prepay_id"));
             params.put("signType", "MD5");
             params.put("timeStamp", String.valueOf(System.currentTimeMillis() / 1000));
             //重新签名
@@ -184,7 +185,7 @@ public class MinCommon {
         } catch (Exception e) {
             log.info("pay error {}", e);
         }
-        return mapStr;
+        return params;
     }
 
     /**
