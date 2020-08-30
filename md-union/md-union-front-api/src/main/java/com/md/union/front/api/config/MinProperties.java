@@ -11,4 +11,5 @@ public class MinProperties {
     private String minAppId ;
     private String minSecret ;
     private String mchId;
+    private String apiKey;
 }
