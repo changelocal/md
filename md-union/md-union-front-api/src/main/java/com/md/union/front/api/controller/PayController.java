@@ -1,10 +1,10 @@
 package com.md.union.front.api.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.arc.util.auth.AppUserPrincipal;
 import com.md.union.front.api.config.MinProperties;
 import com.md.union.front.api.facade.MinCommon;
 import com.md.union.front.api.vo.Order;
+import com.md.union.front.api.vo.PayInfo;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,19 +29,38 @@ public class PayController {
 
     @Autowired
     private MinCommon minCommon;
-
-
     /**
      * 支付
      *
      * @return
      */
     @PostMapping("/order")
-    public String payOrder(@RequestBody Order.PayParam request) {
+    public PayInfo.Order payOrder(@RequestBody Order.PayParam request) {
+        PayInfo.Order result = new PayInfo.Order();
         log.info("prePay param:{}", JSON.toJSONString(request));
-        String prePay = minCommon.appletPay();
-        log.info("prePay result:{}", prePay);
-        return prePay;
+        Map<String,String> ret = minCommon.appletPay();
+        for(String key : ret.keySet()){
+            if("".equals(key)){
+                result.setAppId(ret.get(key));
+            }
+            else if("nonceStr".equals(key)){
+                result.setNonceStr(ret.get(key));
+            }
+            else if("prePayId".equals(key)){
+                result.setPrePayId(ret.get(key));
+            }
+            else if("signType".equals(key)){
+                result.setSignType(ret.get(key));
+            }
+            else if("timeStamp".equals(key)){
+                result.setTimeStamp(ret.get(key));
+            }
+            else {
+                result.setPaySign(ret.get(key));
+            }
+        }
+        log.info("prePay result:{}", result);
+        return result;
     }
 
 
