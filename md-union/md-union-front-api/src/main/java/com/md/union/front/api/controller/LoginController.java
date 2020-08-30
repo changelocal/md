@@ -5,6 +5,7 @@ import com.arc.common.ServiceException;
 import com.arc.util.auth.Anonymous;
 import com.arc.util.http.BaseResponse;
 import com.arc.util.lang.EncryptUtil;
+import com.md.union.front.api.config.LoginInterceptor;
 import com.md.union.front.api.facade.MinCommon;
 import com.md.union.front.api.vo.MinUser;
 import com.md.union.front.client.dto.WxUserDTO;
@@ -48,13 +49,16 @@ public class LoginController {
         if (userResp.getResult() == null) {
             addWxUser(minUser);
         }
-        minUser.setSessionId(EncryptUtil.md5(minUser.getMinId()+"hhh"));
+        minUser.setSessionId(EncryptUtil.md5(minUser.getMinId() + "hhh"));
         minUser.setMobile(userResp.getResult().getMobile());
         minUser.setAppId(userResp.getResult().getAppId());
         minUser.setId(userResp.getResult().getId());
 
         //放入缓存
-        request.getSession().setAttribute(minUser.getSessionId(), JSON.toJSONString(minUser));
+        //request.getSession().setAttribute(minUser.getSessionId(), JSON.toJSONString(minUser));
+        if (!LoginInterceptor.loginStatus.containsKey(minUser.getSessionId())) {
+            LoginInterceptor.loginStatus.put(minUser.getSessionId(), JSON.toJSONString(minUser));
+        }
         log.info("放入缓存的值:{}", JSON.toJSONString(minUser));
         return minUser;
     }
