@@ -2,6 +2,9 @@ package com.md.union.front.api.controller;
 
 import com.arc.common.ServiceException;
 import com.arc.util.http.BaseResponse;
+import com.md.union.front.api.Enums.ChangeEnums;
+import com.md.union.front.api.Enums.DealEnums;
+import com.md.union.front.api.Enums.RegisterEnums;
 import com.md.union.front.api.vo.Brand;
 import com.md.union.front.client.dto.ServiceDTO;
 import com.md.union.front.client.feign.FrontClient;
@@ -28,8 +31,18 @@ public class DealController {
     @GetMapping("/register")
     public List<Brand.BrandRegister> register() {
         List<Brand.BrandRegister> result = new ArrayList<>();
+        for (RegisterEnums value : RegisterEnums.values()) {
+            Brand.BrandRegister item = new Brand.BrandRegister();
+            item.setId(value.getNo());
+            item.setPriceDesc("￥" + value.getPrice() + "件");
+            item.setTitle(value.getTitle());
+            item.setIcon(value.getIcon());
+            item.setBrief(value.getBrief());
+            result.add(item);
+        }
 
-        ServiceDTO.Service service = new ServiceDTO.Service();
+
+        /*ServiceDTO.Service service = new ServiceDTO.Service();
         service.setIsChecked(1);
         service.setIsEnable(2);
         service.setIsVideoDefault(2);
@@ -47,7 +60,7 @@ public class DealController {
                 item.setBrief(p.getSubTitle());
                 result.add(item);
             });
-        }
+        }*/
 
         return result;
     }
@@ -65,12 +78,12 @@ public class DealController {
         if (!service1.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(service1.getStatus(), service1.getMessage());
         }
-        if(!CollectionUtils.isEmpty(service1.getResult().getServices())){
-            service1.getResult().getServices().forEach(p->{
+        if (!CollectionUtils.isEmpty(service1.getResult().getServices())) {
+            service1.getResult().getServices().forEach(p -> {
                 Brand.BrandDesign item = new Brand.BrandDesign();
                 item.setId(p.getId());
                 item.setTitle(p.getServiceName());
-                item.setIcon("http://47.92.65.35:8082/file/brand-design/"+p.getId()+".png");
+                item.setIcon("http://47.92.65.35:8082/file/brand-design/" + p.getId() + ".png");
                 item.setBrief(p.getSubTitle());
                 brandDesigns.add(item);
             });
@@ -83,12 +96,36 @@ public class DealController {
     @GetMapping("/power")
     public Brand.DealRight power() {
         Brand.DealRight result = new Brand.DealRight();
+
+
 //        Brand.Person person = new Brand.Person();
 
         List<Brand.BrandRight> rights = new ArrayList<>();
         List<Brand.BrandRight> changes = new ArrayList<>();
 
-        ServiceDTO.Service service = new ServiceDTO.Service();
+        for (DealEnums value : DealEnums.values()) {
+            Brand.BrandRight item = new Brand.BrandRight();
+            item.setId(value.getNo());
+            item.setBrandType(value.getType());
+            item.setTitle(value.getTitle());
+            item.setImg(value.getIcon());
+            item.setBrief(value.getBrief());
+            item.setPriceDesc("￥" + value.getPrice() + "/件");
+            rights.add(item);
+        }
+        for (ChangeEnums value : ChangeEnums.values()) {
+            Brand.BrandRight item = new Brand.BrandRight();
+            item.setId(value.getNo());
+            item.setBrandType(value.getType());
+            item.setTitle(value.getTitle());
+            item.setImg(value.getIcon());
+            item.setBrief(value.getBrief());
+            item.setPriceDesc("￥" + value.getPrice() + "/件");
+            changes.add(item);
+        }
+
+
+        /*ServiceDTO.Service service = new ServiceDTO.Service();
         service.setIsChecked(1);
         service.setIsEnable(2);
         service.setServiceTypeId("2");
@@ -129,9 +166,11 @@ public class DealController {
                 item.setPriceDesc("￥" + p.getPrice() + "/件");
                 changes.add(item);
             });
-        }
+        }*/
 
 //        result.setPerson(person);
+
+
         result.setRights(rights);
         result.setChanges(changes);
         return result;
@@ -142,7 +181,7 @@ public class DealController {
     public List<Brand.BrandIcon> powerBrand() {
         List<Brand.BrandIcon> result = new ArrayList<>();
 
-        ServiceDTO.Service service = new ServiceDTO.Service();
+        /*ServiceDTO.Service service = new ServiceDTO.Service();
         service.setIsChecked(1);
         service.setIsEnable(2);
 //        service.setServiceTypeId("1");
@@ -181,6 +220,17 @@ public class DealController {
                 result.add(item);
 
             });
+        }*/
+
+        for (DealEnums value : DealEnums.values()) {
+            Brand.BrandIcon item = new Brand.BrandIcon();
+            item.setId(value.getNo());
+            item.setBrandType(value.getType());
+            item.setTitle(value.getTitle());
+            item.setIcon(value.getIcon());
+            item.setTitle(value.getBrief());
+            //item.set("￥" + value.getPrice() + "/件");
+            result.add(item);
         }
         return result;
     }
@@ -193,7 +243,7 @@ public class DealController {
         for (int i = 0; i < 22; i++) {
             Brand.PowerAuth item = new Brand.PowerAuth();
             item.setId(i + 1);
-            item.setImg("http://47.92.65.35:8082/file/enterprise/"+(i+1)+".jpg");
+            item.setImg("http://47.92.65.35:8082/file/enterprise/" + i + 1 + ".jpg");
             item.setTitle("权威认证");
             result.add(item);
         }
