@@ -142,11 +142,12 @@ public class MinCommon {
             //商户号
             //生成签名
             //String signature = WXPayUtil.generateSignature(dataMap, weixinKey);
-            dataMap.put("sign", createSign(dataMap, properties.getMinSecret()));
+            dataMap.put("sign", createSign(dataMap, properties.getApiKey()));
             //签名
             //将类型为map的参数转换为xml
             String requestXml = mapToXml(dataMap);
             //发送参数,调用微信统一下单接口,返回xml
+//            log.info("pay result :{}", requestXml);
             String responseXml = HttpRequest.post(unifiedorderUrl).send(requestXml.getBytes("UTF-8")).body();
             log.info("pay result :{}", responseXml);
             Map<String, String> responseMap = getMapFromXML(responseXml);
@@ -207,9 +208,10 @@ public class MinCommon {
                 }
             }
         }
-        sb.append("key=" + "mtsb20201234567890mtsbmtsbmtsbmt");
+//        sb.append("key=" + "mtsb20201234567890mtsbmtsbmtsbmt");
+        sb.append("key=" + key);
         String text = sb.toString();
-        log.info("sb result:{}", text);
+//        log.info("sb result:{}", text);
         String sign = MD5Util.MD5Encode(text, "UTF-8").toUpperCase();
         return sign;
     }
@@ -264,7 +266,7 @@ public class MinCommon {
      * @throws Exception
      */
     public static Map<String, String> getMapFromXML(String strXML) throws Exception {
-        log.info("pay notif:", strXML);
+        log.info("getMapFromXML:", strXML);
         try {
             Map<String, String> data = new HashMap<String, String>();
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();

@@ -258,6 +258,38 @@ public class Brand {
     }
 
     @Data
+    @ApiModel("展示商标详情")
+    public static class RegistDetail{
+        @ApiModelProperty("商标分类列表")
+        private List<TrademarkCate> trademarkCateList;
+        @ApiModelProperty("初审公告期号")
+        private String firstNo;
+        @ApiModelProperty("初审公告日期")
+        private String firstDate;
+        @ApiModelProperty("注册公告期号")
+        private String signUpNo;
+        @ApiModelProperty("注册公告日期")
+        private String signUpDate;
+        @ApiModelProperty("商标类型")
+        private String trademarkType;
+        @ApiModelProperty("到期时间")
+        private String endDate;
+
+        @ApiModelProperty("类似群组")
+        private String likeCate;
+        @ApiModelProperty("使用范围")
+        private String usage;
+        @ApiModelProperty("商标色系")
+        private String color;
+        @ApiModelProperty("商标大图")
+        private String bigPic;
+        @ApiModelProperty("设计理念")
+        private String concept;
+        @ApiModelProperty("品牌顾问信息")
+        private Brand.Person person;
+
+    }
+    @Data
     @ApiModel("展示查商标的详情")
     public static class SearchDetail{
         @ApiModelProperty("成功率")

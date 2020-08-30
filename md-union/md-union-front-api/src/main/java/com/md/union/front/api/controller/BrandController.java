@@ -288,10 +288,10 @@ public class BrandController {
                 trademarkCates.add(res);
 
                 result.setFirstDate(null == e.getFirstCheckTime()?"":timeFormat.format(e.getFirstCheckTime()));
-                result.setFirstNo(e.getFirstCheckId());
+                result.setFirstNo(e.getFirstCheckId()==null?"":e.getFirstCheckId());
                 result.setEndDate(null ==e.getTimeLimitEnd()?"":timeFormat.format(e.getTimeLimitEnd()));
                 result.setSignUpDate(null == e.getRegisterCheckTime()?"":timeFormat.format(e.getRegisterCheckTime()));
-                result.setSignUpNo(e.getRegisterCheckId());
+                result.setSignUpNo(e.getRegisterCheckId()==null?"":e.getRegisterCheckId());
                 result.setTrademarkType(BrandTypeEnums.valueType(e.getComType()).getTitle());
 
                 result.setLikeCate(e.getGroup());
@@ -458,5 +458,16 @@ public class BrandController {
         return result;
     }
 
+    /**
+     * 查到商标以后，点击购买
+     * @param request
+     * @return
+     */
+    @ApiOperation("购买商标详情")
+    @PostMapping("/buy/regist/detail")
+    public Brand.Detail registDetail(@RequestBody Category.BuyDetailReq request){
+        Brand.Detail detail = new Brand.Detail();
+        return detail;
 
+    }
 }
