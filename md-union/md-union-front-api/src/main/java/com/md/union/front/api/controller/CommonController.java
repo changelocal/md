@@ -9,8 +9,7 @@ import com.md.union.front.api.vo.Consultation;
 import com.md.union.front.client.dto.ServiceDTO;
 import com.md.union.front.client.dto.TrademarkDTO;
 import com.md.union.front.client.feign.FrontClient;
-import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
-import com.sun.org.apache.xml.internal.security.utils.Base64;
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -189,7 +188,7 @@ public class CommonController {
     }
     @ApiOperation("45大分类详情")
     @GetMapping("/min/phone")
-    public Object getPhoneNumber(String encryptedData, String session_key, String iv) throws Base64DecodingException {
+    public Object getPhoneNumber(String encryptedData, String session_key, String iv)  {
         // 被加密的数据
         byte[] dataByte = Base64.decode(encryptedData);
         // 加密秘钥
