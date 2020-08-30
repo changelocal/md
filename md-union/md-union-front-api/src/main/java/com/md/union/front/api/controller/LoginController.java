@@ -2,6 +2,7 @@ package com.md.union.front.api.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.arc.common.ServiceException;
+import com.arc.util.auth.Anonymous;
 import com.arc.util.http.BaseResponse;
 import com.arc.util.lang.EncryptUtil;
 import com.md.union.front.api.facade.MinCommon;
@@ -33,6 +34,7 @@ public class LoginController {
 
     @ApiOperation("小程序登录")
     @GetMapping("/min/{code}")
+    @Anonymous
     public MinUser login(@PathVariable("code") String code, HttpServletRequest request) {
         MinUser minUser = minCommon.minLogin(code);
         WxUserDTO.QueryWxUser param = new WxUserDTO.QueryWxUser();
