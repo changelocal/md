@@ -13,10 +13,14 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Slf4j
 public class LoginInterceptor implements HandlerInterceptor {
+
+    public static Map<String, String> loginStatus = new HashMap<>();
 
 
     @Override
@@ -40,9 +44,9 @@ public class LoginInterceptor implements HandlerInterceptor {
         AppUserPrincipal principal = init(request);
         UserPrincipal.setPrincipal(principal);
         if (request.getRequestURI().indexOf("/front/pay/notifyUrl") >= 0 ||
-                request.getRequestURI().indexOf("/front/login/min") >= 0 ) {
+                request.getRequestURI().indexOf("/front/login/min") >= 0) {
 
-        }else{
+        } else {
             if (StrKit.isBlank(principal.getToken()) || principal.getId() == 0
                     || StrKit.isBlank(principal.getMinId()) || "111".equals(principal.getMinId())) {
                 throw new ServiceException("111111", "未登录");
@@ -55,9 +59,8 @@ public class LoginInterceptor implements HandlerInterceptor {
         AppUserPrincipal principal = new AppUserPrincipal();
         principal.setToken(request.getHeader("x-token"));
         //request.getSession().getAttribute("")
-        Object object = request.getSession().getAttribute(principal.getToken());
-        if (object != null) {
-            MinUser minUser = (MinUser) object;
+        if (loginStatus.containsKey(principal.getToken())) {
+            MinUser minUser = JSON.parseObject(loginStatus.get(principal.getToken()), MinUser.class);
             principal.setOpenId(minUser.getOpenId());
             principal.setAppId(minUser.getAppId());
             principal.setId(minUser.getId());
