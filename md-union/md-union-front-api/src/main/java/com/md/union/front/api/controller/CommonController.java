@@ -115,11 +115,13 @@ public class CommonController {
             throw new ServiceException(query.getStatus(), query.getMessage());
         }
         ConsultationDTO.Info info = null;
-        if(!CollectionUtils.isEmpty(query.getResult().getInfos())){
-             info = query.getResult().getInfos().get(0);
-            //一天内咨询过
-            if(info.getCreateTime().getTime()>new Date().getTime() - 24 * 60 * 60 * 1000*1){
-                hadConsultation = true;
+        if(query.getResult() !=null) {
+            if (!CollectionUtils.isEmpty(query.getResult().getInfos())) {
+                info = query.getResult().getInfos().get(0);
+                //一天内咨询过
+                if (info.getCreateTime().getTime() > new Date().getTime() - 24 * 60 * 60 * 1000 * 1) {
+                    hadConsultation = true;
+                }
             }
         }
         ServiceDTO.Consultation consultation1 = new ServiceDTO.Consultation();
