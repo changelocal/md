@@ -40,8 +40,23 @@ public class ConsultationDao extends BaseDao  {
 		if(!Strings.isNullOrEmpty(consultationParam.getOpenId())){
 			filter=filter.and(f("open_id",consultationParam.getOpenId()));
 		}
+		if(!Strings.isNullOrEmpty(consultationParam.getBuyerMobile())){
+			filter=filter.and(f("buyer_mobile",consultationParam.getBuyerMobile()));
+		}
+		if(!Strings.isNullOrEmpty(consultationParam.getBuyerName())){
+			filter=filter.and(f("buyer_name",consultationParam.getBuyerName()));
+		}
+		if(!Strings.isNullOrEmpty(consultationParam.getNote())){
+			filter=filter.and(f("note",consultationParam.getNote()));
+		}
 		if(!Strings.isNullOrEmpty(consultationParam.getOpUserId())){
 			filter=filter.and(f("op_user_id",consultationParam.getOpUserId()));
+		}
+		if(!Strings.isNullOrEmpty(consultationParam.getOpUserMobile())){
+			filter=filter.and(f("op_user_mobile",consultationParam.getOpUserMobile()));
+		}
+		if(!Strings.isNullOrEmpty(consultationParam.getOpUserName())){
+			filter=filter.and(f("op_user_name",consultationParam.getOpUserName()));
 		}
 		Sorters sorters = t("consultation").sorters(SortType.DESC,"create_time");
 		long total=(long)this.DB().select(count()).from("consultation").where(filter).result().value();
@@ -69,8 +84,23 @@ public class ConsultationDao extends BaseDao  {
 		if(!Strings.isNullOrEmpty(consultationParam.getOpenId())){
 			filter=filter.and(f("open_id",consultationParam.getOpenId()));
 		}
+		if(!Strings.isNullOrEmpty(consultationParam.getBuyerMobile())){
+			filter=filter.and(f("buyer_mobile",consultationParam.getBuyerMobile()));
+		}
+		if(!Strings.isNullOrEmpty(consultationParam.getBuyerName())){
+			filter=filter.and(f("buyer_name",consultationParam.getBuyerName()));
+		}
+		if(!Strings.isNullOrEmpty(consultationParam.getNote())){
+			filter=filter.and(f("note",consultationParam.getNote()));
+		}
 		if(!Strings.isNullOrEmpty(consultationParam.getOpUserId())){
 			filter=filter.and(f("op_user_id",consultationParam.getOpUserId()));
+		}
+		if(!Strings.isNullOrEmpty(consultationParam.getOpUserMobile())){
+			filter=filter.and(f("op_user_mobile",consultationParam.getOpUserMobile()));
+		}
+		if(!Strings.isNullOrEmpty(consultationParam.getOpUserName())){
+			filter=filter.and(f("op_user_name",consultationParam.getOpUserName()));
 		}
 		List<Consultation> list = DB().select(Consultation.class)
 			.where(filter).result().all(Consultation.class);
@@ -102,8 +132,23 @@ public class ConsultationDao extends BaseDao  {
 		if(!Strings.isNullOrEmpty(consultation.getOpenId())){
 			updateValues.add("open_id",consultation.getOpenId());
 		}
+		if(!Strings.isNullOrEmpty(consultation.getBuyerMobile())){
+			updateValues.add("buyer_mobile",consultation.getBuyerMobile());
+		}
+		if(!Strings.isNullOrEmpty(consultation.getBuyerName())){
+			updateValues.add("buyer_name",consultation.getBuyerName());
+		}
+		if(!Strings.isNullOrEmpty(consultation.getNote())){
+			updateValues.add("note",consultation.getNote());
+		}
 		if(!Strings.isNullOrEmpty(consultation.getOpUserId())){
 			updateValues.add("op_user_id",consultation.getOpUserId());
+		}
+		if(!Strings.isNullOrEmpty(consultation.getOpUserMobile())){
+			updateValues.add("op_user_mobile",consultation.getOpUserMobile());
+		}
+		if(!Strings.isNullOrEmpty(consultation.getOpUserName())){
+			updateValues.add("op_user_name",consultation.getOpUserName());
 		}
 		DB().update("consultation").set(updateValues).where(f("id",consultation.getId())).result();
 	}

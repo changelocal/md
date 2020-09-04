@@ -24,7 +24,7 @@ public class Consultation {
 	private String orderNo;
 
 	/**
-	 * 订单状态 1待支付定金 2待提交资料 3委托受理 4待支付尾款 5已完成
+	 * 状态 1发起咨询 2完成
 	 */
 	private int status;
 
@@ -39,9 +39,34 @@ public class Consultation {
 	private String openId;
 
 	/**
+	 * 买家手机
+	 */
+	private String buyerMobile;
+
+	/**
+	 * 买家名字
+	 */
+	private String buyerName;
+
+	/**
+	 * 
+	 */
+	private String note;
+
+	/**
 	 * 后台运营人id被咨询者
 	 */
 	private String opUserId;
+
+	/**
+	 * 销售手机
+	 */
+	private String opUserMobile;
+
+	/**
+	 * 销售名字
+	 */
+	private String opUserName;
 
 	/**
 	 * 创建时间
@@ -53,5 +78,4 @@ public class Consultation {
 	 */
 	private Date updateTime;
 
-    private String note;
 }

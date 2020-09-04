@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.arc.common.ServiceException;
 import com.arc.util.auth.AppUserPrincipal;
 import com.arc.util.http.BaseResponse;
+import com.md.union.front.api.vo.Common;
 import com.md.union.front.api.vo.Consultation;
 import com.md.union.front.client.dto.AdminUserDTO;
 import com.md.union.front.client.dto.ConsultationDTO;
@@ -17,10 +18,7 @@ import io.swagger.annotations.ApiOperation;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
@@ -137,6 +135,8 @@ public class CommonController {
             result.setAvatar(queryRespBaseResponse.getResult().getAdminUsers().get(0).getAvatar());
 
             consultation1.setOpUserId(info.getOpUserId());
+            consultation1.setOpUserMobile(queryRespBaseResponse.getResult().getAdminUsers().get(0).getMobile());
+            consultation1.setOpUserName(queryRespBaseResponse.getResult().getAdminUsers().get(0).getNickname());
 
         }else {
             TrademarkDTO.Consultation consultation = new TrademarkDTO.Consultation();
@@ -147,18 +147,22 @@ public class CommonController {
             }
             //返回任意销售信息
             result.setName(response.getResult().getNickname());
-            result.setQq(response.getResult().getQqAccount());
+            result.setQq(response.getResult().getQqAccount()==null?"":response.getResult().getQqAccount());
             result.setTel(response.getResult().getMobile());
-            result.setTitle(response.getResult().getTitle());
+            result.setTitle(response.getResult().getTitle()==null?"":response.getResult().getTitle());
             result.setAvatar(response.getResult().getAvatar());
 
             consultation1.setOpUserId(response.getResult().getId());
+            consultation1.setOpUserMobile(response.getResult().getMobile());
+            consultation1.setOpUserName(response.getResult().getNickname());
         }
 
         //应该记录一下咨询记录
         consultation1.setOrderNo(id==null?"":id);
         consultation1.setStatus(1);
         consultation1.setOpenId(AppUserPrincipal.getPrincipal().getMinId());
+        consultation1.setBuyerMobile(AppUserPrincipal.getPrincipal().getName());
+        consultation1.setBuyerName(AppUserPrincipal.getPrincipal().getMinId());
 
         BaseResponse<ServiceDTO.Resp> responseAdd = frontClient.addConsultation(consultation1);
         if (!responseAdd.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
@@ -224,14 +228,14 @@ public class CommonController {
         return res;
     }
     @ApiOperation("小程序获取手机")
-    @GetMapping("/min/phone")
-    public Object getPhoneNumber(String encryptedData, String session_key, String iv)  {
+    @PostMapping("/min/phone")
+    public Object getPhoneNumber(@RequestBody Common.MinGetPhone minGetPhone)  {
         // 被加密的数据
-        byte[] dataByte = Base64.decode(encryptedData);
+        byte[] dataByte = Base64.decode(minGetPhone.getEncryptedData());
         // 加密秘钥
-        byte[] keyByte = Base64.decode(session_key);
+        byte[] keyByte = Base64.decode(minGetPhone.getSession_key());
         // 偏移量
-        byte[] ivByte = Base64.decode(iv);
+        byte[] ivByte = Base64.decode(minGetPhone.getIv());
         try {
             // 如果密钥不足16位，那么就补足.  这个if 中的内容很重要
             int base = 16;

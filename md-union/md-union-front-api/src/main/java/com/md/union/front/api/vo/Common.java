@@ -35,6 +35,13 @@ public class Common {
         @ApiModelProperty("结果")
         private String ret;
     }
+    @Data
+    @ApiModel("提交资料结果")
+    public static class MinGetPhone{
 
+        private String encryptedData;
+        private String session_key;
+        private String iv;
+    }
 
 }

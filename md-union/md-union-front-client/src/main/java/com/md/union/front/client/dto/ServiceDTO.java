@@ -170,5 +170,24 @@ public class ServiceDTO {
         private Date updateTime;
 
         private String note;
+        /**
+         * 买家手机
+         */
+        private String buyerMobile;
+
+        /**
+         * 买家名字
+         */
+        private String buyerName;
+
+        /**
+         * 销售手机
+         */
+        private String opUserMobile;
+
+        /**
+         * 销售名字
+         */
+        private String opUserName;
     }
 }
