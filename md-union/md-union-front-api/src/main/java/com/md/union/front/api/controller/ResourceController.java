@@ -2,8 +2,11 @@ package com.md.union.front.api.controller;
 
 import com.arc.common.ServiceException;
 import com.arc.util.http.BaseResponse;
+import com.md.union.front.api.Enums.OrderStatusEnums;
 import com.md.union.front.api.vo.Common;
+import com.md.union.front.client.dto.OrderDTO;
 import com.md.union.front.client.dto.RefDTO;
+import com.md.union.front.client.feign.OrderClient;
 import com.md.union.front.client.feign.OrderRefClient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -21,6 +24,8 @@ import java.util.List;
 public class ResourceController {
     @Autowired
     OrderRefClient orderRefClient;
+    @Autowired
+    private OrderClient orderClient;
 
     @ApiOperation("权威认证的图片")
     @GetMapping("/auth")
@@ -59,7 +64,12 @@ public class ResourceController {
         }
         //修改订单状态
 
+        OrderDTO.BrandOrderVO brandOrderVO = new OrderDTO.BrandOrderVO();
+        brandOrderVO.setId(Integer.parseInt(request.getId()));
+        brandOrderVO.setStatus(OrderStatusEnums.TRUST.getType());
+        BaseResponse update = orderClient.update(brandOrderVO);
 
+        res.setRet("ok");
         return res;
     }
 

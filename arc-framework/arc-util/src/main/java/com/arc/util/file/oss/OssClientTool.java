@@ -8,7 +8,7 @@ import com.aliyun.oss.model.OSSObject;
 import com.aliyun.oss.model.PutObjectRequest;
 import com.aliyun.oss.model.PutObjectResult;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.apache.commons.io.IOUtils;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,15 +20,14 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import org.apache.commons.io.IOUtils;
 
 
 @Configuration
 @EnableConfigurationProperties(OssProperties.class)
-@ConditionalOnProperty(prefix = "oss.client",
-        name = "enabled",
-        havingValue = "true",
-        matchIfMissing = false)
+//@ConditionalOnProperty(prefix = "oss.client",
+//        name = "enabled",
+//        havingValue = "true",
+//        matchIfMissing = false)
 @Slf4j
 public class OssClientTool {
 

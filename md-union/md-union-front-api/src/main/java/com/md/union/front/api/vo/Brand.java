@@ -254,7 +254,7 @@ public class Brand {
         private String concept;
         @ApiModelProperty("品牌顾问信息")
         private Brand.Person person;
-
+        private String brandNo;
     }
 
     @Data

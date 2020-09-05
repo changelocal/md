@@ -36,7 +36,7 @@ public class Common {
         private String ret;
     }
     @Data
-    @ApiModel("提交资料结果")
+    @ApiModel("微信授权手机")
     public static class MinGetPhone{
 
         private String encryptedData;

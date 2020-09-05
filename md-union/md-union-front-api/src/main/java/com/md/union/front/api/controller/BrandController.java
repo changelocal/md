@@ -300,7 +300,7 @@ public class BrandController {
 
                 result.setBigPic(e.getImageUrl());
                 result.setConcept("设计理念");
-
+                result.setBrandNo(e.getBrandId());
             });
         }
         result.setTrademarkCateList(trademarkCates);

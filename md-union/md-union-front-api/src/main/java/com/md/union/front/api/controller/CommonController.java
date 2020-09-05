@@ -4,9 +4,11 @@ package com.md.union.front.api.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.arc.common.ServiceException;
 import com.arc.util.auth.AppUserPrincipal;
+import com.arc.util.file.oss.OssClientTool;
 import com.arc.util.http.BaseResponse;
 import com.md.union.front.api.vo.Common;
 import com.md.union.front.api.vo.Consultation;
+import com.md.union.front.api.vo.OssFileInfo;
 import com.md.union.front.client.dto.AdminUserDTO;
 import com.md.union.front.client.dto.ConsultationDTO;
 import com.md.union.front.client.dto.ServiceDTO;
@@ -15,20 +17,20 @@ import com.md.union.front.client.feign.FrontClient;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.AlgorithmParameters;
 import java.security.Security;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @RestController
 @RequestMapping("/front/common")
@@ -37,25 +39,26 @@ public class CommonController {
 
     @Autowired
     private FrontClient frontClient;
-//    @Autowired
-//    private OssClientTool ossClientTool;
+    @Autowired
+    private OssClientTool ossClientTool;
 
-//    private String realPath = "md";
+    private String realPath = "md/";
 
-//    @ApiOperation(tags = "上传文件相关", value = "上传文件到oss", notes = "上传文件到oss")
-//    @ResponseBody
-//    @PostMapping("upfile2oss")
-//    public OssFileInfo upFile(@RequestParam(value = "fileObj") MultipartFile fileObj) {
-//        String[] ex = fileObj.getContentType().split("/");
-//        SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyyMM");
-//        String fileName = dateFormat2.format(new Date()) + DigestUtils.md5Hex(fileObj.getOriginalFilename()
-//                + System.currentTimeMillis() + new Random().nextLong()) + "." + ex[1];
-//        ossClientTool.uploadImg2Oss(fileObj, realPath.concat(fileName));
-////        logger.info("==================================http://compensate-info.oss-cn-zhangjiakou.aliyuncs.com/" + realPath + fileName);
-//        OssFileInfo res = new OssFileInfo();
-//        res.setName(fileName);
-//        return res;
-//    }
+    @ApiOperation(tags = "上传文件相关", value = "上传文件到oss", notes = "上传文件到oss")
+    @ResponseBody
+    @PostMapping("upfile2oss")
+    public OssFileInfo upFile(@RequestParam(value = "fileObj") MultipartFile fileObj) {
+        String[] ex = fileObj.getContentType().split("/");
+        SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyyMM");
+        String fileName = dateFormat2.format(new Date()) + DigestUtils.md5Hex(fileObj.getOriginalFilename()
+                + System.currentTimeMillis() + new Random().nextLong()) + "." + ex[1];
+        ossClientTool.uploadImg2Oss(fileObj, realPath.concat(fileName));
+//        logger.info("==================================https://tianxiuquan.oss-cn-zhangjiakou.aliyuncs.com/" + realPath + fileName);
+        fileName = "https://tianxiuquan.oss-cn-zhangjiakou.aliyuncs.com/" + realPath + fileName;
+        OssFileInfo res = new OssFileInfo();
+        res.setName(fileName);
+        return res;
+    }
 
 
 //    @ApiOperation(tags = "上传文件相关", value = "下载文件从oss，返回文件对象", notes = "下载文件从oss，返回文件对象")
