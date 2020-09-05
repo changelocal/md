@@ -155,6 +155,13 @@ public class Adminuser {
         @ApiModelProperty("总条数")
         private int count;
     }
-
+    @Data
+    @ApiModel("商标起名查询结果")
+    public static class LoginRes{
+        @ApiModelProperty("分类列表")
+        private int code;
+        @ApiModelProperty("总条数")
+        private String data;
+    }
 
 }
