@@ -1,4 +1,4 @@
-package com.md.union.front.api;
+package com.md.union.web.api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.cloud.client.SpringCloudApplication;
