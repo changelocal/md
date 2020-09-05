@@ -71,8 +71,6 @@ public class Order {
         public int opUserId;
         @ApiModelProperty("产品编号")
         private String productNo;
-        @ApiModelProperty("产品名称")
-        private String productName;
     }
 
     @ApiModel("我的订单列提交资料")
