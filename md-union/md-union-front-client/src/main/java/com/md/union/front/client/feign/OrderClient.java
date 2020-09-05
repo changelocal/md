@@ -1,6 +1,7 @@
 package com.md.union.front.client.feign;
 
 
+import com.arc.util.http.BaseResponse;
 import com.md.union.front.client.dto.OrderDTO;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -15,17 +16,17 @@ public interface OrderClient {
 
     @ApiOperation(value = "查询所有用户订单", notes = "查询所有用户订单")
     @PostMapping("/query")
-    OrderDTO.QueryResp query(@RequestBody OrderDTO.BrandOrderVO request);
+    BaseResponse<OrderDTO.QueryResp> query(@RequestBody OrderDTO.BrandOrderVO request);
 
     @ApiOperation(value = "添加用户订单", notes = "添加用户订单")
     @PostMapping("/add")
-    void add(@RequestBody OrderDTO.BrandOrderVO request);
+    BaseResponse add(@RequestBody OrderDTO.BrandOrderVO request);
 
     @ApiOperation(value = "修改用户订单", notes = "修改用户订单")
     @PostMapping("/update")
-    void update(@RequestBody OrderDTO.BrandOrderVO request);
+    BaseResponse update(@RequestBody OrderDTO.BrandOrderVO request);
 
     @ApiOperation(value = "按调价查询用户订单 只能获取一条", notes = "按调价查询用户订单 只能获取一条")
     @PostMapping("/get/by/condition")
-    OrderDTO.BrandOrderVO getByCondition(@RequestBody OrderDTO.BrandOrderVO request);
+    BaseResponse<OrderDTO.BrandOrderVO> getByCondition(@RequestBody OrderDTO.BrandOrderVO request);
 }

@@ -260,6 +260,11 @@ public class TrademarkDTO {
         private int category;
 
         /**
+         * 商标所属类别名称
+         */
+        private String categoryName;
+
+        /**
          * 商标类似群组
          */
         private String group;
@@ -568,5 +573,10 @@ public class TrademarkDTO {
          * 每页显示条数
          */
         private int pageSize;
+
+        /**
+         * 商标编号
+         */
+        private List<String> brandIds;
     }
 }

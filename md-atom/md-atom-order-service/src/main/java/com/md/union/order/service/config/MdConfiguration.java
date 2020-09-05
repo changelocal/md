@@ -45,7 +45,7 @@ public class MdConfiguration implements WebMvcConfigurer, EnvironmentAware {
 		registration.setName("responseWrapFilter");
 		registration.setFilter(new ResponseWrapFilter());
 		registration.setOrder(2);
-		registration.addUrlPatterns("/api/*");
+		registration.addUrlPatterns("/brand/*");
 		registration.addUrlPatterns("/ref/*");
 		return registration;
 	}

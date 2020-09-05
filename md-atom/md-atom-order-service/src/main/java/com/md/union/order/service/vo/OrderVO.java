@@ -90,6 +90,10 @@ public class OrderVO {
          */
         private String productNo;
         /**
+         * 产品名称
+         */
+        private String productName;
+        /**
          * 当前页
          */
         private int pageIndex;
@@ -97,6 +101,26 @@ public class OrderVO {
          * 每页显示条数
          */
         private int pageSize;
+        /**
+         * 最低价
+         */
+        private int minPrice;
+        /**
+         * 最高价
+         */
+        private int maxPrice;
+        /**
+         * 分类id
+         */
+        private int category;
+        /**
+         * 分类名称
+         */
+        private String categoryName;
+        /**
+         * 品牌图片
+         */
+        private String img;
 
     }
 }

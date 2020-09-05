@@ -52,6 +52,8 @@ public class Order {
         public String prePrice;
         @ApiModelProperty("订单状态 1待支付定金 2待提交资料 3委托受理 4待支付尾款 5已完成")
         public int OrderStatus;
+        @ApiModelProperty("订单类型 1商标注册订单2商标维权订单3商标信息变更订单")
+        public int OrderType;
     }
 
     @ApiModel("我的订单列提交资料")
@@ -65,12 +67,12 @@ public class Order {
         public String restPay;
         @ApiModelProperty("总价")
         public String totalPay;
-        @ApiModelProperty("购买用户id")
-        public int userId;
         @ApiModelProperty("后台运营下单人id")
         public int opUserId;
         @ApiModelProperty("产品编号")
         private String productNo;
+        @ApiModelProperty("产品名称")
+        private String productName;
     }
 
     @ApiModel("我的订单列提交资料")

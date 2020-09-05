@@ -1,21 +1,26 @@
 package com.md.union.front.api.controller;
 
+import com.arc.common.ServiceException;
 import com.arc.util.auth.AppUserPrincipal;
+import com.arc.util.http.BaseResponse;
+import com.google.common.base.Strings;
 import com.md.union.front.api.Enums.OrderStatusEnums;
-import com.md.union.front.api.facade.MinCommon;
 import com.md.union.front.api.vo.Brand;
 import com.md.union.front.api.vo.Category;
 import com.md.union.front.api.vo.Order;
 import com.md.union.front.client.dto.OrderDTO;
+import com.md.union.front.client.dto.TrademarkDTO;
+import com.md.union.front.client.feign.FrontClient;
 import com.md.union.front.client.feign.OrderClient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/front/order")
@@ -25,7 +30,9 @@ public class OrderController {
     @Autowired
     private OrderClient orderClient;
     @Autowired
-    private MinCommon minCommon;
+    private FrontClient frontClient;
+    private SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
 
     @ApiOperation("我的订单列表")
     @PostMapping("list")
@@ -34,12 +41,14 @@ public class OrderController {
         int userId = AppUserPrincipal.getPrincipal().getId();
         OrderDTO.BrandOrderVO param = new OrderDTO.BrandOrderVO();
         param.setUserId(userId);
-        param.setPageIndex(request.getPageIndex());
-        param.setPageSize(request.getPageSize());
-        //OrderDTO.QueryResp resp = orderClient.query(param);
-
-        result.setList(getOrder());
-        result.setTotal(10);
+        param.setPageIndex(request.getPageIndex() == 0 ? 1 : request.getPageIndex());
+        param.setPageSize(request.getPageSize() == 0 ? 10 : request.getPageSize());
+        BaseResponse<OrderDTO.QueryResp> resp = orderClient.query(param);
+        if (!BaseResponse.STATUS_HANDLE_SUCCESS.equals(resp.getStatus())) {
+            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "查询订单列表失败");
+        }
+        result.setList(convertOrder(resp.getResult().getItems()));
+        result.setTotal(resp.getResult().getTotalCount());
         return result;
     }
 
@@ -47,7 +56,10 @@ public class OrderController {
     @PostMapping("submit")
     public void submitOrder(@RequestBody Order.SubmitOrder request) {
         OrderDTO.BrandOrderVO order = convert(request);
-        orderClient.add(order);
+        BaseResponse response = orderClient.add(order);
+        if (!BaseResponse.STATUS_HANDLE_SUCCESS.equals(response.getStatus())) {
+            throw new ServiceException(response.getStatus(), response.getMessage());
+        }
     }
 
     @ApiOperation("我的订单提交资料")
@@ -60,21 +72,32 @@ public class OrderController {
     @GetMapping("/detail/{id}")
     public Order.Detail OrderDtail(@PathVariable("id") int id) {
         Order.Detail result = new Order.Detail();
-        result.setId(1);
-        result.setUserId(10);
-        result.setOrderNo("348484434");
-        result.setImgUrl("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1595652198157&di=96ccdca4a57760b03b43489df7ce953a&imgtype=0&src=http%3A%2F%2Fimg.mp.sohu.com%2Fupload%2F20170602%2F5402bd3037b44135a7362532ae67e2b7_th.png");
+        OrderDTO.BrandOrderVO request = new OrderDTO.BrandOrderVO();
+        request.setId(id);
+        BaseResponse<OrderDTO.BrandOrderVO> response = orderClient.getByCondition(request);
+        if (!BaseResponse.STATUS_HANDLE_SUCCESS.equals(response.getStatus())) {
+            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "查询订单详情失败");
+        }
+        if (response.getResult() == null) {
+            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "查询订单id不存在");
+        }
+        OrderDTO.BrandOrderVO order = response.getResult();
+        result.setId(order.getId());
+        result.setUserId(order.getUserId());
+        result.setOrderNo(order.getOrderNo());
+        result.setImgUrl(order.getImg());
         result.setPerson(getPerson());
-        result.setCategoryName("名典");
-        result.setPayPrice("100.00");
-        result.setPrePrice("100.00");
-        result.setOrderStatus(1);
-        result.setCreateTime("2020-01-01");
-        result.setOverTime("2020-01-02");
-        result.setTotalPrice("2000");
+        result.setCategoryName(order.getCategoryName());
+        result.setPayPrice("" + (order.getPrePay() + order.getRestPay()));
+        result.setPrePrice("" + order.getPrePay());
+        result.setOrderStatus(order.getStatus());
+        if (order.getCreateTime() != null)
+            result.setCreateTime(sf.format(order.getCreateTime()));
+        if (order.getOverTime() != null)
+            result.setOverTime(sf.format(order.getOverTime()));
+        result.setTotalPrice(order.getTotalPay() + "");
         result.setCategroyList(getlist());
         return result;
-
     }
 
     @ApiOperation("我的服务订单详情")
@@ -86,9 +109,27 @@ public class OrderController {
 
     }
 
-    private List<Order.OrderRes> getOrder() {
+    private List<Order.OrderRes> convertOrder(List<OrderDTO.BrandOrderVO> request) {
         List<Order.OrderRes> result = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
+        if (CollectionUtils.isEmpty(request))
+            return result;
+        List<String> brandIds = request.stream().map(p -> p.getProductNo()).collect(Collectors.toList());
+        request.stream().forEach(p -> {
+            Order.OrderRes item = new Order.OrderRes();
+            item.setId(p.getId());
+            item.setOrderNo(p.getOrderNo());
+            item.setImgUrl(p.getImg());
+            item.setBrandName(p.getProductName());
+            item.setCategoryName(p.getCategoryName());
+            item.setImgNo("redxydd");
+            item.setMaxPrice("￥" + 3000);
+            item.setMinPrice("￥" + 1000);
+            item.setPrePrice("￥" + p.getPrePay());
+            item.setOrderStatus(p.getStatus());
+            item.setOrderType(p.getOrderType());
+            result.add(item);
+        });
+        /*for (int i = 0; i < 3; i++) {
             Order.OrderRes item = new Order.OrderRes();
             item.setId(i + 1);
             item.setOrderNo("BR5943838" + i);
@@ -115,7 +156,7 @@ public class OrderController {
             item.setPrePrice("￥" + 10);
             item.setOrderStatus(5);
             result.add(item);
-        }
+        }*/
         return result;
     }
 
@@ -166,7 +207,7 @@ public class OrderController {
         result.setPrePay(Integer.parseInt(request.getPrePay()));
         result.setRestPay(Integer.parseInt(request.getRestPay()));
         result.setTotalPay(Integer.parseInt(request.getTotalPay()));
-        result.setUserId(1);
+        result.setUserId(AppUserPrincipal.getPrincipal().getId());
         result.setOpUserId(1);
         result.setCreateTime(new Date());
         result.setUpdateTime(new Date());
@@ -174,6 +215,49 @@ public class OrderController {
 
         result.setOrderType(request.getOrderType());
         result.setProductNo(request.getProductNo());
+        result.setMinPrice(10000);
+        result.setMinPrice(20000);
+        if (Strings.isNullOrEmpty(request.getProductNo())) {
+            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "品牌编号不能为空");
+        }
+        Map<String, TrademarkDTO.MdBrand> brandMap = getBrandByBrandIds(Arrays.asList(request.getProductNo()));
+        if (!brandMap.containsKey(request.getProductNo()))
+            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "分类不存在");
+        TrademarkDTO.MdBrand brand = brandMap.get(request.getProductNo());
+        result.setProductName(brand.getBrandName());
+        result.setCategory(brand.getCategory());
+        result.setCategoryName(brand.getCategoryName());
+        result.setImg(brand.getImageUrl());
+        return result;
+    }
+
+    private Map<String, TrademarkDTO.MdBrand> getBrandByBrandIds(List<String> brandIds) {
+        Map<String, TrademarkDTO.MdBrand> result = new HashMap<>();
+        if (CollectionUtils.isEmpty(brandIds))
+            return result;
+        TrademarkDTO.MdBrand findBrand = new TrademarkDTO.MdBrand();
+        findBrand.setBrandIds(brandIds);
+        BaseResponse<TrademarkDTO.QueryResp> brandResp = frontClient.find(findBrand);
+        if (!BaseResponse.STATUS_HANDLE_SUCCESS.equals(brandResp.getStatus())) {
+            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "批量查询品牌信息失败");
+        }
+        Map<Integer, TrademarkDTO.Cate> cateMap = getCategoryMap();
+        brandResp.getResult().getMdBrands().forEach(p -> {
+            if (cateMap.containsKey(p.getCategory())) {
+                p.setCategoryName(cateMap.get(p.getCategory()).getCategoryName());
+            }
+            result.put(p.getBrandId(), p);
+        });
+        return result;
+    }
+
+    private Map<Integer, TrademarkDTO.Cate> getCategoryMap() {
+        Map<Integer, TrademarkDTO.Cate> result = new HashMap<>();
+        BaseResponse<TrademarkDTO.RootBrandResp> brandCategoryResp = frontClient.root();
+        if (!BaseResponse.STATUS_HANDLE_SUCCESS.equals(brandCategoryResp.getStatus())) {
+            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "查询45大分类失败");
+        }
+        brandCategoryResp.getResult().getCates().forEach(p -> result.put(p.getCode(), p));
         return result;
     }
 

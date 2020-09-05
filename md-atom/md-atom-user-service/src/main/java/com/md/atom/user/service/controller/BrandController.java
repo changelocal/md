@@ -60,6 +60,7 @@ public class BrandController {
         mdBrand.setIsDelete(1);
         mdBrand.setIsSale(1);
         mdBrand.setType(1);
+        mdBrand.setBrandIds(request.getBrandIds());
         List<MdBrand> query = mdBrandDao.find(mdBrand);
         if(!CollectionUtils.isEmpty(query)){
             List<BrandVO.MdBrand> mdBrands = new ArrayList<>();

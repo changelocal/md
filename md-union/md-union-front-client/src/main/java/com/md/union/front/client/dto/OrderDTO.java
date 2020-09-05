@@ -1,6 +1,7 @@
 package com.md.union.front.client.dto;
 
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.Date;
@@ -97,6 +98,30 @@ public class OrderDTO {
          * 每页显示条数
          */
         private int pageSize;
+        /**
+         * 最低价
+         */
+        private int minPrice;
+        /**
+         * 最高价
+         */
+        private int maxPrice;
+        /**
+         * 分类id
+         */
+        private int category;
+        /**
+         * 分类名称
+         */
+        private String categoryName;
 
+        /**
+         * 产品名称
+         */
+        private String productName;
+        /**
+         * 品牌图片
+         */
+        private String img;
     }
 }
