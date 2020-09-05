@@ -79,7 +79,9 @@ public class OrderController {
         Order.Detail result = new Order.Detail();
         OrderDTO.BrandOrderVO request = new OrderDTO.BrandOrderVO();
         request.setId(id);
+        log.info("orderClient.getByCondition param:{}", request);
         BaseResponse<OrderDTO.BrandOrderVO> response = orderClient.getByCondition(request);
+        log.info("orderClient.getByCondition result:{}", JSON.toJSONString(response));
         if (!BaseResponse.STATUS_HANDLE_SUCCESS.equals(response.getStatus())) {
             throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "查询订单详情失败");
         }
@@ -102,6 +104,9 @@ public class OrderController {
             result.setOverTime(sf.format(order.getOverTime()));
         result.setTotalPrice(order.getTotalPay() + "");
         result.setCategroyList(getlist());
+        result.setBrandName(order.getProductName());
+        result.setMinPrice("" + order.getMinPrice());
+        result.setMaxPrice("" + order.getMaxPrice());
         return result;
     }
 
@@ -206,11 +211,18 @@ public class OrderController {
     }
 
     private OrderDTO.BrandOrderVO convert(Order.SubmitOrder request) {
+        if (request.getTotalPay() == null) {
+            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "商品总价不能为空");
+        }
+        if (request.getPrePay() == null) {
+            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "预支付价不能为空");
+        }
+        int restPay = Integer.parseInt(request.getTotalPay()) - Integer.parseInt(request.getPrePay());
         OrderDTO.BrandOrderVO result = new OrderDTO.BrandOrderVO();
         result.setOrderNo("" + System.currentTimeMillis());
         result.setStatus(OrderStatusEnums.PRE_PAY.getType());
         result.setPrePay(Integer.parseInt(request.getPrePay()));
-        result.setRestPay(Integer.parseInt(request.getRestPay()));
+        result.setRestPay(restPay);
         result.setTotalPay(Integer.parseInt(request.getTotalPay()));
         result.setUserId(AppUserPrincipal.getPrincipal().getId());
         result.setOpUserId(1);
@@ -223,11 +235,11 @@ public class OrderController {
         result.setMinPrice(10000);
         result.setMinPrice(20000);
         if (Strings.isNullOrEmpty(request.getProductNo())) {
-            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "品牌编号不能为空");
+            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "商标编号不能为空");
         }
         Map<String, TrademarkDTO.MdBrand> brandMap = getBrandByBrandIds(Arrays.asList(request.getProductNo()));
         if (!brandMap.containsKey(request.getProductNo()))
-            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "分类不存在");
+            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "商标编号不存在");
         TrademarkDTO.MdBrand brand = brandMap.get(request.getProductNo());
         result.setProductName(brand.getBrandName());
         result.setCategory(brand.getCategory());

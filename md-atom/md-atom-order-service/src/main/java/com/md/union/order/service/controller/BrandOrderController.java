@@ -65,8 +65,14 @@ public class BrandOrderController {
     @PostMapping("/get/by/condition")
     public OrderVO.BrandOrderVO getByCondition(@RequestBody OrderVO.BrandOrderVO request) {
         BrandOrderParam param = new BrandOrderParam();
-
+        param.setId(request.getId());
+        param.setStatus(request.getStatus());
+        param.setUserId(request.getUserId());
+        param.setOpUserId(request.getOpUserId());
+        param.setId(request.getId());
+        log.info("brandOrderDao.find param:{}", JSON.toJSONString(param));
         List<BrandOrder> list = brandOrderDao.find(param);
+        log.info("brandOrderDao.find list:{}", JSON.toJSONString(list));
 
         if (list.size() > 1) {
             throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "订单不唯一");

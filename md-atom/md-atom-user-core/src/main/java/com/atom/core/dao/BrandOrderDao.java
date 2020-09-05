@@ -83,6 +83,9 @@ public class BrandOrderDao extends BaseDao {
         if (brandOrderParam.getOpUserId() > 0) {
             filter = filter.and(f("op_user_id", brandOrderParam.getOpUserId()));
         }
+        if (brandOrderParam.getStatus() > 0) {
+            filter = filter.and(f("status", brandOrderParam.getStatus()));
+        }
         List<BrandOrder> list = DB().select(BrandOrder.class)
                 .where(filter).result().all(BrandOrder.class);
         return list == null ? new ArrayList<>() : list;

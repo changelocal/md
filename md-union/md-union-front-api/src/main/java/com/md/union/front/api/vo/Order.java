@@ -115,6 +115,12 @@ public class Order {
         private List<Category.Info> categroyList;
         @ApiModelProperty("订单完成时间")
         private String overTime;
+        @ApiModelProperty("品牌名称")
+        public String brandName;
+        @ApiModelProperty("最低价")
+        public String minPrice;
+        @ApiModelProperty("最高价")
+        public String maxPrice;
     }
 
     @Data
@@ -122,6 +128,8 @@ public class Order {
     public static class PayParam{
         @ApiModelProperty("订单编号")
         private String orderNo;
+        @ApiModelProperty("商标编号")
+        private String brandNo;
     }
 
 
