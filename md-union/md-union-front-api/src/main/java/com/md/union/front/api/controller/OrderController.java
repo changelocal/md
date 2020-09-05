@@ -1,5 +1,6 @@
 package com.md.union.front.api.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.arc.common.ServiceException;
 import com.arc.util.auth.AppUserPrincipal;
 import com.arc.util.http.BaseResponse;
@@ -14,6 +15,7 @@ import com.md.union.front.client.feign.FrontClient;
 import com.md.union.front.client.feign.OrderClient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +27,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/front/order")
 @Api(tags = {"订单管理服务"})
+@Slf4j
 public class OrderController {
 
     @Autowired
@@ -43,7 +46,9 @@ public class OrderController {
         param.setUserId(userId);
         param.setPageIndex(request.getPageIndex() == 0 ? 1 : request.getPageIndex());
         param.setPageSize(request.getPageSize() == 0 ? 10 : request.getPageSize());
+        log.info("orderClient.query param:{}", JSON.toJSONString(param));
         BaseResponse<OrderDTO.QueryResp> resp = orderClient.query(param);
+        log.info("orderClient.query result:{}", JSON.toJSONString(resp));
         if (!BaseResponse.STATUS_HANDLE_SUCCESS.equals(resp.getStatus())) {
             throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "查询订单列表失败");
         }
