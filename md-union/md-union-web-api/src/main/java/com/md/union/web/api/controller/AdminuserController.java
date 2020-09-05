@@ -1,9 +1,9 @@
-package com.md.union.front.api.controller4web;
+package com.md.union.web.api.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.arc.common.ServiceException;
 import com.arc.util.http.BaseResponse;
-import com.md.union.front.api.vo4web.Adminuser;
+import com.md.union.web.api.vo.Adminuser;
 import com.md.union.front.client.dto.AdminUserDTO;
 import com.md.union.front.client.feign.FrontClient;
 import io.swagger.annotations.Api;
@@ -39,7 +39,7 @@ public class AdminuserController {
         ret.setCode(20000);
         String[] a = {"admin"};
         JSONObject result = new JSONObject();
-                    result.put("roles", "");
+                    result.put("roles", a);
                     result.put("introduction", "i am foo");
                     result.put("avatar", "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
                     result.put("name", "admin");
