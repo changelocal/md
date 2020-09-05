@@ -2,7 +2,7 @@ package com.md.union.web.api.controller;
 
 import com.arc.common.ServiceException;
 import com.arc.util.http.BaseResponse;
-import com.md.union.web.api.vo4web.Wxuser;
+import com.md.union.web.api.vo.Wxuser;
 import com.md.union.front.client.dto.WxUserDTO;
 import com.md.union.front.client.feign.FrontClient;
 import io.swagger.annotations.Api;

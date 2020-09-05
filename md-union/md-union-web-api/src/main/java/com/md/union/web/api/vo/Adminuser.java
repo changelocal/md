@@ -1,4 +1,4 @@
-package com.md.union.front.api.vo4web;
+package com.md.union.web.api.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

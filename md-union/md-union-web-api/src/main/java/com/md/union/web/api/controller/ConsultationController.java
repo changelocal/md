@@ -2,7 +2,7 @@ package com.md.union.web.api.controller;
 
 import com.arc.common.ServiceException;
 import com.arc.util.http.BaseResponse;
-import com.md.union.web.api.vo4web.Consultation;
+import com.md.union.web.api.vo.Consultation;
 import com.md.union.front.client.dto.ConsultationDTO;
 import com.md.union.front.client.feign.FrontClient;
 import io.swagger.annotations.Api;

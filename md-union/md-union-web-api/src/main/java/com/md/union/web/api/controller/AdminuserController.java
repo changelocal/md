@@ -3,7 +3,7 @@ package com.md.union.web.api.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.arc.common.ServiceException;
 import com.arc.util.http.BaseResponse;
-import com.md.union.web.api.vo4web.Adminuser;
+import com.md.union.web.api.vo.Adminuser;
 import com.md.union.front.client.dto.AdminUserDTO;
 import com.md.union.front.client.feign.FrontClient;
 import io.swagger.annotations.Api;
