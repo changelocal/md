@@ -153,16 +153,16 @@ public class CommonController {
             result.setAvatar(response.getResult().getAvatar());
 
             consultation1.setOpUserId(response.getResult().getId());
-            consultation1.setOpUserMobile(response.getResult().getMobile());
-            consultation1.setOpUserName(response.getResult().getNickname());
+//            consultation1.setOpUserMobile(response.getResult().getMobile());
+//            consultation1.setOpUserName(response.getResult().getNickname());
         }
 
         //应该记录一下咨询记录
         consultation1.setOrderNo(id==null?"":id);
         consultation1.setStatus(1);
         consultation1.setOpenId(AppUserPrincipal.getPrincipal().getMinId());
-        consultation1.setBuyerMobile(AppUserPrincipal.getPrincipal().getName());
-        consultation1.setBuyerName(AppUserPrincipal.getPrincipal().getMinId());
+//        consultation1.setBuyerMobile(AppUserPrincipal.getPrincipal().getName());
+//        consultation1.setBuyerName(AppUserPrincipal.getPrincipal().getMinId());
 
         BaseResponse<ServiceDTO.Resp> responseAdd = frontClient.addConsultation(consultation1);
         if (!responseAdd.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {

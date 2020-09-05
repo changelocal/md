@@ -1,5 +1,6 @@
 package com.md.union.front.api.controller4web;
 
+import com.alibaba.fastjson.JSONObject;
 import com.arc.common.ServiceException;
 import com.arc.util.http.BaseResponse;
 import com.md.union.front.api.vo4web.Adminuser;
@@ -10,20 +11,42 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/web/adminuser")
 @Api(tags = {"管理人员"})
 public class AdminuserController {
     @Autowired
     private FrontClient frontClient;
+
+    @PostMapping("/login")
+    public Adminuser.LoginRes login(@RequestBody Adminuser.SearchReq request) {
+        Adminuser.LoginRes ret = new Adminuser.LoginRes();
+        ret.setCode(20000);
+        JSONObject result = new JSONObject();
+        result.put("token", "admin-token");
+        ret.setData(result.toJSONString());
+        return ret;
+    }
+    @GetMapping("/info")
+    public Adminuser.LoginRes info() {
+        Adminuser.LoginRes ret = new Adminuser.LoginRes();
+        ret.setCode(20000);
+        String[] a = {"admin"};
+        JSONObject result = new JSONObject();
+                    result.put("roles", "");
+                    result.put("introduction", "i am foo");
+                    result.put("avatar", "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
+                    result.put("name", "admin");
+        ret.setData(result.toJSONString());
+        return ret;
+    }
+
     @ApiOperation("商标起名查询")
     @PostMapping("/query")
     public Adminuser.SearchRes query(@RequestBody Adminuser.SearchReq request) {
