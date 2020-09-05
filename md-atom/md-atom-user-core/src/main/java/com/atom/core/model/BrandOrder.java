@@ -83,5 +83,28 @@ public class BrandOrder {
 	 * 产品编号
 	 */
 	private String productNo;
-
+	/**
+	 * 产品名称
+	 */
+	private String productName;
+	/**
+	 * 最低价
+	 */
+	private int minPrice;
+	/**
+	 * 最高价
+	 */
+	private int maxPrice;
+	/**
+	 * 分类id
+	 */
+	private int category;
+	/**
+	 * 分类名称
+	 */
+	private String categoryName;
+	/**
+	 * 品牌图片
+	 */
+	private String img;
 }

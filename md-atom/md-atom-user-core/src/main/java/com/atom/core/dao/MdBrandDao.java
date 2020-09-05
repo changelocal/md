@@ -6,6 +6,7 @@ import com.atom.core.model.MdBrand;
 import com.atom.core.model.MdBrandParam;
 import com.google.common.base.Strings;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -149,6 +150,9 @@ public class MdBrandDao extends BaseDao  {
 		}
 		if(!Strings.isNullOrEmpty(mdBrandParam.getBrandId())){
 			filter=filter.and(f("brand_id",mdBrandParam.getBrandId()));
+		}
+		if(!CollectionUtils.isEmpty(mdBrandParam.getBrandIds())){
+			filter=filter.and(f("brand_id",FilterType.IN,mdBrandParam.getBrandIds().toArray(new String[0])));
 		}
 		if(mdBrandParam.getCategory()>0){
 			filter=filter.and(f("category",mdBrandParam.getCategory()));

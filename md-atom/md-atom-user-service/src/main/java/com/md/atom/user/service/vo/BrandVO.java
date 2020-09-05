@@ -376,5 +376,10 @@ public class BrandVO {
          * 每页显示条数
          */
         private int pageSize;
+
+        /**
+         * 商标编号
+         */
+        private List<String> brandIds;
     }
 }

@@ -3,6 +3,7 @@ package com.atom.core.model;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 
 /**
@@ -35,4 +36,6 @@ public class MdBrandParam extends MdBrand{
      * 商标名称长度
      */
     private int brandNameLengthHigh;
+
+    private List<String> brandIds;
 }

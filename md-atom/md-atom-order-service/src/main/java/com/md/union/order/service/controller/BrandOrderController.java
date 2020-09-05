@@ -51,10 +51,10 @@ public class BrandOrderController {
 
     @PostMapping("/add")
     public void add(@RequestBody OrderVO.BrandOrderVO request) {
-        log.info("com.md.union.order.service.controller.BrandOrderController.add param:{}", JSON.toJSONString(request));
+        log.info("BrandOrderController.add param:{}", JSON.toJSONString(request));
         checkAddOrder(request);
         brandOrderDao.add(convertAdd(request));
-        log.info("com.md.union.order.service.controller.BrandOrderController.add success orderNo:{}", request.getOrderNo());
+        log.info("BrandOrderController.add success orderNo:{}", request.getOrderNo());
     }
 
     @PostMapping("/update")
@@ -89,6 +89,12 @@ public class BrandOrderController {
         result.setPreTime(request.getPreTime());
         result.setOverTime(request.getOverTime());
         result.setProductNo(request.getProductNo());
+        result.setProductName(request.getProductName());
+        result.setMinPrice(request.getMinPrice());
+        result.setMaxPrice(request.getMaxPrice());
+        result.setCategory(request.getCategory());
+        result.setCategoryName(request.getCategoryName());
+        result.setImg(request.getImg());
         return result;
     }
 
@@ -138,6 +144,12 @@ public class BrandOrderController {
         result.setPreTime(request.getPreTime());
         result.setOverTime(request.getOverTime());
         result.setProductNo(request.getProductNo());
+        result.setProductName(request.getProductName());
+        result.setCategory(request.getCategory());
+        result.setCategoryName(request.getCategoryName());
+        result.setMinPrice(request.getMinPrice());
+        result.setMaxPrice(request.getMaxPrice());
+        result.setImg(request.getImg());
         return result;
     }
 
