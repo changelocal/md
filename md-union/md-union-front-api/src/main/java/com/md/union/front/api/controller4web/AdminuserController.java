@@ -39,7 +39,7 @@ public class AdminuserController {
         ret.setCode(20000);
         String[] a = {"admin"};
         JSONObject result = new JSONObject();
-                    result.put("roles", "");
+                    result.put("roles", a);
                     result.put("introduction", "i am foo");
                     result.put("avatar", "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
                     result.put("name", "admin");
