@@ -22,7 +22,7 @@ public class Common {
 
     }
     @Data
-    @ApiModel("提交资料")
+    @ApiModel("提交资料文件内容")
     public static class Ref{
         @ApiModelProperty("oss id")
         private String refId;
