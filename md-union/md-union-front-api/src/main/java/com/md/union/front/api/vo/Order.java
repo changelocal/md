@@ -56,7 +56,7 @@ public class Order {
         public int OrderType;
     }
 
-    @ApiModel("我的订单列提交资料")
+    @ApiModel("订单提交")
     @Data
     public static class SubmitOrder{
         @ApiModelProperty("订单类型")
@@ -76,10 +76,8 @@ public class Order {
     @ApiModel("我的订单列提交资料")
     @Data
     public static class SubmitOrderFile{
-        @ApiModelProperty("订单id")
-        public String id;
-        /*@ApiModelProperty("订单编号")
-        public String orderNo;*/
+        @ApiModelProperty("订单编号")
+        public String orderNo;
         @ApiModelProperty("订单提交资料方式 1企业 2 个人")
         private int submitType;
         @ApiModelProperty("文件资料id")

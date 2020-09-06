@@ -17,7 +17,6 @@ import com.md.union.front.client.feign.FrontClient;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
@@ -29,7 +28,6 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.AlgorithmParameters;
 import java.security.Security;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController
@@ -48,15 +46,17 @@ public class CommonController {
     @ResponseBody
     @PostMapping("upfile2oss")
     public OssFileInfo upFile(@RequestParam(value = "fileObj") MultipartFile fileObj) {
-        String[] ex = fileObj.getContentType().split("/");
+        /*String[] ex = fileObj.getContentType().split("/");
         SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyyMM");
-        String fileName = dateFormat2.format(new Date()) + DigestUtils.md5Hex(fileObj.getOriginalFilename()
-                + System.currentTimeMillis() + new Random().nextLong()) + "." + ex[1];
-        ossClientTool.uploadImg2Oss(fileObj, realPath.concat(fileName));
+        String fileId = dateFormat2.format(new Date()) + DigestUtils.md5Hex(fileObj.getOriginalFilename()
+                + System.currentTimeMillis() + new Random().nextLong()) + "." + ex[1];*/
+        String fileId = new Date().getTime() + "T" + new Random().nextLong();
+        ossClientTool.uploadImg2Oss(fileObj, realPath.concat(fileId));
 //        logger.info("==================================https://tianxiuquan.oss-cn-zhangjiakou.aliyuncs.com/" + realPath + fileName);
-        fileName = "https://tianxiuquan.oss-cn-zhangjiakou.aliyuncs.com/" + realPath + fileName;
+        String url = "https://tianxiuquan.oss-cn-zhangjiakou.aliyuncs.com/" + realPath + fileId;
         OssFileInfo res = new OssFileInfo();
-        res.setName(fileName);
+        res.setFileId(fileId);
+        res.setFileUrl(url);
         return res;
     }
 
@@ -109,14 +109,14 @@ public class CommonController {
         Consultation.ConsultationResp result = new Consultation.ConsultationResp();
         //判断最近什么时候咨询过
         boolean hadConsultation = false;
-        ConsultationDTO.Info request  = new ConsultationDTO.Info();
+        ConsultationDTO.Info request = new ConsultationDTO.Info();
         request.setOpenId(AppUserPrincipal.getPrincipal().getMinId());
         BaseResponse<ConsultationDTO.QueryResp> query = frontClient.query(request);
         if (!query.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(query.getStatus(), query.getMessage());
         }
         ConsultationDTO.Info info = null;
-        if(query.getResult() !=null) {
+        if (query.getResult() != null) {
             if (!CollectionUtils.isEmpty(query.getResult().getInfos())) {
                 info = query.getResult().getInfos().get(0);
                 //一天内咨询过
@@ -127,7 +127,7 @@ public class CommonController {
         }
         ServiceDTO.Consultation consultation1 = new ServiceDTO.Consultation();
         //咨询过
-        if(hadConsultation){
+        if (hadConsultation) {
             AdminUserDTO.AdminUser adminUser = new AdminUserDTO.AdminUser();
             adminUser.setId(info.getOpUserId());
             BaseResponse<AdminUserDTO.QueryResp> queryRespBaseResponse = frontClient.find(adminUser);
@@ -141,7 +141,7 @@ public class CommonController {
             consultation1.setOpUserMobile(queryRespBaseResponse.getResult().getAdminUsers().get(0).getMobile());
             consultation1.setOpUserName(queryRespBaseResponse.getResult().getAdminUsers().get(0).getNickname());
 
-        }else {
+        } else {
             TrademarkDTO.Consultation consultation = new TrademarkDTO.Consultation();
             consultation.setId(id);
             BaseResponse<TrademarkDTO.ConsultationResp> response = frontClient.consultation(consultation);
@@ -150,9 +150,9 @@ public class CommonController {
             }
             //返回任意销售信息
             result.setName(response.getResult().getNickname());
-            result.setQq(response.getResult().getQqAccount()==null?"":response.getResult().getQqAccount());
+            result.setQq(response.getResult().getQqAccount() == null ? "" : response.getResult().getQqAccount());
             result.setTel(response.getResult().getMobile());
-            result.setTitle(response.getResult().getTitle()==null?"":response.getResult().getTitle());
+            result.setTitle(response.getResult().getTitle() == null ? "" : response.getResult().getTitle());
             result.setAvatar(response.getResult().getAvatar());
 
             consultation1.setOpUserId(response.getResult().getId());
@@ -161,7 +161,7 @@ public class CommonController {
         }
 
         //应该记录一下咨询记录
-        consultation1.setOrderNo(id==null?"":id);
+        consultation1.setOrderNo(id == null ? "" : id);
         consultation1.setStatus(1);
         consultation1.setOpenId(AppUserPrincipal.getPrincipal().getMinId());
 //        consultation1.setBuyerMobile(AppUserPrincipal.getPrincipal().getName());
@@ -203,7 +203,7 @@ public class CommonController {
         response.getResult().getCates().forEach(e -> {
             Consultation.RootBrandClass node = new Consultation.RootBrandClass();
             node.setCode(e.getCode());
-            node.setName(e.getCode()+"类 "+e.getCategoryName());
+            node.setName(e.getCode() + "类 " + e.getCategoryName());
             rootBrandClasses.add(node);
         });
         res.setRootBrandClasses(rootBrandClasses);
@@ -223,16 +223,17 @@ public class CommonController {
         response.getResult().getCates().forEach(e -> {
             Consultation.BrandClass node = new Consultation.BrandClass();
             node.setDesc(e.getDes());
-            node.setName(e.getCode()+" "+e.getCategoryName());
+            node.setName(e.getCode() + " " + e.getCategoryName());
             rootBrandClasses.add(node);
         });
         res.setBrandClasses(rootBrandClasses);
 //        BeanUtils.copyProperties(response.getResult().getCates(), res);
         return res;
     }
+
     @ApiOperation("小程序获取手机")
     @PostMapping("/min/phone")
-    public Object getPhoneNumber(@RequestBody Common.MinGetPhone minGetPhone)  {
+    public Object getPhoneNumber(@RequestBody Common.MinGetPhone minGetPhone) {
         // 被加密的数据
         byte[] dataByte = Base64.decode(minGetPhone.getEncryptedData());
         // 加密秘钥

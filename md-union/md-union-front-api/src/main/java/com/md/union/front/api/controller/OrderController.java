@@ -67,11 +67,19 @@ public class OrderController {
         }
     }
 
-    @ApiOperation("我的订单提交资料")
+    /*@ApiOperation("我的订单提交资料")
     @PostMapping("submit/file")
-    public void submitOrderFile(@RequestBody Order.SubmitOrder request) {
-
-    }
+    public void submitOrderFile(@RequestBody Order.SubmitOrderFile request) {
+        if (request.getOrderNo() == null) {
+            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "订单编号不能为空");
+        }
+        if (request.getSubmitType() == 0) {
+            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "上传文件类型不能为空");
+        }
+        if (CollectionUtils.isEmpty(request.getFileIds())) {
+            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "上传文件资料不能为空");
+        }
+    }*/
 
     @ApiOperation("我的商品订单详情")
     @GetMapping("/detail/{id}")
