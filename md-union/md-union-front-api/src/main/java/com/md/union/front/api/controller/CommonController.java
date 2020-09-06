@@ -55,8 +55,7 @@ public class CommonController {
 //        logger.info("==================================https://tianxiuquan.oss-cn-zhangjiakou.aliyuncs.com/" + realPath + fileName);
         String url = "https://tianxiuquan.oss-cn-zhangjiakou.aliyuncs.com/" + realPath + fileId;
         OssFileInfo res = new OssFileInfo();
-        res.setFileId(fileId);
-        res.setFileUrl(url);
+        res.setName(url);
         return res;
     }
 
