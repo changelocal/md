@@ -188,6 +188,7 @@ public class BrandController {
             req.setPriceHigh(new BigDecimal(2000000));
         }
 
+
         req.setPageIndex(request.getPageIndex());
         req.setPageSize(request.getPageSize());
 
