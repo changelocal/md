@@ -109,6 +109,8 @@ public class WxUserController {
         result.setIdCard(user.getIdCard());
         result.setMobile(user.getMobile());
         result.setBusinessNo(user.getBusinessNo());
+        result.setPageSize(user.getPageSize());
+        result.setPageIndex(user.getPageIndex());
         return result;
     }
 

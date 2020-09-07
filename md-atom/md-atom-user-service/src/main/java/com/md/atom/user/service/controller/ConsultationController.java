@@ -29,15 +29,13 @@ public class ConsultationController {
     private ConsultationDao consultationDao;
 
     @PostMapping("/query")
-    public ConsultationVO.QueryResp query(Consultation adminUser) {
+    public ConsultationVO.QueryResp query(@RequestBody ConsultationParam adminUser) {
         ConsultationVO.QueryResp result = new ConsultationVO.QueryResp();
-
         ConsultationParam para = new ConsultationParam();
         BeanUtils.copyProperties(adminUser, para);
         PageResult<Consultation> list = consultationDao.query(para);
         List<ConsultationVO.Info> infos = new ArrayList<>();
         if(!CollectionUtils.isEmpty(list.getItems())){
-
             list.getItems().forEach(p->{
                 ConsultationVO.Info info = new ConsultationVO.Info();
                 BeanUtils.copyProperties(p, info);
@@ -49,8 +47,6 @@ public class ConsultationController {
             result.setInfos(infos);
             result.setTotal(0);
         }
-
-
         return result;
     }
 
@@ -60,7 +56,6 @@ public class ConsultationController {
         Consultation user = new Consultation();
         BeanUtils.copyProperties(request, user);
         consultationDao.update(user);
-
         ConsultationVO.Resp result = new ConsultationVO.Resp();
         return result;
     }
