@@ -126,7 +126,7 @@ public class BrandController {
                 res.setCategoryName(e.getCategory()+"类 "+name.get(e.getCategory()));
                 res.setBrandName(e.getBrandName());
                 res.setImgUrl(e.getImageUrl());
-                res.setMaxPrice(e.getPrice().toString());
+                res.setMaxPrice(e.getPriceHigh().toString());
                 res.setMinPrice(e.getPrice().toString());
                 res.setSpecial(true);
                 specialRes.add(res);
@@ -212,7 +212,7 @@ public class BrandController {
                 res.setImgUrl(e.getImageUrl());
                 res.setSpecial(e.getPromoteFlag()==1);
                 res.setMinPrice(e.getPrice().toString());
-                res.setMaxPrice(e.getPrice().toString());
+                res.setMaxPrice(e.getPriceHigh().toString());
                 specialRes.add(res);
             });
         }
@@ -281,7 +281,7 @@ public class BrandController {
                 res.setCateName(e.getCategory()+"类 "+name.get(e.getCategory()));
                 res.setDeposit(e.getPrice().multiply(new BigDecimal(0.2)).toString());
                 res.setPriceLow(e.getPrice().toString());
-                res.setPriceHigh(e.getPrice().toString());
+                res.setPriceHigh(e.getPriceHigh().toString());
                 res.setId(e.getId());
                 res.setName(e.getBrandName());
                 res.setPic(e.getImageUrl());
@@ -414,7 +414,7 @@ public class BrandController {
                 res.setBrandName(e.getBrandName());
                 res.setImgUrl(e.getImageUrl());
                 res.setMinPrice(e.getPrice().toString());
-                res.setMaxPrice(e.getPrice().toString());
+                res.setMaxPrice(e.getPriceHigh().toString());
                 res.setSpecial(e.getPromoteFlag()==1);
                 trademarkCatesFamilar.add(res);
             }

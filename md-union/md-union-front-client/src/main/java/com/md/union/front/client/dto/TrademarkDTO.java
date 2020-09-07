@@ -211,10 +211,9 @@ public class TrademarkDTO {
     @Data
     public static class MdBrand {
         /**
-         * 商标价格区间下限
+         * 商标价格区间上限
          */
         private BigDecimal priceLow;
-
         /**
          * 商标价格区间上限
          */

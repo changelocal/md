@@ -6,7 +6,6 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 
 /**
@@ -134,7 +133,10 @@ public class MdBrand {
 	 * 商标价格
 	 */
 	private BigDecimal price;
-
+    /**
+     * 商标价格最高价
+     */
+    private BigDecimal priceHigh;
 	/**
 	 * 
 	 */

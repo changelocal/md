@@ -19,11 +19,6 @@ public class BrandVO {
     @Data
     public static class MdBrand {
         /**
-         * 商标价格区间下限
-         */
-        private BigDecimal priceLow;
-
-        /**
          * 商标价格区间上限
          */
         private BigDecimal priceHigh;
@@ -146,6 +141,7 @@ public class BrandVO {
          * 商标价格
          */
         private BigDecimal price;
+
 
         /**
          *
