@@ -2,7 +2,8 @@ package com.md.union.admin.api.controller;
 
 import com.arc.common.ServiceException;
 import com.arc.util.http.BaseResponse;
-import com.md.union.admin.api.vo.Wxuser;
+import com.md.union.admin.api.vo.Brand;
+import com.md.union.front.client.dto.TrademarkDTO;
 import com.md.union.front.client.dto.WxUserDTO;
 import com.md.union.front.client.feign.FrontClient;
 import io.swagger.annotations.Api;
@@ -17,31 +18,31 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping("/web/wxuser")
-@Api(tags = {"管理人员"})
-public class WxuserController {
+@RequestMapping("/web/brand")
+@Api(tags = {"商标管理"})
+public class BrandController {
     @Autowired
     private FrontClient frontClient;
     @ApiOperation("商标起名查询")
     @PostMapping("/query")
-    public Wxuser.SearchRes query(@RequestBody Wxuser.SearchReq request) {
-        Wxuser.SearchRes ret = new Wxuser.SearchRes();
-        WxUserDTO.WxUser adminUser = new WxUserDTO.WxUser();
-        BeanUtils.copyProperties(request, adminUser);
-        BaseResponse<WxUserDTO.QueryResp> query = frontClient.query(adminUser);
+    public Brand.SearchRes query(@RequestBody Brand.SearchReq request) {
+        Brand.SearchRes ret = new Brand.SearchRes();
+        TrademarkDTO.MdBrand req = new TrademarkDTO.MdBrand();
+        BeanUtils.copyProperties(request, req);
+        BaseResponse<TrademarkDTO.QueryResp> query = frontClient.search(req);
         if (!query.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(query.getStatus(), query.getMessage());
         }
-        if(!CollectionUtils.isEmpty(query.getResult().getItems())){
-            List<Wxuser.Info> infos = new ArrayList<>();
-            query.getResult().getItems().forEach(p->{
-                Wxuser.Info info = new Wxuser.Info();
+        if(!CollectionUtils.isEmpty(query.getResult().getMdBrands())){
+            List<Brand.Info> infos = new ArrayList<>();
+            query.getResult().getMdBrands().forEach(p->{
+                Brand.Info info = new Brand.Info();
                 BeanUtils.copyProperties(p, info);
                 infos.add(info);
             });
 
             ret.setList(infos);
-            ret.setCount(query.getResult().getItems().size());
+            ret.setCount(query.getResult().getMdBrands().size());
         }else{
             ret.setCount(0);
         }
@@ -49,7 +50,7 @@ public class WxuserController {
     }
 
     @PostMapping("/update")
-    public void update(@RequestBody Wxuser.Info request) {
+    public void update(@RequestBody Brand.Info request) {
         WxUserDTO.WxUser adminUser = new WxUserDTO.WxUser();
         BeanUtils.copyProperties(request, adminUser);
         BaseResponse<WxUserDTO.Resp> query = frontClient.update(adminUser);
