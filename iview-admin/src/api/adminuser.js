@@ -7,3 +7,5 @@ export const query = (data) => {
     method: 'post'
   })
 }
+
+
