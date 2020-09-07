@@ -11,7 +11,7 @@
 
       </el-form>
       <el-table ref="singleTable" :data="tableData" highlight-current-row style="width: 100%">
-        <el-table-column property="openId" label="openID" width="200px" />
+        <el-table-column property="minId" label="openID" width="200px" />
         <el-table-column property="nickName" label="昵称" width="100px" />
         <el-table-column property="realName" label="真实姓名" width="100px" />
         <el-table-column property="idCard" label="身份证" />
@@ -71,7 +71,7 @@ export default {
   computed: {
     formQuery() {
       return {
-        currentPage: this.currentPage,
+        pageIndex: this.currentPage,
         pageSize: this.pageSize,
         mobile: this.mobile
       }
@@ -111,18 +111,23 @@ export default {
       this.form = this.formClear()
     },
     reqList() {
-      this.$http.post(API.adminuserQuery, this.formQuery).then(res => {
-        if (res.status === 200) {
-          const status = res.data.statusCode
-          const rdata = res.data.data
-          if (status === 200) {
-            this.tableData = rdata.list
-            this.totalPage = rdata.total
-            this.currentPage = rdata.currentPage
-          }
+      query(this.formQuery).then(res => {
+        console.log(res)
+        if (res.status === true) {
+          const rdata = res.data
+          this.tableData = rdata.list
+          this.totalPage = rdata.count
+          this.currentPage = rdata.currentPage
+        }else {
+          this.$notify({
+            title: '错误',
+            message: res.message,
+            type: 'error',
+            duration: 2000
+          })
         }
       })
-    }
+    },
   }
 }
 </script>

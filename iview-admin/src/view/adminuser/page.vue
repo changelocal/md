@@ -23,7 +23,7 @@
         </el-form-item>
       </el-form>
       <el-table ref="singleTable" :data="tableData" highlight-current-row style="width: 100%">
-        <el-table-column property="name" label="姓名" width="100px" />
+        <el-table-column property="nickname" label="姓名" width="100px" />
         <el-table-column property="account" label="账号" width="150px" />
         <el-table-column property="type" label="类型" width="100px" />
         <el-table-column property="email" label="邮件" />
@@ -111,7 +111,7 @@ export default {
   },
   methods: {
     formatMapType(row) {
-      return row.enable === 1 ? '有效' : '无效'
+      return row.isEnable === 1 ? '有效' : '无效'
     },
     onAdd() {
       this.openType = 'add'
@@ -151,15 +151,23 @@ export default {
       this.reqList()
     },
     reqList() {
-      query(this.formQuery).then(() => {
+      query(this.formQuery).then(res => {
+        console.log(res)
+        if (res.status === true) {
+          const rdata = res.data
 
-        this.dialogFormVisible = false
-        this.$notify({
-          title: 'Success',
-          message: 'Created Successfully',
-          type: 'success',
-          duration: 2000
-        })
+            this.tableData = rdata.list
+            this.totalPage = rdata.count
+            this.currentPage = rdata.currentPage
+
+        }else {
+          this.$notify({
+            title: 'Success',
+            message: 'Created Successfully',
+            type: 'success',
+            duration: 2000
+          })
+        }
       })
     },
     // reqList() {
