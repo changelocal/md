@@ -44,6 +44,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         AppUserPrincipal principal = init(request);
         UserPrincipal.setPrincipal(principal);
         if (request.getRequestURI().indexOf("/front/pay/notifyUrl") >= 0 ||
+                request.getRequestURI().indexOf("/front/common/consultation") >= 0 ||
                 request.getRequestURI().indexOf("/front/login/min") >= 0) {
 
         } else {

@@ -129,6 +129,8 @@ public class CommonController {
         if (hadConsultation) {
             AdminUserDTO.AdminUser adminUser = new AdminUserDTO.AdminUser();
             adminUser.setId(info.getOpUserId());
+            adminUser.setPageIndex(1);
+            adminUser.setPageSize(10);
             BaseResponse<AdminUserDTO.QueryResp> queryRespBaseResponse = frontClient.find(adminUser);
             result.setName(queryRespBaseResponse.getResult().getAdminUsers().get(0).getNickname());
             result.setQq(queryRespBaseResponse.getResult().getAdminUsers().get(0).getQqAccount());
@@ -155,12 +157,15 @@ public class CommonController {
             result.setAvatar(response.getResult().getAvatar());
 
             consultation1.setOpUserId(response.getResult().getId());
-//            consultation1.setOpUserMobile(response.getResult().getMobile());
-//            consultation1.setOpUserName(response.getResult().getNickname());
+            consultation1.setOpUserMobile(response.getResult().getMobile());
+            consultation1.setOpUserName(response.getResult().getNickname());
         }
 
         //应该记录一下咨询记录
-        consultation1.setOrderNo(id == null ? "" : id);
+        if(id == null || "666".equals(id) || "888".equals(id) || "8".equals(id)  ){
+            id= "";
+        }
+        consultation1.setOrderNo(id);
         consultation1.setStatus(1);
         consultation1.setOpenId(AppUserPrincipal.getPrincipal().getMinId());
 //        consultation1.setBuyerMobile(AppUserPrincipal.getPrincipal().getName());

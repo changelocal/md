@@ -81,7 +81,9 @@ public class AdminUserDao extends BaseDao  {
 
 	public List<AdminUser> find(AdminUserParam adminUserParam) {
 		Filter filter= Filter.create();
-
+        if(!Strings.isNullOrEmpty(adminUserParam.getId())){
+            filter=filter.and(f("id",adminUserParam.getId()));
+        }
 		if(!Strings.isNullOrEmpty(adminUserParam.getAccount())){
 			filter=filter.and(f("account",adminUserParam.getAccount()));
 		}

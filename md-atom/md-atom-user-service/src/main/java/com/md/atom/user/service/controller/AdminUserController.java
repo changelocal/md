@@ -30,7 +30,7 @@ public class AdminUserController {
     private AdminUserDao adminUserDao;
 
     @PostMapping("/query")
-    public AdminUserVO.QueryResp query(AdminUserVO.AdminUser adminUser) {
+    public AdminUserVO.QueryResp query(@RequestBody AdminUserVO.AdminUser adminUser) {
         AdminUserVO.QueryResp result = new AdminUserVO.QueryResp();
 
         AdminUserParam para = new AdminUserParam();
@@ -52,19 +52,29 @@ public class AdminUserController {
     }
 
     @PostMapping("/find")
-    public AdminUserVO.QueryResp find(AdminUserVO.AdminUser adminUser) {
+    public AdminUserVO.QueryResp find(@RequestBody AdminUserVO.AdminUser adminUser) {
         AdminUserVO.QueryResp result = new AdminUserVO.QueryResp();
 
         AdminUserParam para = new AdminUserParam();
         BeanUtils.copyProperties(adminUser, para);
         List<AdminUser> list = adminUserDao.find(para);
-        BeanUtils.copyProperties(list, result);
+
+        List<AdminUserVO.AdminUser> adminUsers = new ArrayList<>();
+        if(!CollectionUtils.isEmpty(list)){
+            list.forEach(p->{
+                AdminUserVO.AdminUser adminUser1 = new AdminUserVO.AdminUser();
+                BeanUtils.copyProperties(p, adminUser1);
+                adminUsers.add(adminUser1);
+            });
+        }
+
+        result.setAdminUsers(adminUsers);
 
         return result;
     }
 
     @PostMapping("/consultation")
-    public AdminUserVO.AdminUser consultation(AdminUserVO.AdminUser adminUser) {
+    public AdminUserVO.AdminUser consultation(@RequestBody AdminUserVO.AdminUser adminUser) {
         AdminUserVO.AdminUser result = new AdminUserVO.AdminUser();
 
         AdminUserParam para = new AdminUserParam();
