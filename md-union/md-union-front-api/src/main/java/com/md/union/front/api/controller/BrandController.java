@@ -81,7 +81,7 @@ public class BrandController {
             Brand.HotRes brand = new Brand.HotRes();
             brand.setCategoryName(e.getCategoryName());
             brand.setCode(e.getCode());
-            brand.setIcon("http://47.92.65.35:8082/file/brand_class/"+e.getCode()+".png");
+            brand.setIcon("https://pay.mdlogo.cn/file/brand_class/"+e.getCode()+".png");
             brand.setTypeName(e.getCode()+"类");
             result.add(brand);
 
@@ -144,6 +144,7 @@ public class BrandController {
     @ApiOperation("买商标查询")
     @PostMapping("/search")
     public Brand.SearchRes brandSearch(@RequestBody Brand.SearchReq request) {
+        log.info("brand search:",request);
         Brand.SearchRes result = new Brand.SearchRes();
 
         TrademarkDTO.MdBrand req = new TrademarkDTO.MdBrand();

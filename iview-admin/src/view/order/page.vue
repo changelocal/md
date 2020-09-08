@@ -217,20 +217,24 @@ export default {
     onSearch() {
       this.reqList()
     },
-
     reqList() {
-      this.$http.post(API.orderQuery, this.formQuery).then(res => {
-        if (res.status === 200) {
-          const status = res.data.statusCode
-          const rdata = res.data.data
-          if (status === 200) {
-            this.tableData = rdata.list
-            this.totalPage = rdata.total
-            this.currentPage = rdata.currentPage
-          }
+      query(this.formQuery).then(res => {
+        console.log(res)
+        if (res.status === true) {
+          const rdata = res.data
+          this.tableData = rdata.list
+          this.totalPage = rdata.count
+          this.currentPage = rdata.currentPage
+        }else {
+          this.$notify({
+            title: '错误',
+            message: res.message,
+            type: 'error',
+            duration: 2000
+          })
         }
       })
-    }
+    },
   }
 }
 </script>

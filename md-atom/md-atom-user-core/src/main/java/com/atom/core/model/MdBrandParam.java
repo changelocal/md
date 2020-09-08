@@ -25,10 +25,6 @@ public class MdBrandParam extends MdBrand{
     private BigDecimal priceLow;
 
     /**
-     * 商标价格区间上限
-     */
-    private BigDecimal priceHigh;
-    /**
      * 商标名称长度
      */
     private int brandNameLengthLow;

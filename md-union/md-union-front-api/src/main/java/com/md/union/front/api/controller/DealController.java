@@ -56,7 +56,7 @@ public class DealController {
                 item.setId(p.getId());
                 item.setPriceDesc(p.getPrice().toString() );
                 item.setTitle(p.getServiceName());
-                item.setIcon("http://47.92.65.35:8082/file/brand-register/"+p.getId()+".png");
+                item.setIcon("https://pay.mdlogo.cn/file/brand-register/"+p.getId()+".png");
                 item.setBrief(p.getSubTitle());
                 result.add(item);
             });
@@ -83,7 +83,7 @@ public class DealController {
                 Brand.BrandDesign item = new Brand.BrandDesign();
                 item.setId(p.getId());
                 item.setTitle(p.getServiceName());
-                item.setIcon("http://47.92.65.35:8082/file/brand-design/" + p.getId() + ".png");
+                item.setIcon("https://pay.mdlogo.cn/file/brand-design/" + p.getId() + ".png");
                 item.setBrief(p.getSubTitle());
                 brandDesigns.add(item);
             });
@@ -196,7 +196,7 @@ public class DealController {
                 item.setId(p.getId());
                 item.setBrandType(2);
                 item.setTitle(p.getServiceName());
-                item.setIcon("http://47.92.65.35:8082/file/icon/message.png");
+                item.setIcon("https://pay.mdlogo.cn/file/icon/message.png");
                 result.add(item);
 
             });
@@ -216,7 +216,7 @@ public class DealController {
                 item.setId(p.getId());
                 item.setBrandType(2);
                 item.setTitle(p.getServiceName());
-                item.setIcon("http://47.92.65.35:8082/file/icon/note.png");
+                item.setIcon("https://pay.mdlogo.cn/file/icon/note.png");
                 result.add(item);
 
             });
@@ -241,10 +241,10 @@ public class DealController {
     public List<Brand.PowerAuth> powerAuth() {
         List<Brand.PowerAuth> result = new ArrayList<>();
 
-        for (int i = 0; i < 22; i++) {
+        for (int i = 1; i < 23; i++) {
             Brand.PowerAuth item = new Brand.PowerAuth();
-            item.setId(i + 1);
-            item.setImg("http://47.92.65.35:8082/file/enterprise/" + i + 1 + ".jpg");
+            item.setId(i);
+            item.setImg("https://pay.mdlogo.cn/file/enterprise/" + i + ".jpg");
             item.setTitle("权威认证");
             result.add(item);
         }

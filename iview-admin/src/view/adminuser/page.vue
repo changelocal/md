@@ -4,14 +4,14 @@
     <el-main>
       <el-form :inline="true">
         <el-form-item label="账号种类">
-          <el-select v-model="mapType" placeholder="请选择">
-            <el-option
+          <select v-model="mapType" placeholder="请选择">
+            <option
               v-for="item in options"
               :key="item.value"
               :label="item.label"
               :value="item.value"
             />
-          </el-select>
+          </select>
         </el-form-item>
         <el-form-item label="姓名">
           <el-input v-model="name" placeholder="请输入姓名" clearable>
@@ -158,7 +158,7 @@ export default {
 
             this.tableData = rdata.list
             this.totalPage = rdata.count
-            this.currentPage = rdata.currentPage
+            // this.currentPage = rdata.currentPage
 
         }else {
           this.$notify({

@@ -30,6 +30,7 @@ public class BrandController {
 
     @PostMapping("/query")
     public BrandVO.QueryResp query(@RequestBody BrandVO.MdBrand request) {
+        log.info("brand query:"+request);
         BrandVO.QueryResp result = new BrandVO.QueryResp();
         MdBrandParam mdBrand = new MdBrandParam();
         BeanUtils.copyProperties(request, mdBrand);

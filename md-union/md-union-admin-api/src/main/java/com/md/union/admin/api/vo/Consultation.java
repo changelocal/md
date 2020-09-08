@@ -38,12 +38,28 @@ public class Consultation {
          * 购买用户id
          */
         private String openId;
+        /**
+         * 买家手机
+         */
+        private String buyerMobile;
 
+        /**
+         * 买家名字
+         */
+        private String buyerName;
         /**
          * 后台运营人id被咨询者
          */
         private String opUserId;
+        /**
+         * 销售手机
+         */
+        private String opUserMobile;
 
+        /**
+         * 销售名字
+         */
+        private String opUserName;
         /**
          * 创建时间
          */
@@ -86,12 +102,28 @@ public class Consultation {
          * 购买用户id
          */
         private String openId;
+        /**
+         * 买家手机
+         */
+        private String buyerMobile;
 
+        /**
+         * 买家名字
+         */
+        private String buyerName;
         /**
          * 后台运营人id被咨询者
          */
         private String opUserId;
+        /**
+         * 销售手机
+         */
+        private String opUserMobile;
 
+        /**
+         * 销售名字
+         */
+        private String opUserName;
         /**
          * 创建时间
          */

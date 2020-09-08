@@ -34,11 +34,11 @@
       </el-form>
       <el-table ref="singleTable" :data="tableData" highlight-current-row style="width: 100%">
         <el-table-column property="orderNo" label="咨询订单" width="200px" />
-        <el-table-column property="buyerName" label="咨询人" width="100px" />
+        <el-table-column property="openId" label="咨询人" width="100px" />
         <el-table-column property="buyerMobile" label="咨询人电话" width="150px" />
         <el-table-column property="status" label="状态" width="100px" />
         <el-table-column property="prePay" label="预付款" />
-        <el-table-column property="opUserName" label="销售" />
+        <el-table-column property="opUserId" label="销售" />
         <el-table-column property="opUserName" label="销售电话" />
         <el-table-column property="note" label="备注" />
         <el-table-column property="createTime" label="创建时间" width="150px" />

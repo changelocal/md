@@ -8,11 +8,11 @@ import com.arc.util.http.BaseResponse;
  */
 public enum RegisterEnums {
 
-    BRAND_NOMAL_RGISTER(1, "R0001", "商标普通注册", "专家预审，通过率高，不成功退全款", 580, "http://47.92.65.35:8082/file/brand-register/1.png"),
-    BRAND_FAST_RGISTER(2, "R0001", "商标加急注册", "不成功退全款，免费再注册一次", 680, "http://47.92.65.35:8082/file/brand-register/2.png"),
-    BRAND_GUARANT_RGISTER(3, "R0001", "商标担保注册", "59分钟急速注册，省心担保，注册不成功退全款", 1180, "http://47.92.65.35:8082/file/brand-register/3.png"),
-    BRAND_SHANRE_RGISTER(4, "R0001", "商标设计+注册双享套餐", "包含LOGO设计，商标加急注册，设计满意为止", 1580, "http://47.92.65.35:8082/file/brand-register/4.png"),
-    BRAND_PERSON_RGISTER(5, "R0001", "个体营业执照+商标注册", "代办个体营业执照只需要身份证", 980, "http://47.92.65.35:8082/file/brand-register/5.png"),
+    BRAND_NOMAL_RGISTER(1, "R0001", "商标普通注册", "专家预审，通过率高，不成功退全款", 580, "https://pay.mdlogo.cn/file/brand-register/1.png"),
+    BRAND_FAST_RGISTER(2, "R0001", "商标加急注册", "不成功退全款，免费再注册一次", 680, "https://pay.mdlogo.cn/file/brand-register/2.png"),
+    BRAND_GUARANT_RGISTER(3, "R0001", "商标担保注册", "59分钟急速注册，省心担保，注册不成功退全款", 1180, "https://pay.mdlogo.cn/file/brand-register/3.png"),
+    BRAND_SHANRE_RGISTER(4, "R0001", "商标设计+注册双享套餐", "包含LOGO设计，商标加急注册，设计满意为止", 1580, "https://pay.mdlogo.cn/file/brand-register/4.png"),
+    BRAND_PERSON_RGISTER(5, "R0001", "个体营业执照+商标注册", "代办个体营业执照只需要身份证", 980, "https://pay.mdlogo.cn/file/brand-register/5.png"),
     ;
 
     RegisterEnums(int type, String no, String title, String brief, int price, String icon) {
