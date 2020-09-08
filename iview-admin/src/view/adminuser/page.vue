@@ -25,12 +25,12 @@
       <el-table ref="singleTable" :data="tableData" highlight-current-row style="width: 100%">
         <el-table-column property="nickname" label="姓名" width="100px" />
         <el-table-column property="account" label="账号" width="150px" />
-        <el-table-column property="type" label="类型" width="100px" />
+        <el-table-column property="type" label="类型" width="100px" :formatter="formatMapType" />
         <el-table-column property="email" label="邮件" />
         <el-table-column property="mobile" label="电话" width="150px" />
         <el-table-column property="title" label="头衔" width="100px" />
         <el-table-column property="qqAccount" label="QQ" width="150px" />
-        <el-table-column property="enable" label="是否有效" width="100px" :formatter="formatMapType" />
+        <el-table-column property="enable" label="是否有效" width="100px" :formatter="formatMapEnable" />
         <el-table-column label="操作" fixed="right" width="100px">
           <template slot-scope="scope">
             <el-button type="text" @click="onEdit(scope.$index)">编辑</el-button>
@@ -100,7 +100,7 @@ export default {
       return {
         pageIndex: this.currentPage,
         pageSize: this.pageSize,
-        name: this.name,
+        nickname: this.name,
         type: this.type
       }
     }
@@ -111,6 +111,9 @@ export default {
   },
   methods: {
     formatMapType(row) {
+      return row.type === 1 ? '销售' : '老板'
+    },
+    formatMapEnable(row) {
       return row.isEnable === 1 ? '有效' : '无效'
     },
     onAdd() {

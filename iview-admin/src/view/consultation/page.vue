@@ -38,8 +38,8 @@
         <el-table-column property="buyerMobile" label="咨询人电话" width="150px" />
         <el-table-column property="status" label="状态" width="100px" />
         <el-table-column property="prePay" label="预付款" />
-        <el-table-column property="opUserId" label="销售" />
-        <el-table-column property="opUserName" label="销售电话" />
+        <el-table-column property="opUserName" label="销售" />
+        <el-table-column property="opUserMobile" label="销售电话" />
         <el-table-column property="note" label="备注" />
         <el-table-column property="createTime" label="创建时间" width="150px" />
         <el-table-column label="操作" fixed="right" width="100px">
@@ -200,7 +200,7 @@ export default {
 
           this.tableData = rdata.list
           this.totalPage = rdata.count
-          this.currentPage = rdata.currentPage
+          // this.currentPage = rdata.currentPage
 
         }else {
           this.$notify({
