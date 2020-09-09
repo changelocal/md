@@ -1,69 +1,57 @@
 <template>
-
-  <el-container style="height: 100%;">
-    <el-main>
-      <el-form :inline="true">
-        <el-form-item label="账号种类">
-          <select v-model="mapType" placeholder="请选择">
-            <option
+      <Form inline :label-width="80">
+        <FormItem  label="账号种类">
+          <Select v-model="mapType" placeholder="请选择">
+            <Option
               v-for="item in options"
               :key="item.value"
               :label="item.label"
               :value="item.value"
             />
-          </select>
-        </el-form-item>
-        <el-form-item label="姓名">
-          <el-input v-model="name" placeholder="请输入姓名" clearable>
-            <el-button slot="append" icon="el-icon-search" @click="onSearch" />
-          </el-input>
-        </el-form-item>
-        <el-form-item label="">
-          <el-button type="primary" icon="el-icon-circle-plus-outline" @click="onAdd">添加销售</el-button>
-        </el-form-item>
-      </el-form>
-      <el-table ref="singleTable" :data="tableData" highlight-current-row style="width: 100%">
-        <el-table-column property="nickname" label="姓名" width="100px" />
-        <el-table-column property="account" label="账号" width="150px" />
-        <el-table-column property="type" label="类型" width="100px" :formatter="formatMapType" />
-        <el-table-column property="email" label="邮件" />
-        <el-table-column property="mobile" label="电话" width="150px" />
-        <el-table-column property="title" label="头衔" width="100px" />
-        <el-table-column property="qqAccount" label="QQ" width="150px" />
-        <el-table-column property="enable" label="是否有效" width="100px" :formatter="formatMapEnable" />
-        <el-table-column label="操作" fixed="right" width="100px">
-          <template slot-scope="scope">
-            <el-button type="text" @click="onEdit(scope.$index)">编辑</el-button>
-            <!--            <el-button @click="onDel(scope.$index)" type="text" >删除</el-button>-->
-            <!--            <el-button @click="onViewResult(scope.$index)" type="text" >查看</el-button>-->
+          </Select>
+        </FormItem >
+        <FormItem  label="姓名">
+          <Input v-model="name" placeholder="请输入姓名" clearable>
+          </Input>
+        </FormItem >
+          <FormItem  label="">
+            <Button type="primary"  @click="onSearch" >搜索</Button>
+        </FormItem >
+        <FormItem  label="">
+          <Button type="primary"  @click="onAdd">添加销售</Button>
+        </FormItem >
+        <Table :columns="columns1" ref="singleTable" :data="tableData" highlight-current-row style="width: 100%">
+          <template slot-scope="{ row, index }" slot="action">
+            <Button type="primary" size="small" style="margin-right: 5px" @click="onEdit(index)">编辑</Button>
           </template>
-        </el-table-column>
-      </el-table>
-      <div class="text-center">
-        <el-pagination
-          layout="prev, pager, next"
-          :page-size="pageSize"
-          :total="totalPage"
-          :current-page="currentPage"
-          hide-on-single-page
-          @current-change="onPageChange"
-        />
-      </div>
-    </el-main>
-    <add v-if="popShow" :open-type="openType" :form-data="form" :handle-close="onClose" />
-  </el-container>
+        </Table>
+        <Page :total="100" />
+        <!--    <add v-if="popShow" :open-type="openType" :form-data="form" :handle-close="onClose" />-->
+      </Form>
 </template>
 
 <script>
-import Add from './add'
+// import Add from './add'
 import { query } from '@/api/adminuser'
 export default {
   name: 'PagePermission',
-  components: {
-    Add
-  },
+  // components: {
+  //   Add
+  // },
   data() {
     return {
+      columns1: [
+        {title: '姓名', key: 'nickname'},
+        {title: '账号', key: 'account'},
+        {title: '类型', key: 'type'},
+        {title: '邮件', key: 'email'},
+        {title: '手机', key: 'mobile'},
+        {title: '头衔', key: 'title'},
+        {title: '地址', key: 'address'},
+        {title: 'QQ', key: 'qqAccount'},
+        {title: '是否有效', key: 'enable'},
+        {title: '操作', slot: 'action', width: 150, align: 'center'}
+      ],
       mapType: 0,
       openType: 'add',
       form: {

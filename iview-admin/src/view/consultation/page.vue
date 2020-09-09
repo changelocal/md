@@ -1,19 +1,17 @@
 <template>
-  <el-container style="height: 100%;">
-    <el-main>
-      <el-form :inline="true">
-        <el-form-item label="状态">
-          <el-select v-model="mapType" placeholder="请选择">
-            <el-option
+      <Form :inline="true" :label-width="80">
+        <Form-item label="状态">
+          <Select v-model="mapType" placeholder="请选择">
+            <Option
               v-for="item in options"
               :key="item.value"
               :label="item.label"
               :value="item.value"
             />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="日期">
-          <el-date-picker
+          </Select>
+        </Form-item>
+        <Form-item label="日期">
+          <Date-picker
             v-model="planStartTime"
             value-format="yyyy-MM-dd"
             type="daterange"
@@ -24,45 +22,35 @@
             end-placeholder="结束日期"
             :picker-options="pickerOptions2"
           />
-        </el-form-item>
-        <el-form-item label="咨询电话">
-          <el-input v-model="mobile" placeholder="请输入电话" clearable>
-            <el-button slot="append" icon="el-icon-search" @click="onSearch" />
-          </el-input>
-        </el-form-item>
+        </Form-item>
+        <Form-item label="咨询电话">
+          <Input v-model="mobile" placeholder="请输入电话" clearable>
+            <Button type="primary" slot="append"  @click="onSearch" />
+          </Input>
+        </Form-item>
+        <Table :columns="columns1" ref="singleTable" :data="tableData" highlight-current-row style="width: 100%">
+          <!--        <el-table-column property="orderNo" label="咨询订单" width="200px" />-->
+          <!--        <el-table-column property="openId" label="咨询人" width="100px" />-->
+          <!--        <el-table-column property="buyerMobile" label="咨询人电话" width="150px" />-->
+          <!--        <el-table-column property="status" label="状态" width="100px" />-->
+          <!--        <el-table-column property="prePay" label="预付款" />-->
+          <!--        <el-table-column property="opUserName" label="销售" />-->
+          <!--        <el-table-column property="opUserMobile" label="销售电话" />-->
+          <!--        <el-table-column property="note" label="备注" />-->
+          <!--        <el-table-column property="createTime" label="创建时间" width="150px" />-->
+          <!--        <el-table-column label="操作" fixed="right" width="100px">-->
+          <!--          <template slot-scope="scope">-->
+          <!--            <el-button type="text" @click="onEdit(scope.$index)">编辑</el-button>-->
+          <!--            <el-button type="text" @click="onNewOrder(scope.$index)">推单</el-button>-->
+          <!--          </template>-->
+          <!--        </el-table-column>-->
+        </Table>
+      </Form>
 
-      </el-form>
-      <el-table ref="singleTable" :data="tableData" highlight-current-row style="width: 100%">
-        <el-table-column property="orderNo" label="咨询订单" width="200px" />
-        <el-table-column property="openId" label="咨询人" width="100px" />
-        <el-table-column property="buyerMobile" label="咨询人电话" width="150px" />
-        <el-table-column property="status" label="状态" width="100px" />
-        <el-table-column property="prePay" label="预付款" />
-        <el-table-column property="opUserName" label="销售" />
-        <el-table-column property="opUserMobile" label="销售电话" />
-        <el-table-column property="note" label="备注" />
-        <el-table-column property="createTime" label="创建时间" width="150px" />
-        <el-table-column label="操作" fixed="right" width="100px">
-          <template slot-scope="scope">
-            <el-button type="text" @click="onEdit(scope.$index)">编辑</el-button>
-            <el-button type="text" @click="onNewOrder(scope.$index)">推单</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <div class="text-center">
-        <el-pagination
-          layout="prev, pager, next"
-          :page-size="pageSize"
-          :total="totalPage"
-          :current-page="currentPage"
-          hide-on-single-page
-          @current-change="onPageChange"
-        />
-      </div>
-    </el-main>
-    <add v-if="popShow" :open-type="openType" :form-data="form" :handle-close="onClose" />
-    <new-order v-if="popNewOrderShow" :open-type="openType" :form-data="form" :handle-close="onClose" />
-  </el-container>
+
+<!--    <add v-if="popShow" :open-type="openType" :form-data="form" :handle-close="onClose" />-->
+<!--    <new-order v-if="popNewOrderShow" :open-type="openType" :form-data="form" :handle-close="onClose" />-->
+
 </template>
 
 <script>
@@ -77,6 +65,18 @@ export default {
   },
   data() {
     return {
+      columns1: [
+        {title: '咨询订单', key: 'orderNo'},
+        {title: '咨询人', key: 'openId'},
+        {title: '咨询人手机', key: 'buyerMobile'},
+        {title: '状态', key: 'status'},
+        {title: '预付款', key: 'prePay'},
+        {title: '销售姓名', key: 'opUserName'},
+        {title: '销售手机', key: 'opUserMobile'},
+        {title: '备注', key: 'note'},
+        {title: '创建时间', key: 'createTime'},
+        {title: '操作', slot: 'action', width: 150, align: 'center'}
+      ],
       mapType: 0,
       options: [{
         value: 0,

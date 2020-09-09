@@ -7,28 +7,28 @@
     @close="onClose(false)"
   >
     <el-form ref="formFields" :model="form" :rules="rulesRight">
-      <el-form-item label="姓名" prop="name" :label-width="formLabelWidth">
+      <el-form-item label="姓名" prop="name" >
         <el-input v-model="form.name" placeholder="请输入姓名" clearable />
       </el-form-item>
-      <el-form-item label="电话" prop="mobile" :label-width="formLabelWidth">
+      <el-form-item label="电话" prop="mobile" >
         <el-input v-model="form.mobile" placeholder="请输入电话" clearable />
       </el-form-item>
-      <el-form-item label="头衔" prop="title" :label-width="formLabelWidth">
+      <el-form-item label="头衔" prop="title" >
         <el-input v-model="form.title" placeholder="请输入头衔" clearable />
       </el-form-item>
-      <el-form-item label="邮件" prop="email" :label-width="formLabelWidth">
+      <el-form-item label="邮件" prop="email" >
         <el-input v-model="form.email" placeholder="请输入邮件" clearable />
       </el-form-item>
-      <el-form-item label="QQ" prop="qqAccount" :label-width="formLabelWidth">
+      <el-form-item label="QQ" prop="qqAccount" >
         <el-input v-model="form.qqAccount" placeholder="请输入QQ" clearable />
       </el-form-item>
-      <el-form-item label="权限" :label-width="formLabelWidth">
+      <el-form-item label="权限" >
         <el-radio-group v-model="form.type" :disabled="readOnly">
           <el-radio :label="1">管理员</el-radio>
           <el-radio :label="2">销售</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="禁用/启用" :label-width="formLabelWidth">
+      <el-form-item label="禁用/启用" >
         <el-switch
           v-model="form.enable"
           active-color="#13ce66"
@@ -88,7 +88,6 @@ export default {
         email: '',
         enable: true
       },
-      formLabelWidth: '80px',
       rulesRight: {
         name: [{ required: true, message: '请输入', trigger: 'blur' }],
         mobile: [{ required: true, message: '请选择', trigger: 'blur' }],
