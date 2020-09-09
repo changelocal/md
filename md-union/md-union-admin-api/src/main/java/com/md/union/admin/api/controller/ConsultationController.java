@@ -43,7 +43,7 @@ public class ConsultationController {
             });
 
             ret.setList(infos);
-            ret.setCount(query.getResult().getInfos().size());
+            ret.setCount(query.getResult().getTotal());
         }else{
             ret.setCount(0);
         }

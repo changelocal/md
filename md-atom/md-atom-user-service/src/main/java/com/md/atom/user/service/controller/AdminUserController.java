@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -94,6 +95,7 @@ public class AdminUserController {
     public AdminUserVO.Resp add(@RequestBody AdminUserVO.AdminUser request) {
         AdminUser user = new AdminUser();
         BeanUtils.copyProperties(request, user);
+        user.setCreateTime(new Date());
         adminUserDao.add(user);
 
         AdminUserVO.Resp result = new AdminUserVO.Resp();
@@ -104,6 +106,7 @@ public class AdminUserController {
     public AdminUserVO.Resp update(@RequestBody AdminUserVO.AdminUser request) {
         AdminUser user = new AdminUser();
         BeanUtils.copyProperties(request, user);
+
         adminUserDao.update(user);
 
         AdminUserVO.Resp result = new AdminUserVO.Resp();

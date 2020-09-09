@@ -42,7 +42,7 @@ public class BrandController {
             });
 
             ret.setList(infos);
-            ret.setCount(query.getResult().getMdBrands().size());
+            ret.setCount(query.getResult().getTotal());
         }else{
             ret.setCount(0);
         }

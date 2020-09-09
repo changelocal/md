@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -61,7 +62,7 @@ public class AdminuserController {
             });
 
             ret.setList(infos);
-            ret.setCount(query.getResult().getAdminUsers().size());
+            ret.setCount(query.getResult().getTotal());
         } else {
             ret.setList(new ArrayList<>());
             ret.setCount(0);
@@ -84,6 +85,7 @@ public class AdminuserController {
     public void add(@RequestBody Adminuser.Info request) {
         AdminUserDTO.AdminUser adminUser = new AdminUserDTO.AdminUser();
         BeanUtils.copyProperties(request, adminUser);
+        adminUser.setId(UUID.randomUUID().toString());
         BaseResponse<AdminUserDTO.Resp> query = frontClient.add(adminUser);
         if (!query.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(query.getStatus(), query.getMessage());

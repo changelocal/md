@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Api(tags = {"管理人员 "}, description = "接口负责人：sxj")
@@ -55,6 +56,7 @@ public class ConsultationController {
     public ConsultationVO.Resp update(@RequestBody Consultation request) {
         Consultation user = new Consultation();
         BeanUtils.copyProperties(request, user);
+        user.setUpdateTime(new Date());
         consultationDao.update(user);
         ConsultationVO.Resp result = new ConsultationVO.Resp();
         return result;

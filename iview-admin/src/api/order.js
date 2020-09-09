@@ -7,3 +7,10 @@ export const query = (data) => {
     method: 'post'
   })
 }
+export const update = (data) => {
+  return axios.request({
+    url: '/web/order/update',
+    data,
+    method: 'post'
+  })
+}

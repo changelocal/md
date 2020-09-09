@@ -92,6 +92,7 @@ public class Adminuser {
          * 微信号
          */
         private String wxAccount;
+        private String title;
 
     }
 

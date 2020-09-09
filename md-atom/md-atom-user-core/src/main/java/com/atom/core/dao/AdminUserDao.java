@@ -137,7 +137,11 @@ public class AdminUserDao extends BaseDao  {
 
 	public void update(AdminUser adminUser) {
 		UpdateValues updateValues = new UpdateValues();
+            updateValues.add("is_enable",adminUser.getIsEnable());
 
+        if(!Strings.isNullOrEmpty(adminUser.getTitle())){
+            updateValues.add("title",adminUser.getTitle());
+        }
 		if(!Strings.isNullOrEmpty(adminUser.getAccount())){
 			updateValues.add("account",adminUser.getAccount());
 		}
