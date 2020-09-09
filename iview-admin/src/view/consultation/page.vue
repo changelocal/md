@@ -1,5 +1,5 @@
 <template>
-      <Form :inline="true" :label-width="80">
+      <Form :inline="true" :label-width="60">
         <Form-item label="状态">
           <Select v-model="mapType" placeholder="请选择">
             <Option
@@ -25,25 +25,16 @@
         </Form-item>
         <Form-item label="咨询电话">
           <Input v-model="mobile" placeholder="请输入电话" clearable>
-            <Button type="primary" slot="append"  @click="onSearch" />
+
           </Input>
         </Form-item>
+        <FormItem>
+          <Button type="primary" @click="onSearch" >搜索</Button>
+        </FormItem>
         <Table :columns="columns1" ref="singleTable" :data="tableData" highlight-current-row style="width: 100%">
-          <!--        <el-table-column property="orderNo" label="咨询订单" width="200px" />-->
-          <!--        <el-table-column property="openId" label="咨询人" width="100px" />-->
-          <!--        <el-table-column property="buyerMobile" label="咨询人电话" width="150px" />-->
-          <!--        <el-table-column property="status" label="状态" width="100px" />-->
-          <!--        <el-table-column property="prePay" label="预付款" />-->
-          <!--        <el-table-column property="opUserName" label="销售" />-->
-          <!--        <el-table-column property="opUserMobile" label="销售电话" />-->
-          <!--        <el-table-column property="note" label="备注" />-->
-          <!--        <el-table-column property="createTime" label="创建时间" width="150px" />-->
-          <!--        <el-table-column label="操作" fixed="right" width="100px">-->
-          <!--          <template slot-scope="scope">-->
-          <!--            <el-button type="text" @click="onEdit(scope.$index)">编辑</el-button>-->
-          <!--            <el-button type="text" @click="onNewOrder(scope.$index)">推单</el-button>-->
-          <!--          </template>-->
-          <!--        </el-table-column>-->
+          <template slot-scope="{ row, index }" slot="action">
+            <Button type="primary" size="small" style="margin-right: 5px" @click="onEdit(index)">编辑</Button>
+          </template>
         </Table>
       </Form>
 

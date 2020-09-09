@@ -1,42 +1,20 @@
 <template>
-  <el-container style="height: 100%;">
-    <el-main>
-      <el-form :inline="true">
-
-        <el-form-item label="手机">
-          <el-input v-model="mobile" placeholder="请输入手机" clearable>
-            <el-button slot="append" icon="el-icon-search" @click="onSearch" />
-          </el-input>
-        </el-form-item>
-
-      </el-form>
-      <el-table ref="singleTable" :data="tableData" highlight-current-row style="width: 100%">
-        <el-table-column property="minId" label="openID" width="200px" />
-        <el-table-column property="nickName" label="昵称" width="100px" />
-        <el-table-column property="realName" label="真实姓名" width="100px" />
-        <el-table-column property="idCard" label="身份证" />
-        <el-table-column property="mobile" label="手机" />
-        <el-table-column property="address" label="地址" width="200px" />
-        <el-table-column property="createTime" label="关注时间" width="150px" />
-        <el-table-column label="操作" fixed="right" width="100px">
-          <template slot-scope="scope">
-            <el-button type="text" @click="onEdit(scope.$index)">编辑</el-button>
+      <Form :inline="true" :label-width="60">
+        <Form-item label="手机">
+          <Input v-model="mobile" placeholder="请输入手机" clearable>
+          </Input>
+        </Form-item>
+        <Form-item label="">
+          <Button type="primary"  @click="onSearch" >搜索</Button>
+        </Form-item>
+        <Table  :columns="columns1" ref="singleTable" :data="tableData" highlight-current-row style="width: 100%">
+          <template slot-scope="{ row, index }" slot="action">
+            <Button type="primary" size="small" style="margin-right: 5px" @click="onEdit(index)">编辑</Button>
           </template>
-        </el-table-column>
-      </el-table>
-      <div class="text-center">
-        <el-pagination
-          layout="prev, pager, next"
-          :page-size="pageSize"
-          :total="totalPage"
-          :current-page="currentPage"
-          hide-on-single-page
-          @current-change="onPageChange"
-        />
-      </div>
-    </el-main>
-    <add v-if="popShow" :open-type="openType" :form-data="form" :handle-close="onClose" />
-  </el-container>
+        </Table>
+      </Form>
+<!--    <add v-if="popShow" :open-type="openType" :form-data="form" :handle-close="onClose" />-->
+
 </template>
 
 <script>
@@ -49,6 +27,16 @@ export default {
   },
   data() {
     return {
+      columns1: [
+        {title: 'openID', key: 'minId'},
+        {title: '昵称', key: 'nickName'},
+        {title: '真实姓名', key: 'realName'},
+        {title: '身份证', key: 'idCard'},
+        {title: '手机', key: 'mobile'},
+        {title: '地址', key: 'address'},
+        {title: '关注时间', key: 'createTime'},
+        {title: '操作', slot: 'action', width: 150, align: 'center'}
+      ],
       openType: 'add',
       form: {
         id: '',

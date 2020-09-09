@@ -1,29 +1,27 @@
 <template>
-  <el-container style="height: 100%;">
-    <el-main>
-      <el-form :inline="true">
-        <el-form-item label="状态">
-          <el-select v-model="status" placeholder="请选择">
-            <el-option
+      <Form :inline="true"  :label-width="60">
+        <Form-item label="状态">
+          <Select v-model="status" placeholder="请选择">
+            <Option
               v-for="item in options"
               :key="item.value"
               :label="item.label"
               :value="item.value"
             />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="类型">
-          <el-select v-model="kind" placeholder="请选择">
-            <el-option
+          </Select>
+        </Form-item>
+        <Form-item label="类型">
+          <Select v-model="kind" placeholder="请选择">
+            <Option
               v-for="item in kinds"
               :key="item.value"
               :label="item.label"
               :value="item.value"
             />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="日期">
-          <el-date-picker
+          </Select>
+        </Form-item>
+        <Form-item label="日期">
+          <Date-picker
             v-model="planStartTime"
             value-format="yyyy-MM-dd"
             type="daterange"
@@ -34,43 +32,17 @@
             end-placeholder="结束日期"
             :picker-options="pickerOptions2"
           />
-        </el-form-item>
-        <el-form-item label="">
-          <el-button type="primary" icon="el-icon-search" @click="onSearch" />
-        </el-form-item>
-      </el-form>
-      <el-table ref="singleTable" :data="tableData" highlight-current-row style="width: 100%">
-        <el-table-column property="no" label="订单号" width="150px" />
-        <el-table-column property="status" label="状态" width="100px" />
-        <el-table-column property="type" label="订单类型" width="150px" />
-        <el-table-column property="prePay" label="预付款" />
-        <el-table-column property="restPay" label="剩余付款" width="100px" />
-        <el-table-column property="totalPay" label="共付款" width="100px" />
-        <el-table-column property="buyer" label="买家" width="100px" />
-        <el-table-column property="sales" label="销售" width="100px" />
-        <el-table-column property="creatTime" label="创建时间" width="100px" />
-        <el-table-column property="productNo" label="产品编号" width="100px" />
-        <el-table-column label="操作" fixed="right" width="100px">
-          <template slot-scope="scope">
-            <el-button type="text" @click="onEdit(scope.$index)">编辑</el-button>
-            <!--            <el-button @click="onDel(scope.$index)" type="text" >删除</el-button>-->
-            <!--            <el-button @click="onViewResult(scope.$index)" type="text" >查看</el-button>-->
+        </Form-item>
+        <Form-item label="">
+          <Button type="primary"  @click="onSearch" >搜索</Button>
+        </Form-item>
+        <Table :columns="columns1" ref="singleTable" :data="tableData" highlight-current-row style="width: 100%">
+          <template slot-scope="{ row, index }" slot="action">
+            <Button type="primary" size="small" style="margin-right: 5px" @click="onEdit(index)">编辑</Button>
           </template>
-        </el-table-column>
-      </el-table>
-      <div class="text-center">
-        <el-pagination
-          layout="prev, pager, next"
-          :page-size="pageSize"
-          :total="totalPage"
-          :current-page="currentPage"
-          hide-on-single-page
-          @current-change="onPageChange"
-        />
-      </div>
-    </el-main>
-    <add v-if="popShow" :open-type="openType" :form-data="form" :handle-close="onClose" />
-  </el-container>
+        </Table>
+      </Form>
+<!--    <add v-if="popShow" :open-type="openType" :form-data="form" :handle-close="onClose" />-->
 </template>
 
 <script>
@@ -84,6 +56,19 @@ export default {
   },
   data() {
     return {
+      columns1: [
+        {title: '订单号', key: 'no'},
+        {title: '状态', key: 'status'},
+        {title: '订单类型', key: 'type'},
+        {title: '预付款', key: 'prePay'},
+        {title: '剩余付款', key: 'restPay'},
+        {title: '共付款', key: 'totalPay'},
+        {title: '买家', key: 'buyer'},
+        {title: '销售', key: 'sales'},
+        {title: '创建时间', key: 'creatTime'},
+        {title: '产品编号', key: 'productNo'},
+        {title: '操作', slot: 'action', width: 150, align: 'center'}
+      ],
       openType: 'add',
       form: {
         no: '',

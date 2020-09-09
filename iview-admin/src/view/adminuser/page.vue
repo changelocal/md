@@ -1,5 +1,5 @@
 <template>
-      <Form inline :label-width="80">
+      <Form inline :label-width="60">
         <FormItem  label="账号种类">
           <Select v-model="mapType" placeholder="请选择">
             <Option
