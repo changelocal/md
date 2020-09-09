@@ -21,6 +21,12 @@
           <Button type="primary"  @click="onAdd">添加销售</Button>
         </FormItem >
         <Table :columns="columns1" ref="singleTable" :data="tableData" highlight-current-row style="width: 100%">
+          <template slot-scope="{ row, index }" slot="type">
+            <span >{{ formatMapType(row.type) }}</span>
+          </template>
+          <template slot-scope="{ row, index }" slot="enable">
+            <span >{{ formatMapEnable(row.enable) }}</span>
+          </template>
           <template slot-scope="{ row, index }" slot="action">
             <Button type="primary" size="small" style="margin-right: 5px" @click="onEdit(index)">编辑</Button>
           </template>
@@ -43,13 +49,13 @@ export default {
       columns1: [
         {title: '姓名', key: 'nickname'},
         {title: '账号', key: 'account'},
-        {title: '类型', key: 'type'},
+        {title: '类型', key: 'type',slot: 'type'},
         {title: '邮件', key: 'email'},
         {title: '手机', key: 'mobile'},
         {title: '头衔', key: 'title'},
         {title: '地址', key: 'address'},
         {title: 'QQ', key: 'qqAccount'},
-        {title: '是否有效', key: 'enable'},
+        {title: '是否有效', key: 'enable',slot: 'enable'},
         {title: '操作', slot: 'action', width: 150, align: 'center'}
       ],
       mapType: 0,
@@ -99,10 +105,10 @@ export default {
   },
   methods: {
     formatMapType(row) {
-      return row.type === 1 ? '销售' : '老板'
+      return row === 1 ? '销售' : '老板'
     },
     formatMapEnable(row) {
-      return row.isEnable === 1 ? '有效' : '无效'
+      return row === 1 ? '有效' : '无效'
     },
     onAdd() {
       this.openType = 'add'
