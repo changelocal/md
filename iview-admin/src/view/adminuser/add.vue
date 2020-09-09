@@ -1,46 +1,46 @@
 <template>
-  <el-dialog
+  <Modal
     :title="title"
     :visible="true"
     :close-on-click-modal="false"
     width="30%"
     @close="onClose(false)"
   >
-    <el-form ref="formFields" :model="form" :rules="rulesRight">
-      <el-form-item label="姓名" prop="name" >
-        <el-input v-model="form.name" placeholder="请输入姓名" clearable />
-      </el-form-item>
-      <el-form-item label="电话" prop="mobile" >
-        <el-input v-model="form.mobile" placeholder="请输入电话" clearable />
-      </el-form-item>
-      <el-form-item label="头衔" prop="title" >
-        <el-input v-model="form.title" placeholder="请输入头衔" clearable />
-      </el-form-item>
-      <el-form-item label="邮件" prop="email" >
-        <el-input v-model="form.email" placeholder="请输入邮件" clearable />
-      </el-form-item>
-      <el-form-item label="QQ" prop="qqAccount" >
-        <el-input v-model="form.qqAccount" placeholder="请输入QQ" clearable />
-      </el-form-item>
-      <el-form-item label="权限" >
-        <el-radio-group v-model="form.type" :disabled="readOnly">
-          <el-radio :label="1">管理员</el-radio>
-          <el-radio :label="2">销售</el-radio>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="禁用/启用" >
-        <el-switch
+    <Form ref="formFields" :model="form" :rules="rulesRight">
+      <Form-item label="姓名" prop="name" >
+        <Input v-model="form.name" placeholder="请输入姓名" clearable />
+      </Form-item>
+      <Form-item label="电话" prop="mobile" >
+        <Input v-model="form.mobile" placeholder="请输入电话" clearable />
+      </Form-item>
+      <Form-item label="头衔" prop="title" >
+        <Input v-model="form.title" placeholder="请输入头衔" clearable />
+      </Form-item>
+      <Form-item label="邮件" prop="email" >
+        <Input v-model="form.email" placeholder="请输入邮件" clearable />
+      </Form-item>
+      <Form-item label="QQ" prop="qqAccount" >
+        <Input v-model="form.qqAccount" placeholder="请输入QQ" clearable />
+      </Form-item>
+      <Form-item label="权限" >
+        <Radio-group v-model="form.type" :disabled="readOnly">
+          <Radio :label="1">管理员</Radio>
+          <Radio :label="2">销售</Radio>
+        </Radio-group>
+      </Form-item>
+      <Form-item label="禁用/启用" >
+        <Switch
           v-model="form.enable"
           active-color="#13ce66"
           inactive-color="#ff4949"
         />
-      </el-form-item>
-    </el-form>
+      </Form-item>
+    </Form>
     <div slot="footer" class="dialog-footer">
-      <el-button type="primary" :disabled="readOnly" @click="onSave(true)">保 存</el-button>
-      <el-button @click="onClose(false)">取 消</el-button>
+      <Button type="primary" :disabled="readOnly" @click="onSave(true)">保 存</Button>
+      <Button @click="onClose(false)">取 消</Button>
     </div>
-  </el-dialog>
+  </Modal>
 </template>
 
 <script>

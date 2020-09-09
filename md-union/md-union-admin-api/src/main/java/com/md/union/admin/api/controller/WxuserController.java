@@ -41,7 +41,7 @@ public class WxuserController {
             });
 
             ret.setList(infos);
-            ret.setCount(query.getResult().getItems().size());
+            ret.setCount(query.getResult().getTotalCount());
         }else{
             ret.setCount(0);
         }

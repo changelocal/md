@@ -8,4 +8,18 @@ export const query = (data) => {
   })
 }
 
+export const add = (data) => {
+  return axios.request({
+    url: '/admin/user/add',
+    data,
+    method: 'post'
+  })
+}
 
+export const update = (data) => {
+  return axios.request({
+    url: '/admin/user/update',
+    data,
+    method: 'post'
+  })
+}

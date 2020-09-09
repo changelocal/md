@@ -1,4 +1,5 @@
 <template>
+  <div>
       <Form inline :label-width="60">
         <FormItem  label="账号种类">
           <Select v-model="mapType" placeholder="请选择">
@@ -25,27 +26,73 @@
             <span >{{ formatMapType(row.type) }}</span>
           </template>
           <template slot-scope="{ row, index }" slot="enable">
-            <span >{{ formatMapEnable(row.enable) }}</span>
+            <span >{{ formatMapEnable(row.isEnable) }}</span>
           </template>
           <template slot-scope="{ row, index }" slot="action">
             <Button type="primary" size="small" style="margin-right: 5px" @click="onEdit(index)">编辑</Button>
           </template>
         </Table>
-        <Page :total="100" />
-        <!--    <add v-if="popShow" :open-type="openType" :form-data="form" :handle-close="onClose" />-->
+        <Page :current="currentPage" :total="totalPage" @on-change="onPageChange" show-elevator size="small" show-total></Page>
       </Form>
+
+  <Modal
+    v-model="popShow"
+    title="销售管理"
+    :visible="true"
+    :close-on-click-modal="false"
+    width="30%"
+    :closable="false"
+    :mask-closable="false"
+    @close="onClose(false)"
+  >
+    <Form  :label-width="70" ref="formFields" :model="form" :rules="rulesRight">
+      <Form-item label="姓名" prop="name" >
+        <Input v-model="form.name" placeholder="请输入姓名" clearable />
+      </Form-item>
+      <Form-item label="电话" prop="mobile" >
+        <Input v-model="form.mobile" placeholder="请输入电话" clearable />
+      </Form-item>
+      <Form-item label="头衔" prop="title" >
+        <Input v-model="form.title" placeholder="请输入头衔" clearable />
+      </Form-item>
+      <Form-item label="邮件" prop="email" >
+        <Input v-model="form.email" placeholder="请输入邮件" clearable />
+      </Form-item>
+      <Form-item label="QQ" prop="qqAccount" >
+        <Input v-model="form.qqAccount" placeholder="请输入QQ" clearable />
+      </Form-item>
+      <Form-item label="权限" >
+        <Radio-group v-model="form.type" >
+          <Radio :label="1">管理员</Radio>
+          <Radio :label="2">销售</Radio>
+        </Radio-group>
+      </Form-item>
+      <Form-item label="禁用/启用" >
+        <i-switch v-model="form.enable"/>
+      </Form-item>
+    </Form>
+    <div slot="footer" class="dialog-footer">
+      <Button type="primary"  @click="onSave(true)">保 存</Button>
+      <Button @click="close()">取 消</Button>
+    </div>
+  </Modal>
+  </div>
 </template>
 
 <script>
-// import Add from './add'
-import { query } from '@/api/adminuser'
+
+import  { query,add,update } from '@/api/adminuser'
 export default {
   name: 'PagePermission',
-  // components: {
-  //   Add
-  // },
   data() {
     return {
+      rulesRight: {
+        name: [{ required: true, message: '请输入', trigger: 'blur' }],
+        mobile: [{ required: true, message: '请输入', trigger: 'blur' }],
+        title: [{ required: true, message: '请输入', trigger: 'blur' }],
+        qqAccount: [{ required: true, message: '请输入', trigger: 'blur' }],
+        email: [{ required: true, message: '请输入', trigger: 'blur' }]
+      },
       columns1: [
         {title: '姓名', key: 'nickname'},
         {title: '账号', key: 'account'},
@@ -55,7 +102,7 @@ export default {
         {title: '头衔', key: 'title'},
         {title: '地址', key: 'address'},
         {title: 'QQ', key: 'qqAccount'},
-        {title: '是否有效', key: 'enable',slot: 'enable'},
+        {title: '是否有效', key: 'isEnable',slot: 'enable'},
         {title: '操作', slot: 'action', width: 150, align: 'center'}
       ],
       mapType: 0,
@@ -65,7 +112,8 @@ export default {
         name: '',
         title: '',
         mobile: '',
-        type: '',
+        email:'',
+        type: 2,
         qqAccount: '',
         enable: true
       },
@@ -81,7 +129,6 @@ export default {
       }],
       name: '',
       tableData: [{ name: 'sxj', title: 'boss', mobile: '13412121212', type: 'admin', qqAccount: '212731', email: 'sxj@123.com' }],
-      currentRow: null,
       currentPage: 1,
       popShow: false,
       currentIndex: null,
@@ -97,6 +144,29 @@ export default {
         nickname: this.name,
         type: this.type
       }
+    },
+    formQueryAdd() {
+        return {
+          nickname: this.form.name,
+          type: this.form.type,
+          email: this.form.email,
+          mobile: this.form.mobile,
+          title: this.form.title,
+          isEnable: this.form.enable?1:0,
+          qqAccount: this.form.qqAccount
+        }
+    },
+    formQueryUpdate() {
+      return {
+        id: this.form.id,
+        nickname: this.form.name,
+        type: this.form.type,
+        email: this.form.email,
+        mobile: this.form.mobile,
+        title: this.form.title,
+        isEnable: this.form.enable?1:0,
+        qqAccount: this.form.qqAccount
+      }
     }
   },
 
@@ -105,7 +175,7 @@ export default {
   },
   methods: {
     formatMapType(row) {
-      return row === 1 ? '销售' : '老板'
+      return row === 1 ? '普通' : '管理员'
     },
     formatMapEnable(row) {
       return row === 1 ? '有效' : '无效'
@@ -118,19 +188,60 @@ export default {
       const item = this.tableData[index]
       this.openType = 'edit'
       this.form.id = item.id
-      this.form.name = item.name
+      this.form.name = item.nickname
       this.form.mobile = item.mobile
       this.form.type = item.type
       this.form.title = item.title
-      this.form.enable = item.enable
+      this.form.enable = item.isEnable
       this.form.email = item.email
       this.form.qqAccount = item.qqAccount
 
-      this.currentIndex = index
       this.popShow = true
     },
-    handleRolesChange() {
-      this.$router.push({ path: '/permission/index?' + +new Date() })
+    onSave(confirm) {
+      this.$refs.formFields.validate(valid => {
+        if (valid) {
+          if (this.openType === 'edit') {
+            this.reqEdit()
+          } else {
+            this.reqAdd()
+          }
+        } else {
+          return false
+        }
+      })
+    },
+    reqAdd() {
+      add(this.formQueryAdd).then(res => {
+        console.log(res)
+        if (res.status === true) {
+          this.close()
+          this.reqList()
+        }else {
+          this.$notify({
+            title: 'Success',
+            message: 'Created Successfully',
+            type: 'success',
+            duration: 2000
+          })
+        }
+      })
+    },
+    reqEdit() {
+      update(this.formQueryUpdate).then(res => {
+        console.log(res)
+        if (res.status === true) {
+          this.close()
+          this.reqList()
+        }else {
+          this.$notify({
+            title: 'Success',
+            message: 'Created Successfully',
+            type: 'success',
+            duration: 2000
+          })
+        }
+      })
     },
     onPageChange(page) {
       this.currentPage = page
@@ -139,13 +250,25 @@ export default {
     onSearch() {
       this.reqList()
     },
-    onClose(data, confirm) {
+    close() {
       this.popShow = false
       this.form = this.formClear()
-      if (confirm && data.openType === 'edit') {
+      // if (confirm && data.openType === 'edit') {
         // this.reqFun(data)
+      // }
+      // this.reqList()
+    },
+    formClear() {
+      return {
+        id:'',
+        enable:true,
+        name: '',
+        mobile: '',
+        type: 1,
+        title: '',
+        qq: '',
+        email: ''
       }
-      this.reqList()
     },
     reqList() {
       query(this.formQuery).then(res => {
@@ -167,19 +290,7 @@ export default {
         }
       })
     },
-    // reqList() {
-    //   this.$http.post(API.adminuserQuery, this.formQuery).then(res => {
-    //     if (res.status === 200) {
-    //       const status = res.data.statusCode
-    //       const rdata = res.data.data
-    //       if (status === 200) {
-    //         this.tableData = rdata.list
-    //         this.totalPage = rdata.total
-    //         this.currentPage = rdata.currentPage
-    //       }
-    //     }
-    //   })
-    // }
+
   }
 }
 </script>
