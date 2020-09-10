@@ -202,7 +202,11 @@ public class TrademarkDTO {
     public static class RootBrandReq{
         private int code;
     }
+    @Data
+    public static class Resp{
 
+        private int code;
+    }
     @Data
     public static class QueryResp{
         private List<MdBrand> mdBrands;

@@ -52,6 +52,12 @@
           <Button type="primary"  @click="onAdd">添加商标</Button>
         </Form-item>
         <Table  :columns="columns1" ref="singleTable" :data="tableData" highlight-current-row style="width: 100%">
+          <template slot-scope="{ row, index }" slot="isQuality">
+            <span >{{ formatMapisQuality(row.isQuality) }}</span>
+          </template>
+          <template slot-scope="{ row, index }" slot="isEnable">
+            <span >{{ formatMapisEnable(row.isEnable) }}</span>
+          </template>
           <template slot-scope="{ row, index }" slot="action">
             <Button type="primary" size="small" style="margin-right: 5px" @click="onEdit(index)">编辑</Button>
           </template>
@@ -60,43 +66,95 @@
 
       </Form>
 <!--    <add v-if="popShow" :open-type="openType" :form-data="form" :handle-close="onClose" />-->
+    <Modal
+      v-model="popShow"
+      title="商标编辑"
+      :visible="true"
+      :close-on-click-modal="false"
+      width="30%"
+      :closable="false"
+      :mask-closable="false"
+      @close="onClose(false)"
+    >
+      <Form  :label-width="70"  ref="formFields" :model="form" >
+        <Form-item label="编号" prop="" >
+          <Input v-model="form.brandId" disabled placeholder="请输入" clearable />
+        </Form-item>
+        <Form-item label="名称" prop="" >
+          <Input v-model="form.brandName" disabled placeholder="请输入" clearable />
+        </Form-item>
+        <Form-item label="最低价格" prop="price" >
+          <InputNumber :max="99999" :min="1" :step="1"  v-model="form.price" placeholder="请输入" clearable />
+        </Form-item>
+        <Form-item label="最高价格" prop="priceHigh" >
+          <InputNumber :max="99999" :min="1" :step="1" v-model="form.priceHigh" placeholder="请输入" clearable />
+        </Form-item>
+        <Form-item label="热门" >
+          <i-switch
+            v-model="form.isQuality"
+          />
+        </Form-item>
+        <Form-item label="下架/上架" >
+          <i-switch
+            v-model="form.isEnable"
+          />
+        </Form-item>
+      </Form>
+      <div slot="footer" class="dialog-footer">
+        <Button type="primary" @click="onSave(true)">保 存</Button>
+        <Button @click="onClose(false)">取 消</Button>
+      </div>
+    </Modal>
   </div>
 </template>
 
 <script>
-import {query} from '@/api/brand'
-import Add from './add'
+import {query,update} from '@/api/brand'
 export default {
   name: 'PagePermission',
-  components: {
-    Add
-  },
   data() {
     return {
       columns1: [
-        {title: '编号', key: 'minId'},
-        {title: '图片', key: 'nickName'},
-        {title: '类型', key: 'realName'},
-        {title: '名称', key: 'idCard'},
+        {title: '编号', key: 'brandId'},
+        {title: '图片', key: 'imageUrl',columns: {
+            'width':'50px'
+          },
+          render: (h, params) => {
+            return h('div', [
+              h('img', {
+                attrs: {
+                  src: params.row.imageUrl
+                },
+                style: {
+                  width: '100px',
+                  height: '100px'
+                }
+              }),
+            ]);
+          }},
+        {title: '类型', key: 'category'},
+        {title: '名称', key: 'brandName'},
         {title: '注册号', key: 'mobile'},
-        {title: '分类', key: 'address'},
-        {title: '价格区间', key: 'createTime'},
-        {title: '上架', key: 'createTime'},
+        {title: '分类', key: 'brandType'},
+        {title: '价格区间', key: 'price'},
+        {title: '热门', key: 'isQuality', slot: 'isQuality'},
+        {title: '上架', key: 'isEnable', slot: 'isEnable'},
         {title: '操作', slot: 'action', width: 150, align: 'center'}
       ],
       brandClass: 0,
-      brandPrice: 0,
+      brandPrice: 1,
       charLength: 0,
       brandType: 0,
       openType: 'add',
       form: {
         id: '',
-        name: '',
-        title: '',
-        mobile: '',
-        type: '',
-        qqAccount: '',
-        enable: ''
+        brandName: '',
+        brandId: '',
+        isEnable: false,
+        isQuality: false,
+        price: 0,
+        priceHigh: 0
+
       },
       options: [
         {value: 0, label: '不限'},
@@ -160,15 +218,15 @@ export default {
         value: 5, label: '5字以上'
       }],
       optionsPrice: [{
-        value: 0, label: '不限'
+        value: 1, label: '不限'
       }, {
-        value: 1, label: '1万以下'
+        value: 2, label: '1万以下'
       }, {
-        value: 2, label: '1-2万'
+        value: 3, label: '1-2万'
       }, {
-        value: 3, label: '2-5万'
+        value: 4, label: '2-5万'
       }, {
-        value: 4, label: '5万以上'
+        value: 5, label: '5万以上'
       }],
       optionsType: [{
         value: 0, label: '不限'
@@ -212,6 +270,16 @@ export default {
         unionType: this.brandType,
         brandSize: this.charLength,
       }
+    },
+    formQueryUpdate() {
+      return {
+        id: this.form.id,
+        note: this.form.note,
+        buyerName: this.form.type,
+        buyerMobile: this.form.email,
+        isEnable: this.form.isEnable?2:1,
+        isQuality: this.form.isQuality?2:1,
+      }
     }
   },
 
@@ -219,8 +287,40 @@ export default {
     this.reqList()
   },
   methods: {
-    formatMapType(row) {
-      return row.enable === 1 ? '有效' : '无效'
+    onSave(confirm) {
+      this.$refs.formFields.validate(valid => {
+        if (valid) {
+          if (this.openType === 'edit') {
+            this.reqEdit()
+          } else {
+
+          }
+        } else {
+          return false
+        }
+      })
+    },
+    reqEdit() {
+      update(this.formQueryUpdate).then(res => {
+        console.log(res)
+        if (res.status === true) {
+          this.onClose()
+          this.reqList()
+        }else {
+          this.$notify({
+            title: 'Success',
+            message: 'Created Successfully',
+            type: 'success',
+            duration: 2000
+          })
+        }
+      })
+    },
+    formatMapisEnable(row) {
+      return row === 2 ? '是' : '否'
+    },
+    formatMapisQuality(row) {
+      return row === 2 ? '是' : '否'
     },
     onAdd() {
       this.openType = 'add'
@@ -230,24 +330,20 @@ export default {
       const item = this.tableData[index]
       this.openType = 'edit'
       this.form.id = item.id
-      this.form.name = item.name
-      this.form.mobile = item.mobile
-      this.form.type = item.type
-      this.form.title = item.title
-      this.form.enable = item.enable
-      this.form.qqAccount = item.qqAccount
+      this.form.brandName = item.brandName
+      this.form.brandId = item.brandId
+      this.form.isEnable = item.isEnable===2?true:false
+      this.form.isQuality = item.isQuality===2?true:false
+      this.form.price = item.price
+      this.form.priceHigh = item.priceHigh
 
-      this.currentIndex = index
       this.popShow = true
-    },
-    handleRolesChange() {
-      this.$router.push({ path: '/permission/index?' + +new Date() })
     },
     onPageChange(page) {
       this.currentPage = page
       this.reqList()
     },
-    onClose(data, confirm) {
+    onClose(confirm) {
       this.popShow = false
       this.popNewOrderShow = false
       // if (confirm) this.reqFun(data);
@@ -261,7 +357,6 @@ export default {
         console.log(res)
         if (res.status === true) {
           const rdata = res.data
-
           this.tableData = rdata.list
           this.totalPage = rdata.count
           // this.currentPage = rdata.currentPage

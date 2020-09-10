@@ -1,40 +1,43 @@
 <template>
-  <el-dialog
-    :title="title"
+  <Modal
+    v-model="popShow"
+    title="title"
     :visible="true"
     :close-on-click-modal="false"
     width="40%"
+    :closable="false"
+    :mask-closable="false"
     @close="onClose(false)"
   >
-    <el-form ref="formFields" :model="form" :rules="rulesRight">
-      <el-form-item label="编号" prop="" :label-width="formLabelWidth">
-        <el-input v-model="form.name" :disabled="readOnly" placeholder="请输入姓名" clearable />
-      </el-form-item>
-      <el-form-item label="名称" prop="" :label-width="formLabelWidth">
-        <el-input v-model="form.mobile" :disabled="readOnly" placeholder="请输入姓名" clearable />
-      </el-form-item>
-      <el-form-item label="头衔" prop="title" :label-width="formLabelWidth">
+    <Form  :label-width="70"  ref="formFields" :model="form" :rules="rulesRight">
+      <Form-item label="编号" prop="" >
+        <el-input v-model="form.name" disabled placeholder="请输入姓名" clearable />
+      </Form-item>
+      <Form-item label="名称" prop="" >
+        <el-input v-model="form.mobile"  placeholder="请输入姓名" clearable />
+      </Form-item>
+      <Form-item label="头衔" prop="title" >
         <el-input v-model="form.title" placeholder="请输入姓名" clearable />
-      </el-form-item>
-      <el-form-item label="最低价格" prop="email" :label-width="formLabelWidth">
+      </Form-item>
+      <Form-item label="最低价格" prop="email" >
         <el-input v-model="form.email" placeholder="请输入姓名" clearable />
-      </el-form-item>
-      <el-form-item label="最高价格" prop="qq" :label-width="formLabelWidth">
+      </Form-item>
+      <Form-item label="最高价格" prop="qq" >
         <el-input v-model="form.qq" placeholder="请输入姓名" clearable />
-      </el-form-item>
-      <el-form-item label="下架/上架" :label-width="formLabelWidth">
-        <el-switch
+      </Form-item>
+      <Form-item label="下架/上架" >
+        <i-switch
           v-model="form.enable"
           active-color="#13ce66"
           inactive-color="#ff4949"
         />
-      </el-form-item>
-    </el-form>
+      </Form-item>
+    </Form>
     <div slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="onSave(true)">保 存</el-button>
-      <el-button @click="onClose(false)">取 消</el-button>
+      <Button type="primary" @click="onSave(true)">保 存</Button>
+      <Button @click="onClose(false)">取 消</Button>
     </div>
-  </el-dialog>
+  </Modal>
 </template>
 
 <script>

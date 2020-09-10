@@ -16,7 +16,11 @@ public class OrderDTO {
         private List<BrandOrderVO> items;
         private int totalCount;
     }
-
+    @Data
+    @ApiModel("返回结果")
+    public static class Resp{
+        private int code;
+    }
     @Data
     @ApiModel("用户支付订单")
     public static class BrandOrderVO {

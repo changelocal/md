@@ -49,6 +49,13 @@ public interface FrontClient {
     @PostMapping(value = "/mdbrand/query", headers = { "Content-Type=application/json" })
     BaseResponse<TrademarkDTO.QueryResp> search(@RequestBody TrademarkDTO.MdBrand request);
     /**
+     * md商标的翻页查询
+     * @param request
+     * @return
+     */
+    @PostMapping(value = "/mdbrand/update", headers = { "Content-Type=application/json" })
+    BaseResponse<TrademarkDTO.Resp> update(@RequestBody TrademarkDTO.MdBrand request);
+    /**
      * md商标的精确查询
      * @param request
      * @return

@@ -4,7 +4,6 @@ import com.arc.common.ServiceException;
 import com.arc.util.http.BaseResponse;
 import com.md.union.admin.api.vo.Brand;
 import com.md.union.front.client.dto.TrademarkDTO;
-import com.md.union.front.client.dto.WxUserDTO;
 import com.md.union.front.client.feign.FrontClient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -46,7 +45,10 @@ public class BrandController {
             req.setBrandNameLength(4);
         }
         else if (request.getBrandSize()==4){
-            req.setBrandNameLengthLow(5);
+            req.setBrandNameLength(5);
+        }
+        else if (request.getBrandSize()==5){
+            req.setBrandNameLengthLow(6);
             req.setBrandNameLengthHigh(99);
         }
         //组合  0 不限
@@ -94,13 +96,12 @@ public class BrandController {
 
     @PostMapping("/update")
     public void update(@RequestBody Brand.Info request) {
-        WxUserDTO.WxUser adminUser = new WxUserDTO.WxUser();
+        TrademarkDTO.MdBrand adminUser = new TrademarkDTO.MdBrand();
         BeanUtils.copyProperties(request, adminUser);
-        BaseResponse<WxUserDTO.Resp> query = frontClient.update(adminUser);
+        BaseResponse<TrademarkDTO.Resp> query = frontClient.update(adminUser);
         if (!query.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(query.getStatus(), query.getMessage());
         }
-
     }
 
 }

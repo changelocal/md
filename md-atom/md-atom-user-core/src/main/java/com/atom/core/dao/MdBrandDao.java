@@ -251,6 +251,12 @@ public class MdBrandDao extends BaseDao  {
 
 	public void update(MdBrand mdBrand) {
 		UpdateValues updateValues = new UpdateValues();
+        if(0<(mdBrand.getIsEnable())){
+            updateValues.add("is_enable",mdBrand.getIsEnable());
+        }
+        if(0<(mdBrand.getIsQuality())){
+            updateValues.add("is_quality",mdBrand.getIsQuality());
+        }
 		if(!Strings.isNullOrEmpty(mdBrand.getId())){
 			updateValues.add("id",mdBrand.getId());
 		}
