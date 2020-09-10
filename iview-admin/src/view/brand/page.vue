@@ -1,4 +1,5 @@
 <template>
+  <div>
       <Form :inline="true" :label-width="60">
         <Form-item label="商标分类">
           <Select v-model="brandClass" placeholder="请选择">
@@ -55,8 +56,11 @@
             <Button type="primary" size="small" style="margin-right: 5px" @click="onEdit(index)">编辑</Button>
           </template>
         </Table>
+        <Page :current="currentPage" :total="totalPage" @on-change="onPageChange" show-elevator size="small" show-total></Page>
+
       </Form>
 <!--    <add v-if="popShow" :open-type="openType" :form-data="form" :handle-close="onClose" />-->
+  </div>
 </template>
 
 <script>
@@ -94,13 +98,54 @@ export default {
         qqAccount: '',
         enable: ''
       },
-      options: [{
-        value: 0, label: '全部'
-      }, {
-        value: 1, label: '管理员'
-      }, {
-        value: 2, label: '普通人员'
-      }],
+      options: [
+        {value: 0, label: '不限'},
+        {label: '化学原料',value:1},
+        {label: '颜料油漆',value:2},
+        {label: '日化用品',value:3},
+        {label: '燃料油脂',value:4},
+        {label: '医药	',value:5 },
+        {label: '金属材料',value:6},
+        {label: '机械设备',value:7},
+        {label: '手工器械',value:8},
+        {label: '科学仪器',value:9},
+        {label: '医疗器械',value:10},
+        {label: '灯具空调',value:11},
+        {label: '运输工具',value:12},
+        {label: '军火烟火',value:13},
+        {label: '珠宝钟表',value:14},
+        {label: '乐器	',value:15 },
+        {label: '办公用品',value:16},
+        {label: '橡胶制品',value:17},
+        {label: '皮革皮具',value:18},
+        {label: '建筑材料',value:19},
+        {label: '家具	',value:20 },
+        {label: '厨房洁具',value:21},
+        {label: '绳网袋篷',value:22},
+        {label: '纱线丝	',value:23 },
+        {label: '布料床单',value:24},
+        {label: '服装鞋帽',value:25},
+        {label: '钮扣拉链',value:26},
+        {label: '地毯席垫',value:27},
+        {label: '健身器材',value:28},
+        {label: '食品	',value:29 },
+        {label: '方便食品',value:30},
+        {label: '饲料种籽',value:31},
+        {label: '啤酒饮料',value:32},
+        {label: '酒精饮品',value:33},
+        {label: '烟草烟具',value:34},
+        {label: '广告销售',value:35},
+        {label: '金融物管',value:36},
+        {label: '建筑修理',value:37},
+        {label: '通讯服务',value:38},
+        {label: '运输贮藏',value:39},
+        {label: '材料加工',value:40},
+        {label: '教育娱乐',value:41},
+        {label: '网站服务',value:42},
+        {label: '餐饮住宿',value:43},
+        {label: '医疗园艺',value:44},
+        {label: '社会服务',value:45},
+        ],
       optionsChar: [{
         value: 0, label: '不限'
       }, {
@@ -159,10 +204,13 @@ export default {
   computed: {
     formQuery() {
       return {
-        currentPage: this.currentPage,
+        pageIndex: this.currentPage,
         pageSize: this.pageSize,
-        name: this.name,
-        type: this.type
+        brandName: this.name,
+        categoryNo: this.brandClass,
+        priceType: this.brandPrice,
+        unionType: this.brandType,
+        brandSize: this.charLength,
       }
     }
   },
@@ -209,15 +257,22 @@ export default {
       this.reqList()
     },
     reqList() {
-      this.$http.post(API.adminuserQuery, this.formQuery).then(res => {
-        if (res.status === 200) {
-          const status = res.data.statusCode
-          const rdata = res.data.data
-          if (status === 200) {
-            this.tableData = rdata.list
-            this.totalPage = rdata.total
-            this.currentPage = rdata.currentPage
-          }
+      query(this.formQuery).then(res => {
+        console.log(res)
+        if (res.status === true) {
+          const rdata = res.data
+
+          this.tableData = rdata.list
+          this.totalPage = rdata.count
+          // this.currentPage = rdata.currentPage
+
+        }else {
+          this.$notify({
+            title: '错误',
+            message: res.message,
+            type: 'error',
+            duration: 2000
+          })
         }
       })
     }

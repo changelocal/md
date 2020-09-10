@@ -1,4 +1,5 @@
 <template>
+  <div>
       <Form :inline="true"  :label-width="60">
         <Form-item label="状态">
           <Select v-model="status" placeholder="请选择">
@@ -41,8 +42,11 @@
             <Button type="primary" size="small" style="margin-right: 5px" @click="onEdit(index)">编辑</Button>
           </template>
         </Table>
+        <Page :current="currentPage" :total="totalPage" @on-change="onPageChange" show-elevator size="small" show-total></Page>
+
       </Form>
 <!--    <add v-if="popShow" :open-type="openType" :form-data="form" :handle-close="onClose" />-->
+  </div>
 </template>
 
 <script>

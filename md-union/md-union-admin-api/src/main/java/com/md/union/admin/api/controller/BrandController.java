@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,11 +24,53 @@ import java.util.List;
 public class BrandController {
     @Autowired
     private FrontClient frontClient;
-    @ApiOperation("商标起名查询")
+    @ApiOperation("商标查询")
     @PostMapping("/query")
     public Brand.SearchRes query(@RequestBody Brand.SearchReq request) {
         Brand.SearchRes ret = new Brand.SearchRes();
         TrademarkDTO.MdBrand req = new TrademarkDTO.MdBrand();
+        //名字
+        req.setBrandName(request.getBrandName());
+        //分类
+        req.setCategory(request.getCategoryNo());
+        //字符数
+        req.setBrandNameLength(request.getBrandSize());
+        if(request.getBrandSize()==1){
+            req.setBrandNameLengthLow(1);
+            req.setBrandNameLengthHigh(2);
+        }
+        else if (request.getBrandSize()==2){
+            req.setBrandNameLength(3);
+        }
+        else if (request.getBrandSize()==3){
+            req.setBrandNameLength(4);
+        }
+        else if (request.getBrandSize()==4){
+            req.setBrandNameLengthLow(5);
+            req.setBrandNameLengthHigh(99);
+        }
+        //组合  0 不限
+        req.setComType(request.getUnionType());
+        //价格
+        if(request.getPriceType()==1){
+            req.setPriceLow(new BigDecimal(1));
+            req.setPriceHigh(new BigDecimal(2000000));
+        }else if (request.getPriceType()==2) {
+            req.setPriceLow(new BigDecimal(1));
+            req.setPriceHigh(new BigDecimal(10000));
+        }else if (request.getPriceType()==3) {
+            req.setPriceLow(new BigDecimal(10000));
+            req.setPriceHigh(new BigDecimal(20000));
+        }else if (request.getPriceType()==4) {
+            req.setPriceLow(new BigDecimal(20000));
+            req.setPriceHigh(new BigDecimal(50000));
+        }else if (request.getPriceType()==5) {
+            req.setPriceLow(new BigDecimal(50000));
+            req.setPriceHigh(new BigDecimal(2000000));
+        }
+        req.setPageIndex(request.getPageIndex());
+        req.setPageSize(request.getPageSize());
+
         BeanUtils.copyProperties(request, req);
         BaseResponse<TrademarkDTO.QueryResp> query = frontClient.search(req);
         if (!query.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {

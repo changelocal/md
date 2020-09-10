@@ -46,6 +46,7 @@ public class WxUserController {
         }
         result.setTotalCount(pageResult.getTotalCount());
         result.setItems(list);
+        log.info("result:"+result);
         return result;
     }
 
