@@ -1,35 +1,36 @@
 <template>
-  <el-dialog
+  <Modal
+    :model="popShow"
     :title="title"
     :visible="true"
     :close-on-click-modal="false"
     width="30%"
     @close="onClose(false)"
   >
-    <el-form ref="formFields" :model="form" :rules="rulesRight">
-      <el-form-item label="咨询人" prop="" :label-width="formLabelWidth">
-        <el-input v-model="form.buyerName" :disabled="readOnly" clearable />
-      </el-form-item>
-      <el-form-item label="咨询电话" prop="" :label-width="formLabelWidth">
-        <el-input v-model="form.buyerMobile" :disabled="readOnly" clearable />
-      </el-form-item>
-      <el-form-item label="状态" prop="" :label-width="formLabelWidth">
-        <el-input v-model="form.status" :disabled="readOnly" clearable />
-      </el-form-item>
-      <el-form-item label="备注" prop="note" :label-width="formLabelWidth">
-        <el-input v-model="form.note" placeholder="请输入备注" clearable />
-      </el-form-item>
+    <Form ref="formFields" :model="form" :rules="rulesRight">
+      <Form-item label="咨询人" prop="" :label-width="formLabelWidth">
+        <Input v-model="form.buyerName" :disabled="readOnly" clearable />
+      </Form-item>
+      <Form-item label="咨询电话" prop="" :label-width="formLabelWidth">
+        <Input v-model="form.buyerMobile" :disabled="readOnly" clearable />
+      </Form-item>
+      <Form-item label="状态" prop="" :label-width="formLabelWidth">
+        <Input v-model="form.status" :disabled="readOnly" clearable />
+      </Form-item>
+      <Form-item label="备注" prop="note" :label-width="formLabelWidth">
+        <Input v-model="form.note" placeholder="请输入备注" clearable />
+      </Form-item>
 
-    </el-form>
+    </Form>
     <div slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="onSave(true)">保 存</el-button>
-      <el-button @click="onClose(false)">取 消</el-button>
+      <Button type="primary" @click="onSave(true)">保 存</Button>
+      <Button @click="onClose(false)">取 消</Button>
     </div>
-  </el-dialog>
+  </Modal>
 </template>
 
 <script>
-import API from '@/api/consultation'
+import {query} from '@/api/consultation'
 
 export default {
 
@@ -59,6 +60,7 @@ export default {
   },
   data() {
     return {
+      popShow:false,
       form: {
         id: '',
         buyerName: '',

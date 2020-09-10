@@ -1,34 +1,34 @@
 <template>
-  <el-dialog
-    :title="title"
+  <Modal
+    title="title"
     :visible="true"
     :close-on-click-modal="false"
     width="30%"
     @close="onClose(false)"
   >
-    <el-form ref="formFields" :model="form" :rules="rulesRight">
-      <el-form-item label="openid" prop="" :label-width="formLabelWidth">
-        <el-input v-model="form.openid" :disabled="readOnly" clearable />
-      </el-form-item>
-      <el-form-item label="昵称" prop="" :label-width="formLabelWidth">
-        <el-input v-model="form.nickName" :disabled="readOnly" clearable />
-      </el-form-item>
-      <el-form-item label="电话" prop="" :label-width="formLabelWidth">
-        <el-input v-model="form.mobile" :disabled="readOnly" clearable />
-      </el-form-item>
-      <el-form-item label="真实姓名" prop="" :label-width="formLabelWidth">
-        <el-input v-model="form.realName" placeholder="请输入姓名" clearable />
-      </el-form-item>
-      <el-form-item label="身份证" prop="" :label-width="formLabelWidth">
-        <el-input v-model="form.idCard" placeholder="请输入身份证" clearable />
-      </el-form-item>
+    <Form ref="formFields" :model="form" :rules="rulesRight">
+      <Form-item label="openid" prop="" :label-width="formLabelWidth">
+        <Input v-model="form.openid" :disabled="readOnly" clearable />
+      </Form-item>
+      <Form-item label="昵称" prop="" :label-width="formLabelWidth">
+        <Input v-model="form.nickName" :disabled="readOnly" clearable />
+      </Form-item>
+      <Form-item label="电话" prop="" :label-width="formLabelWidth">
+        <Input v-model="form.mobile" :disabled="readOnly" clearable />
+      </Form-item>
+      <Form-item label="真实姓名" prop="" :label-width="formLabelWidth">
+        <Input v-model="form.realName" placeholder="请输入姓名" clearable />
+      </Form-item>
+      <Form-item label="身份证" prop="" :label-width="formLabelWidth">
+        <Input v-model="form.idCard" placeholder="请输入身份证" clearable />
+      </Form-item>
 
-    </el-form>
+    </Form>
     <div slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="onSave(true)">保 存</el-button>
-      <el-button @click="onClose(false)">取 消</el-button>
+      <Button type="primary" @click="onSave(true)">保 存</Button>
+      <Button @click="onClose(false)">取 消</Button>
     </div>
-  </el-dialog>
+  </Modal>
 </template>
 
 <script>

@@ -1,4 +1,5 @@
 <template>
+  <div>
       <Form :inline="true" :label-width="60">
         <Form-item label="手机">
           <Input v-model="mobile" placeholder="请输入手机" clearable>
@@ -12,21 +13,61 @@
             <Button type="primary" size="small" style="margin-right: 5px" @click="onEdit(index)">编辑</Button>
           </template>
         </Table>
-      </Form>
-<!--    <add v-if="popShow" :open-type="openType" :form-data="form" :handle-close="onClose" />-->
+        <Page :current="currentPage" :total="totalPage" @on-change="onPageChange" show-elevator size="small" show-total></Page>
 
+      </Form>
+    <Modal
+      v-model="popShow"
+      title="用户信息修改"
+      :visible="true"
+      :close-on-click-modal="false"
+      width="30%"
+      :closable="false"
+      :mask-closable="false"
+      @close="onClose(false)"
+    >
+      <Form  :label-width="80" ref="formFields" :model="form" :rules="rulesRight">
+        <Form-item label="openid" prop="" >
+          <Input v-model="form.minId" disabled clearable />
+        </Form-item>
+        <Form-item label="昵称" prop="" >
+          <Input v-model="form.nickName" disabled clearable />
+        </Form-item>
+        <Form-item label="电话" prop="" >
+          <Input v-model="form.mobile"  clearable />
+        </Form-item>
+        <Form-item label="真实姓名" prop="realName" >
+          <Input v-model="form.realName" placeholder="请输入姓名" clearable />
+        </Form-item>
+        <Form-item label="身份证" prop="" >
+          <Input v-model="form.idCard" placeholder="请输入身份证" clearable />
+        </Form-item>
+
+      </Form>
+      <div slot="footer" class="dialog-footer">
+        <Button type="primary" @click="onSave(true)">保 存</Button>
+        <Button @click="onClose(false)">取 消</Button>
+      </div>
+    </Modal>
+<!--    <add v-if="popShow" :open-type="openType" :form-data="form" :handle-close="onClose" />-->
+  </div>
 </template>
 
 <script>
-import {query} from '@/api/wxuser'
-import Add from './add'
+import {query,update} from '@/api/wxuser'
+// import Add from './add'
 export default {
   name: 'PagePermission',
-  components: {
-    Add
-  },
+  // components: {
+  //   Add
+  // },
   data() {
     return {
+      rulesRight: {
+        realName: [{ required: true, message: '请输入', trigger: 'blur' }],
+        // mobile: [{ required: true, message: '请输入', trigger: 'blur' }],
+        // idCard: [{ required: true, message: '请输入', trigger: 'blur' }]
+      },
       columns1: [
         {title: 'openID', key: 'minId'},
         {title: '昵称', key: 'nickName'},
@@ -43,7 +84,7 @@ export default {
         nickName: '',
         realName: '',
         mobile: '',
-        openid: '',
+        minId: '',
         idCard: ''
       },
       mobile: '',
@@ -63,6 +104,15 @@ export default {
         pageSize: this.pageSize,
         mobile: this.mobile
       }
+    },
+    formQueryUpdate() {
+      return {
+        id: this.form.id,
+        mobile: this.form.mobile,
+        nickName: this.form.nickName,
+        realName: this.form.realName,
+        idCard: this.form.idCard,
+      }
     }
   },
   onAdd() {
@@ -73,17 +123,47 @@ export default {
     this.reqList()
   },
   methods: {
+    onSave(confirm) {
+      this.$refs.formFields.validate(valid => {
+        if (valid) {
+          if (this.openType === 'edit') {
+            this.reqEdit()
+          } else {
+
+          }
+        } else {
+          return false
+        }
+      })
+    },
+    reqEdit() {
+      update(this.formQueryUpdate).then(res => {
+        console.log(res)
+        if (res.status === true) {
+          this.onClose()
+          this.reqList()
+        }else {
+          this.$notify({
+            title: 'Success',
+            message: 'Created Successfully',
+            type: 'success',
+            duration: 2000
+          })
+        }
+      })
+    },
     onEdit(index) {
       const item = this.tableData[index]
+      console.log(item)
       this.openType = 'edit'
       this.form.id = item.id
-      this.form.openid = item.openId
+      this.form.minId = item.minId
       this.form.mobile = item.mobile
       this.form.nickName = item.nickName
       this.form.realName = item.realName
       this.form.idCard = item.idCard
 
-      this.currentIndex = index
+      // this.currentIndex = index
       this.popShow = true
     },
     onPageChange(page) {
@@ -93,7 +173,7 @@ export default {
     onSearch() {
       this.reqList()
     },
-    onClose(data, confirm) {
+    onClose( confirm) {
       this.popShow = false
       // if (confirm) this.reqFun(data);
       this.form = this.formClear()

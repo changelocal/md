@@ -128,7 +128,9 @@ export default {
         label: '普通人员'
       }],
       name: '',
-      tableData: [{ name: 'sxj', title: 'boss', mobile: '13412121212', type: 'admin', qqAccount: '212731', email: 'sxj@123.com' }],
+      tableData: [
+        // { name: 'sxj', title: 'boss', mobile: '13412121212', type: 'admin', qqAccount: '212731', email: 'sxj@123.com' }
+        ],
       currentPage: 1,
       popShow: false,
       currentIndex: null,

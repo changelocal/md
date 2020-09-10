@@ -1,4 +1,5 @@
 <template>
+  <div>
       <Form :inline="true" :label-width="60">
         <Form-item label="状态">
           <Select v-model="mapType" placeholder="请选择">
@@ -32,6 +33,9 @@
           <Button type="primary" @click="onSearch" >搜索</Button>
         </FormItem>
         <Table :columns="columns1" ref="singleTable" :data="tableData" highlight-current-row style="width: 100%">
+          <template slot-scope="{ row, index }" slot="status">
+            <span >{{ formatMapStatus(row.status) }}</span>
+          </template>
           <template slot-scope="{ row, index }" slot="action">
             <Button type="primary" size="small" style="margin-right: 5px" @click="onEdit(index)">编辑</Button>
           </template>
@@ -39,30 +43,69 @@
         <Page :current="currentPage" :total="totalPage" @on-change="onPageChange" show-elevator size="small" show-total></Page>
 
       </Form>
+  <Modal
+    v-model="popShow"
+    title="修改咨询"
+    :visible="true"
+    :close-on-click-modal="false"
+    width="30%"
+    :closable="false"
+    :mask-closable="false"
+    @close="onClose(false)"
+  >
+    <Form  :label-width="70" ref="formFields" :model="form" :rules="rulesRight">
+      <Form-item label="咨询人" prop="" >
+        <Input v-model="form.buyerName"  clearable />
+      </Form-item>
+      <Form-item label="咨询电话" prop="" >
+        <Input v-model="form.buyerMobile"  clearable />
+      </Form-item>
+      <Form-item label="状态" prop="" >
+<!--        <Input v-model="form.status" clearable />-->
+        <Select v-model="form.status" placeholder="请选择">
+          <Option
+            v-for="item in optionsStatus"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </Select>
+      </Form-item>
+      <Form-item label="备注" prop="note" >
+        <Input v-model="form.note" placeholder="请输入备注" clearable />
+      </Form-item>
 
+    </Form>
+    <div slot="footer" class="dialog-footer">
+      <Button type="primary" @click="onSave(true)">保 存</Button>
+      <Button @click="onClose(false)">取 消</Button>
+    </div>
+  </Modal>
 
-<!--    <add v-if="popShow" :open-type="openType" :form-data="form" :handle-close="onClose" />-->
 <!--    <new-order v-if="popNewOrderShow" :open-type="openType" :form-data="form" :handle-close="onClose" />-->
-
+  </div>
 </template>
 
 <script>
-import {query} from '@/api/consultation'
-import Add from './add'
+import {query,update} from '@/api/consultation'
+// import Add from './add'
 import NewOrder from './newOrder'
 export default {
   name: 'PagePermission',
   components: {
-    Add,
+    // Add,
     NewOrder
   },
   data() {
     return {
+      rulesRight: {
+        note: [{ required: true, message: '请输入', trigger: 'blur' }]
+      },
       columns1: [
         {title: '咨询订单', key: 'orderNo'},
         {title: '咨询人', key: 'openId'},
         {title: '咨询人手机', key: 'buyerMobile'},
-        {title: '状态', key: 'status'},
+        {title: '状态', key: 'status', slot: 'status'},
         {title: '预付款', key: 'prePay'},
         {title: '销售姓名', key: 'opUserName'},
         {title: '销售手机', key: 'opUserMobile'},
@@ -81,14 +124,20 @@ export default {
         value: 2,
         label: '完成咨询'
       }],
+      optionsStatus: [{
+        value: 1,
+        label: '发起咨询'
+      }, {
+        value: 2,
+        label: '完成咨询'
+      }],
       openType: 'add',
       form: {
         id: '',
-        nickName: '',
-        realName: '',
-        mobile: '',
-        openid: '',
-        idCard: ''
+        buyerMobile: '',
+        buyerName: '',
+        note: '',
+        status: '',
       },
       planStartTime: [],
       pickerOptions2: {
@@ -136,6 +185,15 @@ export default {
         pageSize: this.pageSize,
         mobile: this.mobile
       }
+    },
+    formQueryUpdate() {
+      return {
+        id: this.form.id,
+        note: this.form.note,
+        buyerName: this.form.type,
+        buyerMobile: this.form.email,
+        status: this.form.status,
+      }
     }
   },
   onAdd() {
@@ -146,17 +204,47 @@ export default {
     this.reqList()
   },
   methods: {
+    formatMapStatus(row) {
+      return row === 1 ? '发起咨询' : '回复咨询'
+    },
+    onSave(confirm) {
+      this.$refs.formFields.validate(valid => {
+        if (valid) {
+          if (this.openType === 'edit') {
+            this.reqEdit()
+          } else {
+
+          }
+        } else {
+          return false
+        }
+      })
+    },
+    reqEdit() {
+      update(this.formQueryUpdate).then(res => {
+        console.log(res)
+        if (res.status === true) {
+          this.onClose()
+          this.reqList()
+        }else {
+          this.$notify({
+            title: 'Success',
+            message: 'Created Successfully',
+            type: 'success',
+            duration: 2000
+          })
+        }
+      })
+    },
     onEdit(index) {
       const item = this.tableData[index]
       this.openType = 'edit'
       this.form.id = item.id
-      this.form.openid = item.openid
-      this.form.mobile = item.mobile
+      this.form.status = item.status
+      this.form.note = item.note
       this.form.buyerName = item.buyerName
       this.form.buyerMobile = item.buyerMobile
-      this.form.idCard = item.idCard
 
-      this.currentIndex = index
       this.popShow = true
     },
     onNewOrder(index) {
@@ -179,9 +267,9 @@ export default {
     onSearch() {
       this.reqList()
     },
-    onClose(data, confirm) {
+    onClose( confirm) {
       this.popShow = false
-      this.popNewOrderShow = false
+      // this.popNewOrderShow = false
       // if (confirm) this.reqFun(data);
       this.form = this.formClear()
     },
