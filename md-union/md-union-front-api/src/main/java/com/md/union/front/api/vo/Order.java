@@ -90,7 +90,7 @@ public class Order {
         @ApiModelProperty("主键id")
         private int id;
         @ApiModelProperty("用户id")
-        private int userId;
+        private long userId;
         @ApiModelProperty("订单编号")
         private String orderNo;
         @ApiModelProperty("图片url")

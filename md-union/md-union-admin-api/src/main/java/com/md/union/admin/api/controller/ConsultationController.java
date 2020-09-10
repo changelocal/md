@@ -7,6 +7,7 @@ import com.md.union.front.client.dto.ConsultationDTO;
 import com.md.union.front.client.feign.FrontClient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
@@ -16,20 +17,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
 @RequestMapping("/web/consultation")
 @Api(tags = {"咨询"})
+@Slf4j
 public class ConsultationController {
     @Autowired
     private FrontClient frontClient;
     @ApiOperation("商标起名查询")
     @PostMapping("/query")
     public Consultation.SearchRes query(@RequestBody Consultation.SearchReq request) {
+        log.info("query:"+request);
         Consultation.SearchRes ret = new Consultation.SearchRes();
         ConsultationDTO.Info adminUser = new ConsultationDTO.Info();
         BeanUtils.copyProperties(request, adminUser);
+        log.info("adminUser:"+adminUser);
         BaseResponse<ConsultationDTO.QueryResp> query = frontClient.query(adminUser);
         if (!query.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(query.getStatus(), query.getMessage());
@@ -54,6 +59,7 @@ public class ConsultationController {
     public void update(@RequestBody Consultation.Info request) {
         ConsultationDTO.Info info = new ConsultationDTO.Info();
         BeanUtils.copyProperties(request, info);
+        info.setUpdateTime(new Date());
         BaseResponse<ConsultationDTO.Resp> query = frontClient.update(info);
         if (!query.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(query.getStatus(), query.getMessage());

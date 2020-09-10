@@ -30,7 +30,7 @@ public class WxUserDTO {
         /**
          * 主键
          */
-        private int id;
+        private long id;
 
         /**
          * 用户唯一标识id

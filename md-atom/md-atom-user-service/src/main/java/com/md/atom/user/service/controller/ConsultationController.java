@@ -30,7 +30,8 @@ public class ConsultationController {
     private ConsultationDao consultationDao;
 
     @PostMapping("/query")
-    public ConsultationVO.QueryResp query(@RequestBody ConsultationParam adminUser) {
+    public ConsultationVO.QueryResp query(@RequestBody ConsultationVO.Info adminUser) {
+        log.info("query:"+adminUser);
         ConsultationVO.QueryResp result = new ConsultationVO.QueryResp();
         ConsultationParam para = new ConsultationParam();
         BeanUtils.copyProperties(adminUser, para);

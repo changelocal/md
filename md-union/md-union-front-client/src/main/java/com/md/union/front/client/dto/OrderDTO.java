@@ -1,7 +1,6 @@
 package com.md.union.front.client.dto;
 
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.Date;
@@ -59,7 +58,7 @@ public class OrderDTO {
         /**
          * 购买用户id
          */
-        private int userId;
+        private long userId;
 
         /**
          * 后台运营下单人id

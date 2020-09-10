@@ -44,6 +44,7 @@ public class ConsultationDTO {
          * 买家名字
          */
         private String buyerName;
+        private String note;
         /**
          * 后台运营人id被咨询者
          */
@@ -67,7 +68,6 @@ public class ConsultationDTO {
          */
         private Date updateTime;
 
-        private String note;
         @ApiModelProperty("当前页")
         private int pageIndex;
         @ApiModelProperty("每页显示条数")

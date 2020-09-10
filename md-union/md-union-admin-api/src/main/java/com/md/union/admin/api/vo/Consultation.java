@@ -111,6 +111,7 @@ public class Consultation {
          * 买家名字
          */
         private String buyerName;
+        private String note;
         /**
          * 后台运营人id被咨询者
          */
@@ -133,9 +134,6 @@ public class Consultation {
          * 修改时间
          */
         private Date updateTime;
-
-        private String note;
-
         @ApiModelProperty("当前页")
         public int pageIndex;
         @ApiModelProperty("每页显示条数")

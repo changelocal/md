@@ -41,7 +41,7 @@ public class OrderController {
     @PostMapping("list")
     public Order.ListRes list(@RequestBody Order.SearchReq request) {
         Order.ListRes result = new Order.ListRes();
-        int userId = AppUserPrincipal.getPrincipal().getId();
+        long userId = AppUserPrincipal.getPrincipal().getId();
         OrderDTO.BrandOrderVO param = new OrderDTO.BrandOrderVO();
         param.setUserId(userId);
         param.setPageIndex(request.getPageIndex() == 0 ? 1 : request.getPageIndex());

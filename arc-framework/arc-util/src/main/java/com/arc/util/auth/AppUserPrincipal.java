@@ -55,11 +55,11 @@ public class AppUserPrincipal implements UserPrincipal {
         this.minId = minId;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -69,7 +69,7 @@ public class AppUserPrincipal implements UserPrincipal {
     private String unionId;
     private String token;
     private String minId;
-    private int id;
+    private long id;
 
 
     public static AppUserPrincipal getPrincipal() {
