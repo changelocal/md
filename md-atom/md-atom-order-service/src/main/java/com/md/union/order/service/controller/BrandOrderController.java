@@ -124,6 +124,7 @@ public class BrandOrderController {
     private BrandOrderParam convertQuery(OrderVO.BrandOrderVO request) {
         BrandOrderParam result = new BrandOrderParam();
         result.setId(request.getId());
+        result.setOrderType(request.getOrderType());
         result.setOrderNo(request.getOrderNo());
         result.setStatus(request.getStatus());
         result.setUserId(request.getUserId());
