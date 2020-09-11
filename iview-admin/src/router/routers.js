@@ -182,6 +182,7 @@ export default [
         component: () => import('@/view/makeorder/page.vue'),
         name: 'MakeOrder',
         meta: {
+          hideInMenu: true,
           title: '推单'
         }
       }

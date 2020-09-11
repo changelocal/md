@@ -49,23 +49,69 @@
           </template>
         </Table>
         <Page :current="currentPage" :total="totalPage" @on-change="onPageChange" show-elevator size="small" show-total></Page>
+      </Form>
+
+    <Modal
+      v-model="popShow"
+      title="修改订单"
+      :visible="true"
+      :close-on-click-modal="false"
+      width="30%"
+      :closable="false"
+      :mask-closable="false"
+      @close="onClose(false)"
+    >
+      <Form :label-width="70"  ref="formFields" :model="form" :rules="rulesRight">
+        <Form-item label="订单号" prop="" >
+          <Input v-model="form.orderNo" disabled placeholder="" clearable />
+        </Form-item>
+        <Form-item label="类型" prop="" >
+          <Input v-model="form.type" disabled placeholder="" clearable />
+        </Form-item>
+        <Form-item label="状态" prop="status" >
+          <Select v-model="form.status" placeholder="请选择">
+            <Option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </Select>
+        </Form-item>
+        <Form-item label="预付款" prop="prePay" >
+          <InputNumber v-model="form.prePay" :min="0" :max="99999" controls-position="right" placeholder="请输入预付款" clearable />
+        </Form-item>
+        <Form-item label="剩余款" prop="restPay" >
+          <InputNumber v-model="form.restPay" :min="0" :max="99999" controls-position="right" placeholder="请输入剩余款" clearable />
+        </Form-item>
+        <Form-item label="共付款" prop="totalPay" >
+          <InputNumber v-model="form.totalPay" :min="0" :max="99999" controls-position="right" placeholder="请输入共付款" clearable />
+        </Form-item>
 
       </Form>
-<!--    <add v-if="popShow" :open-type="openType" :form-data="form" :handle-close="onClose" />-->
+      <div slot="footer" class="dialog-footer">
+        <Button type="primary" @click="onSave(true)">保 存</Button>
+        <Button @click="onClose(false)">取 消</Button>
+      </div>
+    </Modal>
+
   </div>
 </template>
 
 <script>
-import {query} from '@/api/order'
-import Add from './add'
+import {query,update} from '@/api/order'
 
 export default {
   name: 'PagePermission',
-  components: {
-    Add
-  },
+
   data() {
     return {
+      rulesRight: {
+        prePay: [{ required: true, message: '请输入', trigger: 'blur' }],
+        restPay: [{ required: true, message: '请输入', trigger: 'blur' }],
+        totalPay: [{ required: true, message: '请输入', trigger: 'blur' }],
+        status: [{ required: true, message: '请输入', trigger: 'blur' }],
+      },
       columns1: [
         {title: '订单号', key: 'orderNo', width: 150},
         {title: '状态', key: 'orderStatus', slot: 'status'},
@@ -200,31 +246,21 @@ export default {
     formatMapType(row) {
       return row === 1 ? '商标注册' : row === 2 ?'商标维权' :"商标信息变更"
     },
-
-    onAdd() {
-      this.openType = 'add'
-      this.popShow = true
-    },
     onEdit(index) {
       const item = this.tableData[index]
       this.openType = 'edit'
-      this.form.no = item.no
+      this.form.id = item.id
+      this.form.orderNo = item.orderNo
       this.form.status = item.status
       this.form.prePay = item.prePay
       this.form.restPay = item.restPay
       this.form.totalPay = item.totalPay
-      this.form.enable = item.enable
-      this.form.qqAccount = item.qqAccount
 
-      this.currentIndex = index
       this.popShow = true
     },
-    onClose(data, confirm) {
+    onClose( confirm) {
       this.popShow = false
       this.form = this.formClear()
-      if (confirm && data.openType === 'edit') {
-        // this.reqFun(data)
-      }
       this.reqList()
     },
     onPageChange(page) {

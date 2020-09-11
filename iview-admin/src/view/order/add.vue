@@ -1,16 +1,19 @@
 <template>
-  <el-dialog
-    :title="title"
+  <Modal
+    v-model="popShow"
+    title="title"
     :visible="true"
     :close-on-click-modal="false"
     width="30%"
+    :closable="false"
+    :mask-closable="false"
     @close="onClose(false)"
   >
-    <el-form ref="formFields" :model="form" :rules="rulesRight">
-      <el-form-item label="订单号" prop="" :label-width="formLabelWidth">
-        <el-input v-model="form.no" :disabled="readOnly" placeholder="" clearable />
-      </el-form-item>
-      <el-form-item label="状态" prop="status" :label-width="formLabelWidth">
+    <Form :label-width="70"  ref="formFields" :model="form" :rules="rulesRight">
+      <Form-item label="订单号" prop="" >
+        <el-input v-model="form.no" disabled placeholder="" clearable />
+      </Form-item>
+      <Form-item label="状态" prop="status" >
         <el-select v-model="form.status" placeholder="请选择">
           <el-option
             v-for="item in options"
@@ -19,26 +22,26 @@
             :value="item.value"
           />
         </el-select>
-      </el-form-item>
-      <el-form-item label="类型" prop="" :label-width="formLabelWidth">
-        <el-input v-model="form.type" :disabled="readOnly" placeholder="" clearable />
-      </el-form-item>
-      <el-form-item label="预付款" prop="" :label-width="formLabelWidth">
+      </Form-item>
+      <Form-item label="类型" prop="" >
+        <el-input v-model="form.type" disabled placeholder="" clearable />
+      </Form-item>
+      <Form-item label="预付款" prop="" >
         <el-input-number v-model="form.prePay" :min="0" :max="99999" controls-position="right" placeholder="请输入预付款" clearable />
-      </el-form-item>
-      <el-form-item label="剩余款" prop="" :label-width="formLabelWidth">
+      </Form-item>
+      <Form-item label="剩余款" prop="" >
         <el-input-number v-model="form.restPay" :min="0" :max="99999" controls-position="right" placeholder="请输入剩余款" clearable />
-      </el-form-item>
-      <el-form-item label="共付款" prop="" :label-width="formLabelWidth">
+      </Form-item>
+      <Form-item label="共付款" prop="" >
         <el-input-number v-model="form.totalPay" :min="0" :max="99999" controls-position="right" placeholder="请输入共付款" clearable />
-      </el-form-item>
+      </Form-item>
 
-    </el-form>
+    </Form>
     <div slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="onSave(true)">保 存</el-button>
-      <el-button @click="onClose(false)">取 消</el-button>
+      <Button type="primary" @click="onSave(true)">保 存</Button>
+      <Button @click="onClose(false)">取 消</Button>
     </div>
-  </el-dialog>
+  </Modal>
 </template>
 
 <script>

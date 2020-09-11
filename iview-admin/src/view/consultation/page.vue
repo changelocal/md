@@ -62,7 +62,6 @@
         <Input v-model="form.buyerMobile" disabled clearable />
       </Form-item>
       <Form-item label="状态" prop="" >
-<!--        <Input v-model="form.status" clearable />-->
         <Select v-model="form.status" placeholder="请选择">
           <Option
             v-for="item in optionsStatus"
@@ -72,7 +71,7 @@
           />
         </Select>
       </Form-item>
-      <Form-item label="备注" prop="" >
+      <Form-item label="备注" prop="note" >
         <Input v-model="form.note" placeholder="请输入备注" clearable />
       </Form-item>
 
@@ -83,13 +82,11 @@
     </div>
   </Modal>
 
-<!--    <new-order v-if="popNewOrderShow" :open-type="openType" :form-data="form" :handle-close="onClose" />-->
   </div>
 </template>
 
 <script>
 import {query,update} from '@/api/consultation'
-// import Add from './add'
 import NewOrder from './newOrder'
 export default {
   name: 'PagePermission',
@@ -141,6 +138,7 @@ export default {
         status: '',
       },
       planStartTime: [],
+      buyerMobile:'',
       pickerOptions2: {
         shortcuts: [{
           text: '最近一周',
@@ -193,23 +191,25 @@ export default {
       return {
         id: this.form.id,
         note: this.form.note,
-        buyerName: this.form.type,
-        buyerMobile: this.form.email,
         status: this.form.status,
       }
     }
-  },
-  onAdd() {
-    this.openType = 'add'
-    this.popShow = true
   },
   created() {
     this.reqList()
   },
   methods: {
+    formClear() {
+      return {
+        id: '',
+        buyerMobile: '',
+        buyerName: '',
+        note: '',
+        status: '',
+      }
+    },
     onMakeOrder(index){
       const item = this.tableData[index]
-      console.log(item)
       if(item.buyerMobile !== null && item.buyerMobile !== '') {
         this.$router.push({
           name: "MakeOrder",
@@ -223,7 +223,7 @@ export default {
         });
       }else{
         this.$Notice.error({
-          title: '买家必须有手机号',
+          title: '咨询人手机不能为空',
         });
       }
     },
@@ -245,7 +245,6 @@ export default {
     },
     reqEdit() {
       update(this.formQueryUpdate).then(res => {
-        console.log(res)
         if (res.status === true) {
           this.onClose()
           this.reqList()
@@ -294,11 +293,10 @@ export default {
       this.popShow = false
       // this.popNewOrderShow = false
       // if (confirm) this.reqFun(data);
-      this.form = this.formClear()
+      this.form = this.formClear
     },
     reqList() {
       query(this.formQuery).then(res => {
-        console.log(res)
         if (res.status === true) {
           const rdata = res.data
           this.tableData = rdata.list

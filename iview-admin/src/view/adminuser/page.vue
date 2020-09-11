@@ -235,7 +235,6 @@ export default {
     },
     reqAdd() {
       add(this.formQueryAdd).then(res => {
-        console.log(res)
         if (res.status === true) {
           this.close()
           this.reqList()
@@ -251,7 +250,6 @@ export default {
     },
     reqEdit() {
       update(this.formQueryUpdate).then(res => {
-        console.log(res)
         if (res.status === true) {
           this.close()
           this.reqList()
@@ -294,14 +292,10 @@ export default {
     },
     reqList() {
       query(this.formQuery).then(res => {
-        console.log(res)
         if (res.status === true) {
           const rdata = res.data
-
             this.tableData = rdata.list
             this.totalPage = rdata.count
-            // this.currentPage = rdata.currentPage
-
         }else {
           this.$notify({
             title: 'Success',

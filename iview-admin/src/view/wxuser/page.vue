@@ -115,10 +115,6 @@ export default {
       }
     }
   },
-  onAdd() {
-    this.openType = 'add'
-    this.popShow = true
-  },
   created() {
     this.reqList()
   },
@@ -178,9 +174,18 @@ export default {
       // if (confirm) this.reqFun(data);
       this.form = this.formClear()
     },
+    formClear() {
+      return {
+        id: '',
+        nickName: '',
+        realName: '',
+        mobile: '',
+        minId: '',
+        idCard: ''
+      }
+    },
     reqList() {
       query(this.formQuery).then(res => {
-        console.log(res)
         if (res.status === true) {
           const rdata = res.data
           this.tableData = rdata.list
