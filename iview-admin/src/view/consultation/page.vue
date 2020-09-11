@@ -38,6 +38,7 @@
           </template>
           <template slot-scope="{ row, index }" slot="action">
             <Button type="primary" size="small" style="margin-right: 5px" @click="onEdit(index)">编辑</Button>
+            <Button type="error" size="small" style="margin-right: 5px" @click="onMakeOrder(index)">推单</Button>
           </template>
         </Table>
         <Page :current="currentPage" :total="totalPage" @on-change="onPageChange" show-elevator size="small" show-total></Page>
@@ -204,6 +205,17 @@ export default {
     this.reqList()
   },
   methods: {
+    onMakeOrder(index){
+      const item = this.tableData[index]
+      this.$router.push({
+        name: "MakeOrder",
+        query:{
+          buyerId:item.id,
+          buyerName:item.buyerName,
+          buyerMobile:item.buyerMobile,
+        }
+      }).catch(err=>{err});
+    },
     formatMapStatus(row) {
       return row === 1 ? '发起咨询' : '回复咨询'
     },

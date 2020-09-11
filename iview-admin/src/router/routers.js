@@ -176,6 +176,14 @@ export default [
         meta: {
           title: '咨询列表'
         }
+      },
+      {
+        path: 'make',
+        component: () => import('@/view/makeorder/page.vue'),
+        name: 'MakeOrder',
+        meta: {
+          title: '推单'
+        }
       }
 
     ]

@@ -6,17 +6,17 @@ import com.arc.common.ServiceException;
 import com.arc.util.auth.AppUserPrincipal;
 import com.arc.util.file.oss.OssClientTool;
 import com.arc.util.http.BaseResponse;
+import com.google.common.base.Strings;
 import com.md.union.front.api.vo.Common;
 import com.md.union.front.api.vo.Consultation;
 import com.md.union.front.api.vo.OssFileInfo;
-import com.md.union.front.client.dto.AdminUserDTO;
-import com.md.union.front.client.dto.ConsultationDTO;
-import com.md.union.front.client.dto.ServiceDTO;
-import com.md.union.front.client.dto.TrademarkDTO;
+import com.md.union.front.client.dto.*;
 import com.md.union.front.client.feign.FrontClient;
+import com.md.union.front.client.feign.UserClient;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
@@ -33,12 +33,15 @@ import java.util.*;
 @RestController
 @RequestMapping("/front/common")
 @Api(tags = {"小程序通用功能"})
+@Slf4j
 public class CommonController {
 
     @Autowired
     private FrontClient frontClient;
     @Autowired
     private OssClientTool ossClientTool;
+    @Autowired
+    private UserClient userClient;
 
     private String realPath = "md/";
 
@@ -238,6 +241,7 @@ public class CommonController {
     @ApiOperation("小程序获取手机")
     @PostMapping("/min/phone")
     public Object getPhoneNumber(@RequestBody Common.MinGetPhone minGetPhone) {
+        log.info("minGetPhone:"+minGetPhone);
         // 被加密的数据
         byte[] dataByte = Base64.decode(minGetPhone.getEncryptedData());
         // 加密秘钥
@@ -264,7 +268,22 @@ public class CommonController {
             byte[] resultByte = cipher.doFinal(dataByte);
             if (null != resultByte && resultByte.length > 0) {
                 String result = new String(resultByte, "UTF-8");
-                return JSONObject.parseObject(result);
+                log.info("result:"+result);
+                JSONObject jsonObject = JSONObject.parseObject(result);
+                String phone = jsonObject.getString("phoneNumber");
+                if(!Strings.isNullOrEmpty(phone)){
+                    WxUserDTO.QueryWxUser queryWxUser = new WxUserDTO.QueryWxUser();
+                    queryWxUser.setMinId(AppUserPrincipal.getPrincipal().getMinId());
+                    BaseResponse<WxUserDTO.WxUser> byCondition = userClient.getByCondition(queryWxUser);
+                    if (!byCondition.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+                        throw new ServiceException(byCondition.getStatus(), byCondition.getMessage());
+                    }
+                    WxUserDTO.UpdateWxUser updateWxUser = new WxUserDTO.UpdateWxUser();
+                    updateWxUser.setMobile(phone);
+                    updateWxUser.setId(byCondition.getResult().getId());
+                    userClient.update(updateWxUser);
+                }
+                return jsonObject;
             }
         } catch (Exception e) {
             e.printStackTrace();

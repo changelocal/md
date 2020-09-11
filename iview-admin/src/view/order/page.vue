@@ -38,6 +38,12 @@
           <Button type="primary"  @click="onSearch" >搜索</Button>
         </Form-item>
         <Table :columns="columns1" ref="singleTable" :data="tableData" highlight-current-row style="width: 100%">
+          <template slot-scope="{ row, index }" slot="status">
+            <span >{{ formatMapStatus(row.orderStatus) }}</span>
+          </template>
+          <template slot-scope="{ row, index }" slot="type">
+            <span >{{ formatMapType(row.OrderType) }}</span>
+          </template>
           <template slot-scope="{ row, index }" slot="action">
             <Button type="primary" size="small" style="margin-right: 5px" @click="onEdit(index)">编辑</Button>
           </template>
@@ -61,16 +67,17 @@ export default {
   data() {
     return {
       columns1: [
-        {title: '订单号', key: 'no'},
-        {title: '状态', key: 'status'},
-        {title: '订单类型', key: 'type'},
+        {title: '订单号', key: 'orderNo'},
+        {title: '状态', key: 'orderStatus', slot: 'status'},
+        {title: '订单类型', key: 'OrderType', slot: 'type'},
+        {title: '商标类型', key: 'categoryName'},
         {title: '预付款', key: 'prePay'},
         {title: '剩余付款', key: 'restPay'},
         {title: '共付款', key: 'totalPay'},
-        {title: '买家', key: 'buyer'},
-        {title: '销售', key: 'sales'},
-        {title: '创建时间', key: 'creatTime'},
-        {title: '产品编号', key: 'productNo'},
+        {title: '买家', key: 'userId'},
+        {title: '销售', key: 'opUserId'},
+        {title: '产品名称', key: 'productName'},
+        {title: '创建时间', key: 'createTime'},
         {title: '操作', slot: 'action', width: 150, align: 'center'}
       ],
       openType: 'add',
@@ -158,10 +165,10 @@ export default {
   computed: {
     formQuery() {
       return {
-        currentPage: this.currentPage,
+        pageIndex: this.currentPage,
         pageSize: this.pageSize,
-        name: this.name,
-        type: this.type
+        OrderStatus: this.status,
+        OrderType: this.kind
       }
     }
   },
@@ -173,6 +180,27 @@ export default {
     this.reqList()
   },
   methods: {
+    formatMapStatus(row) {
+       if(row === 1){
+         return '待支付定金'
+       }
+       else if (row === 2){
+         return '待提交资料'
+       }
+       else if (row === 3){
+         return '委托受理'
+       }
+       else if (row === 4){
+         return '待支付尾款'
+       }
+       else if (row === 5){
+         return '已完成'
+       }
+    },
+    formatMapType(row) {
+      return row === 1 ? '商标注册' : row === 2 ?'商标维权' :"商标信息变更"
+    },
+
     onAdd() {
       this.openType = 'add'
       this.popShow = true
@@ -212,8 +240,7 @@ export default {
         if (res.status === true) {
           const rdata = res.data
           this.tableData = rdata.list
-          this.totalPage = rdata.count
-          this.currentPage = rdata.currentPage
+          this.totalPage = rdata.total
         }else {
           this.$notify({
             title: '错误',
