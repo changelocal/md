@@ -63,7 +63,7 @@
           <Button type="primary"  @click="onEdit()">生成订单</Button>
         </Form-item>
         </row>
-        <Table  :columns="columns1" ref="singleTable" :data="tableData" highlight-current-row style="width: 100%">
+        <Table @on-selection-change="onSelectChange" :columns="columns1" ref="singleTable" :data="tableData" highlight-current-row style="width: 100%">
           <template slot-scope="{ row, index }" slot="isQuality">
             <span >{{ formatMapisQuality(row.isQuality) }}</span>
           </template>
@@ -87,24 +87,27 @@
       :mask-closable="false"
       @close="onClose(false)"
     >
-      <Form  :label-width="70"  ref="formFields" :model="form" >
+      <Form  :label-width="70"  ref="formFields" :model="form" :rules="rulesRight">
         <Form-item label="买家名字" prop="" >
-          <Input v-model="form.buyerName" disabled placeholder="请输入" clearable />
+          <Input v-model="form.buyerName" disabled placeholder="" clearable />
         </Form-item>
         <Form-item label="买家手机" prop="" >
-          <Input v-model="form.buyerMobile" disabled placeholder="请输入" clearable />
-        </Form-item>
-        <Form-item label="商标编号" prop="" >
-          <Input v-model="form.brandId" disabled placeholder="请输入" clearable />
+          <Input v-model="form.buyerMobile" disabled placeholder="" clearable />
         </Form-item>
         <Form-item label="商标名称" prop="" >
-          <Input v-model="form.brandName" disabled placeholder="请输入" clearable />
+          <Input v-model="form.brandName" disabled placeholder="" clearable />
         </Form-item>
-        <Form-item label="定金" prop="price" >
-          <InputNumber :max="99999" :min="1" :step="1"  v-model="form.price" placeholder="请输入" clearable />
+        <Form-item label="商标类型" prop="" >
+          <Input v-model="form.brandType" disabled placeholder="" clearable />
         </Form-item>
-        <Form-item label="总价" prop="priceHigh" >
-          <InputNumber :max="99999" :min="1" :step="1" v-model="form.priceHigh" placeholder="请输入" clearable />
+        <Form-item label="定金" prop="prePay" >
+          <InputNumber :max="99999" :min="1" :step="1"  v-model="form.prePay" placeholder="请输入" clearable />
+        </Form-item>
+        <Form-item label="剩余支付" prop="restPay" >
+          <InputNumber :max="99999" :min="1" :step="1"  v-model="form.restPay" placeholder="请输入" clearable />
+        </Form-item>
+        <Form-item label="总价" prop="totalPay" >
+          <InputNumber :max="99999" :min="1" :step="1" v-model="form.totalPay" placeholder="请输入" clearable />
         </Form-item>
 
       </Form>
@@ -123,6 +126,11 @@ export default {
   name: 'PagePermission',
   data() {
     return {
+      rulesRight: {
+        prePay: [{ required: true, message: '请输入', trigger: 'blur' }],
+        restPay: [{ required: true, message: '请输入', trigger: 'blur' }],
+        totalPay: [{ required: true, message: '请输入', trigger: 'blur' }],
+      },
       columns1: [
         {type: 'selection', width: 60, align: 'center'
         },
@@ -158,14 +166,14 @@ export default {
       brandType: 0,
       openType: 'add',
       form: {
-        id: '',
+        buyerId: '',
+        buyerName: '',
+        buyerMobile: '',
         brandName: '',
-        brandId: '',
-        isEnable: false,
-        isQuality: false,
-        price: 0,
-        priceHigh: 0
-
+        prePay: 0,
+        restPay: 0,
+        totalPay: 0,
+        brandIds:[]
       },
       options: [
         {value: 0, label: '不限'},
@@ -261,7 +269,8 @@ export default {
         value: 9, label: '字母+数字'
       }],
       name: '',
-      tableData: [{ name: 'sxj', title: 'boss' }],
+      tableData: [],
+      selectedItems: [],
       currentRow: null,
       currentPage: 1,
       popShow: false,
@@ -284,12 +293,13 @@ export default {
     },
     formQueryUpdate() {
       return {
-        id: this.form.id,
-        note: this.form.note,
+        buyerId: this.form.id,
         buyerName: this.form.type,
         buyerMobile: this.form.email,
-        isEnable: this.form.isEnable?2:1,
-        isQuality: this.form.isQuality?2:1,
+        brandIds: this.form.brandIds,
+        prePay: this.form.prePay,
+        restPay: this.form.restPay,
+        totalPay: this.form.totalPay,
       }
     },
     rBuyerId() {
@@ -307,6 +317,9 @@ export default {
     // this.reqList()
   },
   methods: {
+    onSelectChange(list) {
+      this.selectedItems = list;
+    },
     onSave(confirm) {
       this.$refs.formFields.validate(valid => {
         if (valid) {
@@ -350,17 +363,24 @@ export default {
       this.popShow = true
     },
     onEdit() {
-      // const item = this.tableData[index]
-      this.openType = 'edit'
-      this.form.id = this.rBuyerId
-      this.form.buyerName = this.rBuyerName
-      this.form.buyerMobile = this.rBuyerMobile
-      // this.form.brandName = item.brandName
-      // this.form.brandId = item.brandId
-      // this.form.price = item.price
-      // this.form.priceHigh = item.priceHigh
+      if(this.selectedItems.length<0){
+        this.$Notice.error({
+          title: '没有选择任何商标',
+        });
+      }else {
+        // const item = this.tableData[index]
+        this.openType = 'edit'
+        this.form.buyerId = this.rBuyerId
+        this.form.buyerName = this.rBuyerName
+        this.form.buyerMobile = this.rBuyerMobile
 
-      this.popShow = true
+        this.selectedItems.forEach(p=>{
+          this.form.prelPay += p.price;
+          this.form.totalPay += p.priceHigh;
+          this.form.brandType += p.type;
+        })
+        this.popShow = true
+      }
     },
     onPageChange(page) {
       this.currentPage = page

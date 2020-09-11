@@ -25,7 +25,7 @@
           />
         </Form-item>
         <Form-item label="咨询电话">
-          <Input v-model="mobile" placeholder="请输入电话" clearable>
+          <Input v-model="buyerMobile" placeholder="请输入电话" clearable>
 
           </Input>
         </Form-item>
@@ -56,10 +56,10 @@
   >
     <Form  :label-width="70" ref="formFields" :model="form" :rules="rulesRight">
       <Form-item label="咨询人" prop="" >
-        <Input v-model="form.buyerName"  clearable />
+        <Input v-model="form.buyerName" disabled clearable />
       </Form-item>
       <Form-item label="咨询电话" prop="" >
-        <Input v-model="form.buyerMobile"  clearable />
+        <Input v-model="form.buyerMobile" disabled clearable />
       </Form-item>
       <Form-item label="状态" prop="" >
 <!--        <Input v-model="form.status" clearable />-->
@@ -72,7 +72,7 @@
           />
         </Select>
       </Form-item>
-      <Form-item label="备注" prop="note" >
+      <Form-item label="备注" prop="" >
         <Input v-model="form.note" placeholder="请输入备注" clearable />
       </Form-item>
 
@@ -104,14 +104,14 @@ export default {
       },
       columns1: [
         {title: '咨询订单', key: 'orderNo'},
-        {title: '咨询人', key: 'openId'},
+        {title: '咨询人', key: 'buyerName'},
         {title: '咨询人手机', key: 'buyerMobile'},
-        {title: '状态', key: 'status', slot: 'status'},
-        {title: '预付款', key: 'prePay'},
-        {title: '销售姓名', key: 'opUserName'},
+        {title: '状态', key: 'status', slot: 'status', width: 100},
+        {title: '预付款', key: 'prePay', width: 80},
+        {title: '销售姓名', key: 'opUserName', width: 100},
         {title: '销售手机', key: 'opUserMobile'},
         {title: '备注', key: 'note'},
-        {title: '创建时间', key: 'createTime'},
+        {title: '创建时间', key: 'createTime', width: 150},
         {title: '操作', slot: 'action', width: 150, align: 'center'}
       ],
       mapType: 0,
@@ -184,7 +184,9 @@ export default {
       return {
         pageIndex: this.currentPage,
         pageSize: this.pageSize,
-        mobile: this.mobile
+        mobile: this.mobile,
+        buyerMobile: this.buyerMobile,
+        status: this.mapType,
       }
     },
     formQueryUpdate() {
@@ -207,14 +209,23 @@ export default {
   methods: {
     onMakeOrder(index){
       const item = this.tableData[index]
-      this.$router.push({
-        name: "MakeOrder",
-        query:{
-          buyerId:item.id,
-          buyerName:item.buyerName,
-          buyerMobile:item.buyerMobile,
-        }
-      }).catch(err=>{err});
+      console.log(item)
+      if(item.buyerMobile !== null && item.buyerMobile !== '') {
+        this.$router.push({
+          name: "MakeOrder",
+          query: {
+            buyerId: item.id,
+            buyerName: item.buyerName,
+            buyerMobile: item.buyerMobile,
+          }
+        }).catch(err => {
+          err
+        });
+      }else{
+        this.$Notice.error({
+          title: '买家必须有手机号',
+        });
+      }
     },
     formatMapStatus(row) {
       return row === 1 ? '发起咨询' : '回复咨询'
@@ -290,10 +301,8 @@ export default {
         console.log(res)
         if (res.status === true) {
           const rdata = res.data
-
           this.tableData = rdata.list
           this.totalPage = rdata.count
-          // this.currentPage = rdata.currentPage
 
         }else {
           this.$notify({

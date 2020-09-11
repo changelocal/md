@@ -2,7 +2,7 @@
   <div>
       <Form inline :label-width="60">
         <FormItem  label="账号种类">
-          <Select v-model="mapType" placeholder="请选择">
+          <Select v-model="type" placeholder="请选择">
             <Option
               v-for="item in options"
               :key="item.value"
@@ -49,6 +49,9 @@
       <Form-item label="姓名" prop="name" >
         <Input v-model="form.name" placeholder="请输入姓名" clearable />
       </Form-item>
+      <Form-item label="账号" prop="account" >
+        <Input v-model="form.account" placeholder="请输入账号" clearable />
+      </Form-item>
       <Form-item label="电话" prop="mobile" >
         <Input v-model="form.mobile" placeholder="请输入电话" clearable />
       </Form-item>
@@ -63,8 +66,8 @@
       </Form-item>
       <Form-item label="权限" >
         <Radio-group v-model="form.type" >
-          <Radio :label="1">管理员</Radio>
-          <Radio :label="2">销售</Radio>
+          <Radio :label="2">管理员</Radio>
+          <Radio :label="1">普通</Radio>
         </Radio-group>
       </Form-item>
       <Form-item label="禁用/启用" >
@@ -87,6 +90,7 @@ export default {
   data() {
     return {
       rulesRight: {
+        account: [{ required: true, message: '请输入', trigger: 'blur' }],
         name: [{ required: true, message: '请输入', trigger: 'blur' }],
         mobile: [{ required: true, message: '请输入', trigger: 'blur' }],
         title: [{ required: true, message: '请输入', trigger: 'blur' }],
@@ -94,26 +98,39 @@ export default {
         email: [{ required: true, message: '请输入', trigger: 'blur' }]
       },
       columns1: [
-        {title: '姓名', key: 'nickname'},
+        {title: '姓名', key: 'nickname', width: 80},
         {title: '账号', key: 'account'},
-        {title: '类型', key: 'type',slot: 'type'},
-        {title: '邮件', key: 'email'},
+        {title: '类型', key: 'type',slot: 'type', width: 80},
+        {title: '邮件', key: 'email', width: 170},
         {title: '手机', key: 'mobile'},
         {title: '头衔', key: 'title'},
-        {title: '地址', key: 'address'},
+        {title: '头像', key: 'avatar',render: (h, params) => {
+            return h('div', [
+              h('img', {
+                attrs: {
+                  src: params.row.avatar
+                },
+                style: {
+                  width: '50px',
+                  height: '50px'
+                }
+              }),
+            ]);
+          }},
         {title: 'QQ', key: 'qqAccount'},
         {title: '是否有效', key: 'isEnable',slot: 'enable'},
-        {title: '操作', slot: 'action', width: 150, align: 'center'}
+        {title: '操作', slot: 'action', width: 70, align: 'center'}
       ],
-      mapType: 0,
+      type: 0,
       openType: 'add',
       form: {
         id: '',
         name: '',
         title: '',
         mobile: '',
+        account: '',
         email:'',
-        type: 2,
+        type: 1,
         qqAccount: '',
         enable: true
       },
@@ -121,10 +138,10 @@ export default {
         value: 0,
         label: '全部'
       }, {
-        value: 1,
+        value: 2,
         label: '管理员'
       }, {
-        value: 2,
+        value: 1,
         label: '普通人员'
       }],
       name: '',
@@ -151,6 +168,7 @@ export default {
         return {
           nickname: this.form.name,
           type: this.form.type,
+          account: this.form.account,
           email: this.form.email,
           mobile: this.form.mobile,
           title: this.form.title,
@@ -162,6 +180,7 @@ export default {
       return {
         id: this.form.id,
         nickname: this.form.name,
+        account: this.form.account,
         type: this.form.type,
         email: this.form.email,
         mobile: this.form.mobile,
@@ -190,6 +209,7 @@ export default {
       const item = this.tableData[index]
       this.openType = 'edit'
       this.form.id = item.id
+      this.form.account = item.account
       this.form.name = item.nickname
       this.form.mobile = item.mobile
       this.form.type = item.type

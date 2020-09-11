@@ -67,18 +67,18 @@ export default {
   data() {
     return {
       columns1: [
-        {title: '订单号', key: 'orderNo'},
+        {title: '订单号', key: 'orderNo', width: 150},
         {title: '状态', key: 'orderStatus', slot: 'status'},
         {title: '订单类型', key: 'OrderType', slot: 'type'},
         {title: '商标类型', key: 'categoryName'},
-        {title: '预付款', key: 'prePay'},
-        {title: '剩余付款', key: 'restPay'},
-        {title: '共付款', key: 'totalPay'},
+        {title: '预付款', key: 'prePay', width: 80},
+        {title: '剩余付款', key: 'restPay', width: 90},
+        {title: '共付款', key: 'totalPay', width: 80},
         {title: '买家', key: 'userId'},
         {title: '销售', key: 'opUserId'},
         {title: '产品名称', key: 'productName'},
-        {title: '创建时间', key: 'createTime'},
-        {title: '操作', slot: 'action', width: 150, align: 'center'}
+        {title: '创建时间', key: 'createTime', width: 150},
+        {title: '操作', slot: 'action', width: 70, align: 'center'}
       ],
       openType: 'add',
       form: {
@@ -153,7 +153,7 @@ export default {
       status: 0,
       kind: 0,
       name: '',
-      tableData: [{ no: 'sxj', buyer: 'boss', type: '123', status: '待提交资料', prePay: '222' }],
+      tableData: [],
       currentRow: null,
       currentPage: 1,
       popShow: false,

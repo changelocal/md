@@ -14,3 +14,10 @@ export const update = (data) => {
     method: 'post'
   })
 }
+export const push = (data) => {
+  return axios.request({
+    url: '/web/order/push',
+    data,
+    method: 'post'
+  })
+}

@@ -34,7 +34,7 @@
           <Input v-model="form.nickName" disabled clearable />
         </Form-item>
         <Form-item label="电话" prop="" >
-          <Input v-model="form.mobile"  clearable />
+          <Input v-model="form.mobile" disabled clearable />
         </Form-item>
         <Form-item label="真实姓名" prop="realName" >
           <Input v-model="form.realName" placeholder="请输入姓名" clearable />
@@ -69,14 +69,14 @@ export default {
         // idCard: [{ required: true, message: '请输入', trigger: 'blur' }]
       },
       columns1: [
-        {title: 'openID', key: 'minId'},
+        {title: 'openID', key: 'minId', width: 250},
         {title: '昵称', key: 'nickName'},
-        {title: '真实姓名', key: 'realName'},
+        {title: '真实姓名', key: 'realName', width: 100},
         {title: '身份证', key: 'idCard'},
-        {title: '手机', key: 'mobile'},
+        {title: '手机', key: 'mobile', width: 100},
         {title: '地址', key: 'address'},
         {title: '关注时间', key: 'createTime'},
-        {title: '操作', slot: 'action', width: 150, align: 'center'}
+        {title: '操作', slot: 'action', width: 70, align: 'center'}
       ],
       openType: 'add',
       form: {
@@ -88,7 +88,7 @@ export default {
         idCard: ''
       },
       mobile: '',
-      tableData: [{ openoid: '2234244', nickName: 'xj', mobile: '13713131313', openId: '123123213', idCard: '2132123', realName: 'sxj', address: 'sdfdsf' }],
+      tableData: [],
       currentRow: null,
       currentPage: 1,
       popShow: false,
@@ -185,7 +185,6 @@ export default {
           const rdata = res.data
           this.tableData = rdata.list
           this.totalPage = rdata.count
-          this.currentPage = rdata.currentPage
         }else {
           this.$notify({
             title: '错误',
