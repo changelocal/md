@@ -37,11 +37,11 @@ export default {
       tableData: [
         {
           'imageType': '身份证正面',
-          'imageUrl': 'https://o5wwk8baw.qnssl.com/a42bdcc1178e62b4694c830f028db5c0/avatar'
+          'imageUrl': 'http://ytmd-library.oss-cn-beijing.aliyuncs.com/25/0080-4110-b63c-4a3c6617915e-cd30428fecf0-6ef17.gif'
         },
         {
           'imageType': '身份证反面',
-          'imageUrl': 'https://o5wwk8baw.qnssl.com/bc7521e033abdd1e92222d733590f104/avatar'
+          'imageUrl': 'http://ytmd-library.oss-cn-beijing.aliyuncs.com/20/0096-42db-a4d1-651449331865-cd30428fecf0-ce494.gif'
         }
       ],
       imgName: '',
