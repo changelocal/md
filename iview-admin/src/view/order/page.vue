@@ -229,13 +229,12 @@ export default {
     this.reqList()
   },
   methods: {
-    onImage(){
+    onImage(index){
+      const item = this.tableData[index]
       this.$router.push({
         name: "Image",
         query: {
-          // buyerId: item.id,
-          // buyerName: item.buyerName,
-          // buyerMobile: item.buyerMobile,
+          orderId: item.id,
         }
       }).catch(err => {
         err

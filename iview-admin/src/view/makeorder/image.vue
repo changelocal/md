@@ -2,7 +2,6 @@
   <div class="demo-upload-list" >
     <card>
     <Table  :columns="columns1" ref="singleTable" :data="tableData" highlight-current-row style="width: 100%">
-
     </Table>
     <Modal title="View Image" v-model="visible">
       <img :src="'https://o5wwk8baw.qnssl.com/' + imgName + '/large'"  style="width: 100%">
@@ -12,6 +11,7 @@
 
 </template>
 <script>
+import {image} from '@/api/order'
 export default {
   data () {
     return {
@@ -33,7 +33,6 @@ export default {
               }),
             ]);
           }},
-
       ],
       tableData: [
         {
@@ -50,7 +49,37 @@ export default {
       uploadList: []
     }
   },
+  computed:{
+    rOrderId() {
+      return this.$route.query.orderId;
+    },
+    formQuery() {
+      return {
+        orderId: this.rOrderId,
+      }
+    },
+  },
+  created() {
+    this.reqList()
+  },
+  methods: {
+    reqList() {
+      image(this.formQuery).then(res => {
+        console.log(res)
+        if (res.status === true) {
+          const rdata = res.data
+          this.tableData = rdata.list
 
-
+        } else {
+          this.$notify({
+            title: '错误',
+            message: res.message,
+            type: 'error',
+            duration: 2000
+          })
+        }
+      })
+    }
+  }
 }
 </script>
