@@ -99,4 +99,19 @@ public class AdminuserController {
             throw new ServiceException(query.getStatus(), query.getMessage());
         }
     }
+
+    @GetMapping("/home")
+    public List<Adminuser.HomeRes> home() {
+        List<Adminuser.HomeRes> ret = new ArrayList<>();
+        BaseResponse<List<AdminUserDTO.HomeRes>> counter = frontClient.counter();
+        if (!counter.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+            throw new ServiceException(counter.getStatus(), counter.getMessage());
+        }
+        counter.getResult().forEach(p->{
+            Adminuser.HomeRes result = new Adminuser.HomeRes();
+            BeanUtils.copyProperties(p, result);
+            ret.add(result);
+        });
+        return ret;
+    }
 }

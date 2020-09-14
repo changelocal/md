@@ -52,6 +52,12 @@
       <Form-item label="账号" prop="account" >
         <Input v-model="form.account" placeholder="请输入账号" clearable />
       </Form-item>
+      <Form-item label="密码" prop="password" >
+        <Input v-model="form.password" type="password" placeholder="请输入账号" clearable />
+      </Form-item>
+      <Form-item label="重复密码" prop="password2" >
+        <Input v-model="form.password2" type="password" placeholder="请输入账号" clearable />
+      </Form-item>
       <Form-item label="电话" prop="mobile" >
         <Input v-model="form.mobile" placeholder="请输入电话" clearable />
       </Form-item>
@@ -91,6 +97,8 @@ export default {
     return {
       rulesRight: {
         account: [{ required: true, message: '请输入', trigger: 'blur' }],
+        password: [{ required: true, message: '请输入', trigger: 'blur' }],
+        password2: [{ required: true, message: '请输入', trigger: 'blur' }],
         name: [{ required: true, message: '请输入', trigger: 'blur' }],
         mobile: [{ required: true, message: '请输入', trigger: 'blur' }],
         title: [{ required: true, message: '请输入', trigger: 'blur' }],
@@ -129,6 +137,8 @@ export default {
         title: '',
         mobile: '',
         account: '',
+        password: '',
+        password2: '',
         email:'',
         type: 1,
         qqAccount: '',
@@ -166,6 +176,7 @@ export default {
     },
     formQueryAdd() {
         return {
+          password: this.form.password,
           nickname: this.form.name,
           type: this.form.type,
           account: this.form.account,
@@ -179,6 +190,7 @@ export default {
     formQueryUpdate() {
       return {
         id: this.form.id,
+        password: this.form.password,
         nickname: this.form.name,
         account: this.form.account,
         type: this.form.type,
@@ -234,19 +246,25 @@ export default {
       })
     },
     reqAdd() {
-      add(this.formQueryAdd).then(res => {
-        if (res.status === true) {
-          this.close()
-          this.reqList()
-        }else {
-          this.$notify({
-            title: 'Success',
-            message: 'Created Successfully',
-            type: 'success',
-            duration: 2000
-          })
-        }
-      })
+      if(this.form.password === this.form.password2) {
+        add(this.formQueryAdd).then(res => {
+          if (res.status === true) {
+            this.close()
+            this.reqList()
+          } else {
+            this.$notify({
+              title: 'Success',
+              message: 'Created Successfully',
+              type: 'success',
+              duration: 2000
+            })
+          }
+        })
+      }else{
+        this.$Notice.error({
+          title: '两次密码不一致',
+        });
+      }
     },
     reqEdit() {
       update(this.formQueryUpdate).then(res => {
@@ -284,9 +302,12 @@ export default {
         enable:true,
         name: '',
         mobile: '',
+        password: '',
+        password2: '',
+        account: '',
         type: 1,
         title: '',
-        qq: '',
+        qqAccount: '',
         email: ''
       }
     },

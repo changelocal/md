@@ -21,6 +21,12 @@ import static com.arc.db.jsd.Shortcut.*;
 @Repository
 public class AdminUserDao extends BaseDao  {
 
+
+    public long counter() {
+        long total=(long)this.DB().select(count()).from("admin_user").result().value();
+        return total;
+    }
+
 	public PageResult<AdminUser> query(AdminUserParam adminUserParam) {
 		PageResult<AdminUser> result = new PageResult<>();
 		Filter filter= Filter.create();

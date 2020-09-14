@@ -4,6 +4,7 @@ import com.arc.common.ServiceException;
 import com.arc.util.http.BaseResponse;
 import com.md.union.admin.api.vo.Consultation;
 import com.md.union.front.client.dto.ConsultationDTO;
+import com.md.union.front.client.dto.TrademarkDTO;
 import com.md.union.front.client.feign.FrontClient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -44,9 +45,20 @@ public class ConsultationController {
             query.getResult().getInfos().forEach(p->{
                 Consultation.Info info = new Consultation.Info();
                 BeanUtils.copyProperties(p, info);
+
+                TrademarkDTO.MdBrand mdBrand = new TrademarkDTO.MdBrand();
+                mdBrand.setId(info.getOrderNo());
+                BaseResponse<TrademarkDTO.QueryResp> queryRespBaseResponse = frontClient.find(mdBrand);
+                if (!queryRespBaseResponse.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+                    throw new ServiceException(queryRespBaseResponse.getStatus(), queryRespBaseResponse.getMessage());
+                }
+                if(!CollectionUtils.isEmpty(queryRespBaseResponse.getResult().getMdBrands())){
+                    info.setName(queryRespBaseResponse.getResult().getMdBrands().get(0).getBrandName());
+                }else{
+                    info.setName("无");
+                }
                 infos.add(info);
             });
-
             ret.setList(infos);
             ret.setCount(query.getResult().getTotal());
         }else{

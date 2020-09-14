@@ -174,6 +174,19 @@ public class Adminuser {
     }
 
     @Data
+    @ApiModel("登录返回结果")
+    public static class HomeRes{
+        @ApiModelProperty("title")
+        private String title;
+        @ApiModelProperty("icon")
+        private String icon;
+        @ApiModelProperty("count")
+        private long count;
+        @ApiModelProperty("color")
+        private String color;
+    }
+
+    @Data
     @ApiModel("登录请求参数")
     public static class LoginReq{
         private String userName;

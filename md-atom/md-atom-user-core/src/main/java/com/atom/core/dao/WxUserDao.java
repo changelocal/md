@@ -22,6 +22,11 @@ import static com.arc.db.jsd.Shortcut.*;
 @Repository
 public class WxUserDao extends BaseDao  {
 
+    public long counter() {
+        long total=(long)this.DB().select(count()).from("wx_user").result().value();
+        return total;
+    }
+
 	public PageResult<WxUser> query(WxUserParam wxUserParam) {
 		PageResult<WxUser> result = new PageResult<>();
 		Filter filter= Filter.create();

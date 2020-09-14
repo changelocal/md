@@ -18,6 +18,7 @@ public class Consultation {
          * 主键id
          */
         private int id;
+        private String name;
 
         /**
          * 咨询订单编号

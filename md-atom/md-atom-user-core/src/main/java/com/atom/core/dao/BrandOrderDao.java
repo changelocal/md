@@ -21,6 +21,11 @@ import static com.arc.db.jsd.Shortcut.*;
 @Repository
 public class BrandOrderDao extends BaseDao {
 
+    public long counter() {
+        long total=(long)this.DB().select(count()).from("brand_order").result().value();
+        return total;
+    }
+
     public PageResult<BrandOrder> query(BrandOrderParam brandOrderParam) {
         PageResult<BrandOrder> result = new PageResult<>();
         Filter filter = Filter.create();

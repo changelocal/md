@@ -1,5 +1,6 @@
 package com.md.union.front.client.dto;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -110,5 +111,18 @@ public class AdminUserDTO {
     @Data
     public static class Resp{
         private int code;
+    }
+
+    @Data
+    @ApiModel("登录返回结果")
+    public static class HomeRes{
+        @ApiModelProperty("title")
+        private String title;
+        @ApiModelProperty("icon")
+        private String icon;
+        @ApiModelProperty("count")
+        private long count;
+        @ApiModelProperty("color")
+        private String color;
     }
 }

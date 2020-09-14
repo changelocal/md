@@ -2,6 +2,9 @@ package com.md.atom.user.service.controller;
 
 import com.arc.util.data.PageResult;
 import com.atom.core.dao.AdminUserDao;
+import com.atom.core.dao.BrandOrderDao;
+import com.atom.core.dao.MdBrandDao;
+import com.atom.core.dao.WxUserDao;
 import com.atom.core.model.AdminUser;
 import com.atom.core.model.AdminUserParam;
 import com.md.atom.user.service.vo.AdminUserVO;
@@ -11,10 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,6 +29,12 @@ public class AdminUserController {
 
     @Autowired
     private AdminUserDao adminUserDao;
+    @Autowired
+    private WxUserDao wxUserDao;
+    @Autowired
+    private MdBrandDao mdBrandDao;
+    @Autowired
+    private BrandOrderDao brandOrderDao;
 
     @PostMapping("/query")
     public AdminUserVO.QueryResp query(@RequestBody AdminUserVO.AdminUser adminUser) {
@@ -112,4 +118,38 @@ public class AdminUserController {
         AdminUserVO.Resp result = new AdminUserVO.Resp();
         return result;
     }
+
+    @GetMapping("/counter")
+    public List<AdminUserVO.HomeRes> counter() {
+        List<AdminUserVO.HomeRes> ret = new ArrayList<>();
+        AdminUserVO.HomeRes res = new AdminUserVO.HomeRes();
+        res.setTitle("累计员工");
+        res.setColor("#2d8cf0");
+        res.setIcon("md-person-add");
+        res.setCount(adminUserDao.counter());
+        ret.add(res);
+
+         res = new AdminUserVO.HomeRes();
+        res.setTitle("累计用户");
+        res.setColor("#19be6b");
+        res.setIcon("md-locate");
+        res.setCount(wxUserDao.counter());
+        ret.add(res);
+
+         res = new AdminUserVO.HomeRes();
+        res.setTitle("累计商标");
+        res.setColor("#ff9900");
+        res.setIcon("md-help-circle");
+        res.setCount(mdBrandDao.counter());
+        ret.add(res);
+
+        res = new AdminUserVO.HomeRes();
+        res.setTitle("累计订单");
+        res.setColor("#ed3f14");
+        res.setIcon("md-share");
+        res.setCount(brandOrderDao.counter());
+        ret.add(res);
+        return ret;
+    }
+
 }

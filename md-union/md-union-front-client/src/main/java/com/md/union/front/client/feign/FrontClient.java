@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.List;
+
 /**
  * 服务接口
  */
@@ -114,6 +116,9 @@ public interface FrontClient {
 
     @PostMapping(value = "/adminuser/update", headers = { "Content-Type=application/json" })
     BaseResponse<AdminUserDTO.Resp> update(@RequestBody AdminUserDTO.AdminUser request);
+
+    @GetMapping(value = "/adminuser/counter", headers = { "Content-Type=application/json" })
+    BaseResponse<List<AdminUserDTO.HomeRes>> counter();
 
     /**********************************service***********************************/
     @GetMapping(value = "/service/get/{code}", headers = { "Content-Type=application/json" })
