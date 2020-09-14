@@ -1,14 +1,17 @@
 package com.md.union.front.api.controller;
 
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.arc.common.ServiceException;
 import com.arc.util.auth.AppUserPrincipal;
 import com.arc.util.file.oss.OssClientTool;
 import com.arc.util.http.BaseResponse;
 import com.google.common.base.Strings;
+import com.md.union.front.api.config.LoginInterceptor;
 import com.md.union.front.api.vo.Common;
 import com.md.union.front.api.vo.Consultation;
+import com.md.union.front.api.vo.MinUser;
 import com.md.union.front.api.vo.OssFileInfo;
 import com.md.union.front.client.dto.*;
 import com.md.union.front.client.feign.FrontClient;
@@ -165,8 +168,8 @@ public class CommonController {
         }
 
         //应该记录一下咨询记录
-        if(id == null || "666".equals(id) || "888".equals(id) || "8".equals(id)  ){
-            id= "";
+        if (id == null || "666".equals(id) || "888".equals(id) || "8".equals(id)) {
+            id = "";
         }
         consultation1.setOrderNo(id);
         consultation1.setStatus(1);
@@ -241,7 +244,7 @@ public class CommonController {
     @ApiOperation("小程序获取手机")
     @PostMapping("/min/phone")
     public Object getPhoneNumber(@RequestBody Common.MinGetPhone minGetPhone) {
-        log.info("minGetPhone:"+minGetPhone);
+        log.info("minGetPhone:" + minGetPhone);
         // 被加密的数据
         byte[] dataByte = Base64.decode(minGetPhone.getEncryptedData());
         // 加密秘钥
@@ -268,20 +271,20 @@ public class CommonController {
             byte[] resultByte = cipher.doFinal(dataByte);
             if (null != resultByte && resultByte.length > 0) {
                 String result = new String(resultByte, "UTF-8");
-                log.info("result:"+result);
+                log.info("result:" + result);
                 JSONObject jsonObject = JSONObject.parseObject(result);
                 String phone = jsonObject.getString("phoneNumber");
-                if(!Strings.isNullOrEmpty(phone)){
-                    WxUserDTO.QueryWxUser queryWxUser = new WxUserDTO.QueryWxUser();
-                    queryWxUser.setMinId(AppUserPrincipal.getPrincipal().getMinId());
-                    BaseResponse<WxUserDTO.WxUser> byCondition = userClient.getByCondition(queryWxUser);
-                    if (!byCondition.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
-                        throw new ServiceException(byCondition.getStatus(), byCondition.getMessage());
-                    }
+                if (!Strings.isNullOrEmpty(phone)) {
                     WxUserDTO.UpdateWxUser updateWxUser = new WxUserDTO.UpdateWxUser();
                     updateWxUser.setMobile(phone);
-                    updateWxUser.setId(byCondition.getResult().getId());
+                    updateWxUser.setId(AppUserPrincipal.getPrincipal().getId());
                     userClient.update(updateWxUser);
+                    if (LoginInterceptor.loginStatus.containsKey(AppUserPrincipal.getPrincipal().getToken())) {
+                        MinUser minUser = JSON.parseObject(LoginInterceptor.loginStatus.get(AppUserPrincipal.getPrincipal().getToken()), MinUser.class);
+                        minUser.setMobile(phone);
+                        LoginInterceptor.loginStatus.put(AppUserPrincipal.getPrincipal().getToken(), JSON.toJSONString(minGetPhone));
+                    }
+
                 }
                 return jsonObject;
             }
