@@ -46,13 +46,17 @@ public class LoginController {
         if (!BaseResponse.STATUS_HANDLE_SUCCESS.equals(userResp.getStatus())) {
             throw new ServiceException(userResp.getStatus(), userResp.getMessage());
         }
-        if (userResp.getResult() == null) {
-            addWxUser(minUser);
-        }
         minUser.setSessionId(EncryptUtil.md5(minUser.getMinId() + "hhh"));
-        minUser.setMobile(userResp.getResult().getMobile());
-        minUser.setAppId(userResp.getResult().getAppId());
-        minUser.setId(userResp.getResult().getId());
+        long userId = 0;
+        if (userResp.getResult() == null) {
+            userId = addWxUser(minUser);
+            minUser.setId(userId);
+        } else {
+            minUser.setMobile(userResp.getResult().getMobile());
+            minUser.setAppId(userResp.getResult().getAppId());
+            minUser.setId(userResp.getResult().getId());
+            minUser.setMobile(userResp.getResult().getMobile());
+        }
 
         //放入缓存
         //request.getSession().setAttribute(minUser.getSessionId(), JSON.toJSONString(minUser));
@@ -63,12 +67,16 @@ public class LoginController {
         return minUser;
     }
 
-    private void addWxUser(MinUser minUser) {
+    private long addWxUser(MinUser minUser) {
         WxUserDTO.WxUser user = new WxUserDTO.WxUser();
         user.setMinId(minUser.getMinId());
         user.setAppId(String.valueOf(new Date().getTime()));
         user.setMobile(minUser.getMobile());
         user.setOpenId(minUser.getOpenId());
-        userClient.add(user);
+        BaseResponse<Long> userRes = userClient.add(user);
+        if (!BaseResponse.STATUS_HANDLE_SUCCESS.equals(userRes.getStatus())) {
+            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "添加用户失败");
+        }
+        return userRes.getResult();
     }
 }

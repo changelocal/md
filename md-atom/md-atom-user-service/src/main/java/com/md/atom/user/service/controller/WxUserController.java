@@ -52,7 +52,7 @@ public class WxUserController {
 
     @ApiOperation(value = "添加微信用户记录", notes = "添加微信用户记录")
     @PostMapping("/add")
-    public void add(@RequestBody WxUserVO.WxUser request) {
+    public long add(@RequestBody WxUserVO.WxUser request) {
         log.info("com.md.atom.user.service.controller.WxUserController.add param:{}", JSON.toJSONString(request));
         WxUser wxUser = new WxUser();
         wxUser.setAppId(request.getAppId());
@@ -63,8 +63,8 @@ public class WxUserController {
         wxUser.setIdCard(request.getIdCard());
         wxUser.setAddress(request.getAddress());
         wxUser.setCreateTime(new Date());
-        wxUserDao.add(wxUser);
         log.info("com.md.atom.user.service.controller.WxUserController.add success:{}", wxUser.getAppId());
+        return wxUserDao.add(wxUser);
 
     }
 

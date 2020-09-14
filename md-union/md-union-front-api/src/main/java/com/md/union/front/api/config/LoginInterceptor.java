@@ -65,6 +65,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             principal.setAppId(minUser.getAppId());
             principal.setId(minUser.getId());
             principal.setMinId(minUser.getMinId());
+            principal.setMobile(minUser.getMobile());
         } else {
             /*principal.setToken("1111");
             principal.setId(158);

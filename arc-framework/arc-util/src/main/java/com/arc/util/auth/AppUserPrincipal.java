@@ -71,6 +71,17 @@ public class AppUserPrincipal implements UserPrincipal {
     private String minId;
     private long id;
 
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    private String mobile;
+
+
 
     public static AppUserPrincipal getPrincipal() {
         UserPrincipal principal = UserPrincipal.getPrincipal();

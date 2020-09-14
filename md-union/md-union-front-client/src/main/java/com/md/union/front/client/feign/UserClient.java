@@ -20,7 +20,7 @@ public interface UserClient {
 
     @ApiOperation(value = "添加微信用户记录", notes = "添加微信用户记录")
     @PostMapping("/add")
-    BaseResponse add(@RequestBody WxUserDTO.WxUser request);
+    BaseResponse<Long> add(@RequestBody WxUserDTO.WxUser request);
 
     @ApiOperation(value = "修改微信用户记录", notes = "修改微信用户记录")
     @PostMapping("/update")
