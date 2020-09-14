@@ -23,3 +23,9 @@ export const update = (data) => {
     method: 'post'
   })
 }
+export const count = () => {
+  return axios.request({
+    url: '/admin/user/count',
+    method: 'get'
+  })
+}

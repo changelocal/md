@@ -112,9 +112,7 @@ public class AdminUserController {
     public AdminUserVO.Resp update(@RequestBody AdminUserVO.AdminUser request) {
         AdminUser user = new AdminUser();
         BeanUtils.copyProperties(request, user);
-
         adminUserDao.update(user);
-
         AdminUserVO.Resp result = new AdminUserVO.Resp();
         return result;
     }
