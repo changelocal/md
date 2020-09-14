@@ -456,6 +456,7 @@ public class BrandController {
         result.setTotal(10);
         result.setPerson(person);
         result.setDes(responseFamilar.getResult().getDes());
+        result.setId(id);
 
         return result;
     }

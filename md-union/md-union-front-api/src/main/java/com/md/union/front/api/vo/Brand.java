@@ -127,6 +127,7 @@ public class Brand {
     @Data
     @ApiModel("商标购买详情")
     public static class DealDetail {
+        private String id;
         @ApiModelProperty("title")
         private String title;
         @ApiModelProperty("subTitle")
