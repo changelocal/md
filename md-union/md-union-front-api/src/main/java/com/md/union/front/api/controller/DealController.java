@@ -34,7 +34,7 @@ public class DealController {
         for (RegisterEnums value : RegisterEnums.values()) {
             Brand.BrandRegister item = new Brand.BrandRegister();
             item.setId(value.getNo());
-            item.setPriceDesc("￥" + value.getPrice() + "件");
+            item.setPriceDesc("" + value.getPrice());
             item.setTitle(value.getTitle());
             item.setIcon(value.getIcon());
             item.setBrief(value.getBrief());
