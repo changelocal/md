@@ -94,6 +94,7 @@ public class AdminUserVO {
          */
         private String wxQrcode;
         private String title;
+        private String salt;
 
         /**
          * 当前页

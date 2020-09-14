@@ -28,6 +28,7 @@ public class AdminUserDTO {
          */
         private String password;
         private String title;
+        private String salt;
 
         /**
          * 0=god,

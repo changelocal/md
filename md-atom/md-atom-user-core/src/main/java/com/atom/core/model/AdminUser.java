@@ -97,5 +97,6 @@ public class AdminUser {
 	 */
 	private String wxQrcode;
 	private String title;
+	private String salt;
 
 }

@@ -142,6 +142,9 @@ public class AdminUserDao extends BaseDao  {
         if(!Strings.isNullOrEmpty(adminUser.getTitle())){
             updateValues.add("title",adminUser.getTitle());
         }
+        if(!Strings.isNullOrEmpty(adminUser.getSalt())){
+            updateValues.add("salt",adminUser.getSalt());
+        }
 		if(!Strings.isNullOrEmpty(adminUser.getAccount())){
 			updateValues.add("account",adminUser.getAccount());
 		}

@@ -2,11 +2,12 @@ package com.md.union.admin.api.controller;
 
 import com.arc.common.ServiceException;
 import com.arc.util.http.BaseResponse;
+import com.md.union.admin.api.vo.Adminuser;
 import com.md.union.front.client.dto.AdminUserDTO;
 import com.md.union.front.client.feign.FrontClient;
-import com.md.union.admin.api.vo.Adminuser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
@@ -74,11 +75,14 @@ public class AdminuserController {
     public void update(@RequestBody Adminuser.Info request) {
         AdminUserDTO.AdminUser adminUser = new AdminUserDTO.AdminUser();
         BeanUtils.copyProperties(request, adminUser);
+        //password
+        String salt = DigestUtils.md5Hex(request.getPassword() + System.currentTimeMillis());
+        adminUser.setPassword(DigestUtils.md5Hex(request.getPassword() + salt));//md5 getBusinessNo
+        adminUser.setSalt(salt); //md5 getBusinessNo+timestamp
         BaseResponse<AdminUserDTO.Resp> query = frontClient.update(adminUser);
         if (!query.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(query.getStatus(), query.getMessage());
         }
-
     }
 
     @PostMapping("/add")
@@ -86,10 +90,13 @@ public class AdminuserController {
         AdminUserDTO.AdminUser adminUser = new AdminUserDTO.AdminUser();
         BeanUtils.copyProperties(request, adminUser);
         adminUser.setId(UUID.randomUUID().toString());
+        //password
+        String salt = DigestUtils.md5Hex(request.getPassword() + System.currentTimeMillis());
+        adminUser.setPassword(DigestUtils.md5Hex(request.getPassword() + salt));//md5 getBusinessNo
+        adminUser.setSalt(salt); //md5 getBusinessNo+timestamp
         BaseResponse<AdminUserDTO.Resp> query = frontClient.add(adminUser);
         if (!query.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(query.getStatus(), query.getMessage());
         }
-
     }
 }
