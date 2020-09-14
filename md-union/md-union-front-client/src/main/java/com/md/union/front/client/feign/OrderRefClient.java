@@ -1,6 +1,7 @@
 package com.md.union.front.client.feign;
 
 
+import com.arc.util.http.BaseResponse;
 import com.md.union.front.client.dto.RefDTO;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -25,6 +26,6 @@ public interface OrderRefClient {
 
     @ApiOperation(value = "查找订单附件", notes = "查找订单附件")
     @PostMapping("/find/by/condition")
-    List<RefDTO.OrderRefFile> findByCondition(@RequestBody RefDTO.OrderRefFile request);
+    BaseResponse<List<RefDTO.OrderRefFile>> findByCondition(@RequestBody RefDTO.OrderRefFile request);
 
 }

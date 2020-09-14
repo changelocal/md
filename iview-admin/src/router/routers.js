@@ -185,6 +185,15 @@ export default [
           hideInMenu: true,
           title: '推单'
         }
+      },
+      {
+        path: 'image',
+        component: () => import('@/view/makeorder/image.vue'),
+        name: 'Image',
+        meta: {
+          hideInMenu: true,
+          title: '资料'
+        }
       }
 
     ]

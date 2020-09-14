@@ -47,6 +47,9 @@
           <template slot-scope="{ row, index }" slot="action">
             <Button type="primary" size="small" style="margin-right: 5px" @click="onEdit(index)">编辑</Button>
           </template>
+          <template slot-scope="{ row, index }" slot="action">
+            <Button type="primary" size="small" style="margin-right: 5px" @click="onImage(index)">查看图片</Button>
+          </template>
         </Table>
         <Page :current="currentPage" :total="totalPage" @on-change="onPageChange" show-elevator size="small" show-total></Page>
       </Form>
@@ -124,7 +127,7 @@ export default {
         {title: '销售', key: 'opUserId'},
         {title: '产品名称', key: 'productName'},
         {title: '创建时间', key: 'createTime', width: 150},
-        {title: '操作', slot: 'action', width: 70, align: 'center'}
+        {title: '操作', slot: 'action', width: 100, align: 'center'}
       ],
       openType: 'add',
       form: {
@@ -226,6 +229,18 @@ export default {
     this.reqList()
   },
   methods: {
+    onImage(){
+      this.$router.push({
+        name: "Image",
+        query: {
+          // buyerId: item.id,
+          // buyerName: item.buyerName,
+          // buyerMobile: item.buyerMobile,
+        }
+      }).catch(err => {
+        err
+      });
+    },
     formatMapStatus(row) {
        if(row === 1){
          return '待支付定金'
