@@ -11,6 +11,7 @@ import com.md.union.front.api.vo.Brand;
 import com.md.union.front.api.vo.Category;
 import com.md.union.front.api.vo.Order;
 import com.md.union.front.client.dto.OrderDTO;
+import com.md.union.front.client.dto.ServiceDTO;
 import com.md.union.front.client.dto.TrademarkDTO;
 import com.md.union.front.client.feign.FrontClient;
 import com.md.union.front.client.feign.OrderClient;
@@ -129,7 +130,7 @@ public class OrderController {
     }
 
     @ApiOperation("我的服务订单详情")
-    @GetMapping("/submit/{code}")
+    @GetMapping("/service/{code}")
     public void createOrder(@PathVariable("code") String code) {
         OrderDTO.BrandOrderVO order = convert(code);
         BaseResponse response = orderClient.add(order);
@@ -313,18 +314,18 @@ public class OrderController {
         result.setOrderType(OrderTypeEnums.BRAND_REGISTER.getType());
         result.setProductNo(code);
         result.setMinPrice(10000);
-        result.setMinPrice(20000);
+        result.setMaxPrice(10000);
         if (Strings.isNullOrEmpty(code)) {
-            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "商标编号不能为空");
+            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "商标服务主键不能为空");
         }
-        Map<String, TrademarkDTO.MdBrand> brandMap = getBrandByBrandIds(Arrays.asList(code));
-        if (!brandMap.containsKey(code))
-            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "商标编号不存在");
-        TrademarkDTO.MdBrand brand = brandMap.get(code);
-        result.setProductName(brand.getBrandName());
-        result.setCategory(brand.getCategory());
-        result.setCategoryName(brand.getCategoryName());
-        result.setImg(brand.getImageUrl());
+        BaseResponse<ServiceDTO.Service> serviceResp = frontClient.getService(code);
+        if (!BaseResponse.STATUS_HANDLE_SUCCESS.equals(serviceResp.getStatus())) {
+            throw new ServiceException(serviceResp.getStatus(), serviceResp.getMessage());
+        }
+        result.setProductName(serviceResp.getResult().getServiceName());
+        result.setCategoryName(serviceResp.getResult().getServiceName());
+        result.setImg(serviceResp.getResult().getImageUrl());
+
         return result;
     }
 
