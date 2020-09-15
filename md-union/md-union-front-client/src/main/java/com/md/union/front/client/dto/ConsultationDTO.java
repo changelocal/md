@@ -72,6 +72,8 @@ public class ConsultationDTO {
         private int pageIndex;
         @ApiModelProperty("每页显示条数")
         private int pageSize;
+        private Date createTimeBegin;
+        private Date createTimeEnd;
     }
 
     @Data

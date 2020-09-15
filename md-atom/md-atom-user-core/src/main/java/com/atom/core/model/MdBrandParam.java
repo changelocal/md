@@ -3,6 +3,7 @@ package com.atom.core.model;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 
@@ -34,4 +35,7 @@ public class MdBrandParam extends MdBrand{
     private int brandNameLengthHigh;
 
     private List<String> brandIds;
+    private Date createTimeBegin;
+    private Date createTimeEnd;
+
 }

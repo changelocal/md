@@ -75,6 +75,8 @@ public class ConsultationVO {
          * 每页显示条数
          */
         private int pageSize;
+        private Date createTimeBegin;
+        private Date createTimeEnd;
     }
 
     @Data

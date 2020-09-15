@@ -126,5 +126,7 @@ public class OrderDTO {
          * 品牌图片
          */
         private String img;
+        private Date createTimeBegin;
+        private Date createTimeEnd;
     }
 }

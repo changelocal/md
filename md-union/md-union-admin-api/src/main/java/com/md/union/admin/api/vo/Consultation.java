@@ -139,6 +139,7 @@ public class Consultation {
         public int pageIndex;
         @ApiModelProperty("每页显示条数")
         public int pageSize;
+        private String[] dateRange;
     }
 
     @Data

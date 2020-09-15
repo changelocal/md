@@ -18,6 +18,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -38,6 +39,15 @@ public class OrderController {
         Order.ListRes ret = new Order.ListRes();
         OrderDTO.BrandOrderVO param = new OrderDTO.BrandOrderVO();
         BeanUtils.copyProperties(request, param);
+
+        if(request.getDateRange().length>0){
+            param.setCreateTimeBegin(new Date(request.getDateRange()[0]));
+            param.setCreateTimeEnd(new Date(request.getDateRange()[1]));
+        }else{
+            param.setCreateTimeBegin(null);
+            param.setCreateTimeEnd(null);
+        }
+
         BaseResponse<OrderDTO.QueryResp> query = orderClient.query(param);
         if (!query.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(query.getStatus(), query.getMessage());

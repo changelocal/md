@@ -1,9 +1,6 @@
 package com.atom.core.dao;
 
-import com.arc.db.jsd.Filter;
-import com.arc.db.jsd.SortType;
-import com.arc.db.jsd.Sorters;
-import com.arc.db.jsd.UpdateValues;
+import com.arc.db.jsd.*;
 import com.arc.util.data.PageResult;
 import com.atom.core.model.BrandOrder;
 import com.atom.core.model.BrandOrderParam;
@@ -29,6 +26,14 @@ public class BrandOrderDao extends BaseDao {
     public PageResult<BrandOrder> query(BrandOrderParam brandOrderParam) {
         PageResult<BrandOrder> result = new PageResult<>();
         Filter filter = Filter.create();
+
+        if(null!=(brandOrderParam.getCreateTimeBegin())){
+            filter=filter.and(f("create_time", FilterType.GTE,brandOrderParam.getCreateTimeBegin()));
+        }
+        if(null!=(brandOrderParam.getCreateTimeEnd())){
+            filter=filter.and(f("create_time",FilterType.LTE,brandOrderParam.getCreateTimeEnd()));
+        }
+
         if (brandOrderParam.getStatus() > 0) {
             filter = filter.and(f("status", brandOrderParam.getStatus()));
         }

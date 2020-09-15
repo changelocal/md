@@ -35,6 +35,15 @@ public class ConsultationController {
         Consultation.SearchRes ret = new Consultation.SearchRes();
         ConsultationDTO.Info adminUser = new ConsultationDTO.Info();
         BeanUtils.copyProperties(request, adminUser);
+
+        if(request.getDateRange().length>0){
+            adminUser.setCreateTimeBegin(new Date(request.getDateRange()[0]));
+            adminUser.setCreateTimeEnd(new Date(request.getDateRange()[1]));
+        }else{
+            adminUser.setCreateTimeBegin(null);
+            adminUser.setCreateTimeEnd(null);
+        }
+
         log.info("adminUser:"+adminUser);
         BaseResponse<ConsultationDTO.QueryResp> query = frontClient.query(adminUser);
         if (!query.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {

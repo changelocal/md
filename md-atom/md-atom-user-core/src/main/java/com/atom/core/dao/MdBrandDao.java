@@ -29,6 +29,13 @@ public class MdBrandDao extends BaseDao  {
 		PageResult<MdBrand> result = new PageResult<>();
 		Filter filter= Filter.create();
 
+        if(null!=(mdBrandParam.getCreateTimeBegin())){
+            filter=filter.and(f("create_time",FilterType.GTE,mdBrandParam.getCreateTimeBegin()));
+        }
+        if(null!=(mdBrandParam.getCreateTimeEnd())){
+            filter=filter.and(f("create_time",FilterType.LTE,mdBrandParam.getCreateTimeEnd()));
+        }
+
         if(mdBrandParam.getPriceLow().compareTo(BigDecimal.valueOf(0))>0){
             filter=filter.and(f("price", FilterType.GTE,mdBrandParam.getPriceLow()));
         }

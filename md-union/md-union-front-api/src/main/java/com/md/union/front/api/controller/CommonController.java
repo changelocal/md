@@ -278,6 +278,7 @@ public class CommonController {
                     WxUserDTO.UpdateWxUser updateWxUser = new WxUserDTO.UpdateWxUser();
                     updateWxUser.setMobile(phone);
                     updateWxUser.setId(AppUserPrincipal.getPrincipal().getId());
+                    updateWxUser.setUpdateTime(new Date());
                     userClient.update(updateWxUser);
                     if (LoginInterceptor.loginStatus.containsKey(AppUserPrincipal.getPrincipal().getToken())) {
                         MinUser minUser = JSON.parseObject(LoginInterceptor.loginStatus.get(AppUserPrincipal.getPrincipal().getToken()), MinUser.class);

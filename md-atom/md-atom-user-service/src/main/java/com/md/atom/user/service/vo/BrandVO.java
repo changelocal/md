@@ -28,6 +28,8 @@ public class BrandVO {
          *
          */
         private Date createTime;
+        private Date createTimeBegin;
+        private Date createTimeEnd;
 
         /**
          * 商标名称

@@ -2,10 +2,6 @@ package com.atom.core.model;
 
 import lombok.Data;
 
-
-import java.time.LocalDateTime;
-
-
 import java.util.Date;
 
 
@@ -22,4 +18,6 @@ public class BrandOrderParam extends BrandOrder{
 	 * 每页显示条数
 	 */
 	private int pageSize;
+    private Date createTimeBegin;
+    private Date createTimeEnd;
 }
