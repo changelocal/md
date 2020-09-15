@@ -6,6 +6,7 @@ import com.arc.util.auth.AppUserPrincipal;
 import com.arc.util.http.BaseResponse;
 import com.google.common.base.Strings;
 import com.md.union.front.api.Enums.OrderStatusEnums;
+import com.md.union.front.api.Enums.OrderTypeEnums;
 import com.md.union.front.api.vo.Brand;
 import com.md.union.front.api.vo.Category;
 import com.md.union.front.api.vo.Order;
@@ -125,6 +126,16 @@ public class OrderController {
         result = getOrderDetail(id);
         return result;
 
+    }
+
+    @ApiOperation("我的服务订单详情")
+    @GetMapping("/submit/{code}")
+    public void createOrder(@PathVariable("code") String code) {
+        OrderDTO.BrandOrderVO order = convert(code);
+        BaseResponse response = orderClient.add(order);
+        if (!BaseResponse.STATUS_HANDLE_SUCCESS.equals(response.getStatus())) {
+            throw new ServiceException(response.getStatus(), response.getMessage());
+        }
     }
 
     private List<Order.OrderRes> convertOrder(List<OrderDTO.BrandOrderVO> request) {
@@ -283,6 +294,37 @@ public class OrderController {
             throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "查询45大分类失败");
         }
         brandCategoryResp.getResult().getCates().forEach(p -> result.put(p.getCode(), p));
+        return result;
+    }
+
+    private OrderDTO.BrandOrderVO convert(String code) {
+        OrderDTO.BrandOrderVO result = new OrderDTO.BrandOrderVO();
+        result.setOrderNo("" + System.currentTimeMillis());
+        result.setStatus(OrderStatusEnums.PRE_PAY.getType());
+        result.setPrePay(1000);
+        result.setRestPay(1000);
+        result.setTotalPay(2000);
+        result.setUserId(AppUserPrincipal.getPrincipal().getId());
+        result.setOpUserId(1);
+        result.setCreateTime(new Date());
+        result.setUpdateTime(new Date());
+
+
+        result.setOrderType(OrderTypeEnums.BRAND_REGISTER.getType());
+        result.setProductNo(code);
+        result.setMinPrice(10000);
+        result.setMinPrice(20000);
+        if (Strings.isNullOrEmpty(code)) {
+            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "商标编号不能为空");
+        }
+        Map<String, TrademarkDTO.MdBrand> brandMap = getBrandByBrandIds(Arrays.asList(code));
+        if (!brandMap.containsKey(code))
+            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "商标编号不存在");
+        TrademarkDTO.MdBrand brand = brandMap.get(code);
+        result.setProductName(brand.getBrandName());
+        result.setCategory(brand.getCategory());
+        result.setCategoryName(brand.getCategoryName());
+        result.setImg(brand.getImageUrl());
         return result;
     }
 

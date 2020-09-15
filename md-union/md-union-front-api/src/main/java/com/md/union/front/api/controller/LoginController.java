@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/front/login")
@@ -78,5 +79,21 @@ public class LoginController {
             throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "添加用户失败");
         }
         return userRes.getResult();
+    }
+
+    @ApiOperation("小程序登录")
+    @GetMapping("/user")
+    @Anonymous
+    public Map<String,String> getUserMap(){
+
+        return LoginInterceptor.loginStatus;
+    }
+
+    @ApiOperation("小程序登录")
+    @GetMapping("/user/clear")
+    @Anonymous
+    public void clear(){
+
+         LoginInterceptor.loginStatus.clear();
     }
 }

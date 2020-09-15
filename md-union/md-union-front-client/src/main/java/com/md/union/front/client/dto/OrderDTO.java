@@ -127,4 +127,10 @@ public class OrderDTO {
          */
         private String img;
     }
+
+    @Data
+    public static class SubOrderReq{
+        private int orderType;
+        private String code;
+    }
 }
