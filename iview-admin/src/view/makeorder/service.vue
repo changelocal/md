@@ -127,9 +127,9 @@ export default {
   data() {
     return {
       rulesRight: {
-        prePay: [{ required: true, message: '请输入' }],
-        restPay: [{ required: true, message: '请输入' }],
-        totalPay: [{ required: true, message: '请输入' }],
+        prePay: [{ required: true, message: '请输入', trigger: 'blur' }],
+        restPay: [{ required: true, message: '请输入', trigger: 'blur' }],
+        totalPay: [{ required: true, message: '请输入', trigger: 'blur' }],
       },
       columns1: [
         {type: 'selection', width: 60, align: 'center'

@@ -174,7 +174,7 @@ public class CommonController {
         consultation1.setOrderNo(id);
         consultation1.setStatus(1);
         consultation1.setOpenId(AppUserPrincipal.getPrincipal().getMinId());
-//        consultation1.setBuyerMobile(AppUserPrincipal.getPrincipal().getName());
+        consultation1.setBuyerMobile(AppUserPrincipal.getPrincipal().getMobile());
 //        consultation1.setBuyerName(AppUserPrincipal.getPrincipal().getMinId());
 
         BaseResponse<ServiceDTO.Resp> responseAdd = frontClient.addConsultation(consultation1);
