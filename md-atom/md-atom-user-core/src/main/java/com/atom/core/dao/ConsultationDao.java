@@ -1,9 +1,6 @@
 package com.atom.core.dao;
 
-import com.arc.db.jsd.Filter;
-import com.arc.db.jsd.SortType;
-import com.arc.db.jsd.Sorters;
-import com.arc.db.jsd.UpdateValues;
+import com.arc.db.jsd.*;
 import com.arc.util.data.PageResult;
 import com.atom.core.model.Consultation;
 import com.atom.core.model.ConsultationParam;
@@ -25,6 +22,14 @@ public class ConsultationDao extends BaseDao  {
 	public PageResult<Consultation> query(ConsultationParam consultationParam) {
 		PageResult<Consultation> result = new PageResult<>();
 		Filter filter= Filter.create();
+
+        if(null!=(consultationParam.getCreateTimeBegin())){
+            filter=filter.and(f("create_time", FilterType.GTE,consultationParam.getCreateTimeBegin()));
+        }
+        if(null!=(consultationParam.getCreateTimeEnd())){
+            filter=filter.and(f("create_time",FilterType.LTE,consultationParam.getCreateTimeEnd()));
+        }
+
 		if(consultationParam.getId()>0){
 			filter=filter.and(f("id",consultationParam.getId()));
 		}

@@ -21,6 +21,7 @@ public class Order {
         public int pageIndex;
         @ApiModelProperty("每页显示条数")
         public int pageSize;
+        private String[] dateRange;
     }
     @ApiModel("用户购买商标的订单列表")
     @Data

@@ -100,11 +100,11 @@ export default {
         note: [{ required: true, message: '请输入', trigger: 'blur' }]
       },
       columns1: [
-        {title: '咨询订单', key: 'orderNo'},
+        {title: '咨询订单', key: 'name'},
         {title: '咨询人', key: 'buyerName'},
         {title: '咨询人手机', key: 'buyerMobile'},
         {title: '状态', key: 'status', slot: 'status', width: 100},
-        {title: '预付款', key: 'prePay', width: 80},
+        // {title: '预付款', key: 'prePay', width: 80},
         {title: '销售姓名', key: 'opUserName', width: 100},
         {title: '销售手机', key: 'opUserMobile'},
         {title: '备注', key: 'note'},
@@ -167,7 +167,7 @@ export default {
         }]
       },
       mobile: '',
-      tableData: [{ buyerName: 'sxj', buyerMobile: '13813113131', status: '发起咨询' }],
+      tableData: [],
       currentRow: null,
       currentPage: 1,
       popShow: false,

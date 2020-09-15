@@ -91,7 +91,7 @@ export default [
         path: 'page',
         name: 'PagePermissiona',
         meta: {
-          title: '人员列表'
+          title: '销售列表'
         },
         component: () => import('@/view/adminuser/page.vue')
       }

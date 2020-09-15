@@ -22,9 +22,9 @@
           </Select>
         </Form-item>
         <Form-item label="日期">
-          <Date-picker
+          <DatePicker
             v-model="planStartTime"
-            value-format="yyyy-MM-dd"
+            format="yyyy-MM-dd"
             type="daterange"
             align="right"
             unlink-panels
@@ -215,7 +215,8 @@ export default {
         pageIndex: this.currentPage,
         pageSize: this.pageSize,
         OrderStatus: this.status,
-        OrderType: this.kind
+        OrderType: this.kind,
+        dateRange: this.planStartTime
       }
     }
   },

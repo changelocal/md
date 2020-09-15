@@ -174,7 +174,7 @@ public class CommonController {
         consultation1.setOrderNo(id);
         consultation1.setStatus(1);
         consultation1.setOpenId(AppUserPrincipal.getPrincipal().getMinId());
-//        consultation1.setBuyerMobile(AppUserPrincipal.getPrincipal().getName());
+        consultation1.setBuyerMobile(AppUserPrincipal.getPrincipal().getMobile());
 //        consultation1.setBuyerName(AppUserPrincipal.getPrincipal().getMinId());
 
         BaseResponse<ServiceDTO.Resp> responseAdd = frontClient.addConsultation(consultation1);
@@ -278,6 +278,7 @@ public class CommonController {
                     WxUserDTO.UpdateWxUser updateWxUser = new WxUserDTO.UpdateWxUser();
                     updateWxUser.setMobile(phone);
                     updateWxUser.setId(AppUserPrincipal.getPrincipal().getId());
+                    updateWxUser.setUpdateTime(new Date());
                     userClient.update(updateWxUser);
                     if (LoginInterceptor.loginStatus.containsKey(AppUserPrincipal.getPrincipal().getToken())) {
                         MinUser minUser = JSON.parseObject(LoginInterceptor.loginStatus.get(AppUserPrincipal.getPrincipal().getToken()), MinUser.class);

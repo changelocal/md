@@ -231,6 +231,8 @@ public class TrademarkDTO {
          *
          */
         private Date createTime;
+        private Date createTimeBegin;
+        private Date createTimeEnd;
 
         /**
          * 商标名称

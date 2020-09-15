@@ -11,6 +11,7 @@
         <Table  :columns="columns1" ref="singleTable" :data="tableData" highlight-current-row style="width: 100%">
           <template slot-scope="{ row, index }" slot="action">
             <Button type="primary" size="small" style="margin-right: 5px" @click="onEdit(index)">编辑</Button>
+            <Button type="primary" size="small" style="margin-right: 5px" @click="onMakeService(index)">推服务订单</Button>
           </template>
         </Table>
         <Page :current="currentPage" :total="totalPage" @on-change="onPageChange" show-elevator size="small" show-total></Page>
@@ -49,35 +50,93 @@
         <Button @click="onClose(false)">取 消</Button>
       </div>
     </Modal>
-<!--    <add v-if="popShow" :open-type="openType" :form-data="form" :handle-close="onClose" />-->
+    <Modal
+      v-model="popShowService"
+      title="推服务订单"
+      :visible="true"
+      :close-on-click-modal="false"
+      width="30%"
+      :closable="false"
+      :mask-closable="false"
+      @close="onClose(false)"
+    >
+      <Form  :label-width="80"  ref="formFields" :model="formService" :rules="rulesRightService">
+        <Form-item label="买家名字" prop="" >
+          <Input v-model="formService.buyerName" disabled placeholder="" clearable />
+        </Form-item>
+        <Form-item label="买家手机" prop="" >
+          <Input v-model="formService.buyerMobile" disabled placeholder="" clearable />
+        </Form-item>
+        <Form-item label="服务分类" prop="" >
+          <RadioGroup v-model="animal" @on-change="radioChange">
+            <Radio label="维权"></Radio>
+            <Radio label="信息变更"></Radio>
+          </RadioGroup>
+        </Form-item>
+        <Form-item label="服务内容" prop="" >
+          <Select v-model="formService.brandType" placeholder="请选择">
+            <Option
+              v-for="item in optionsPrice"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </Select>
+        </Form-item>
+        <Form-item label="定金" prop="prePay" >
+          <InputNumber :max="99999" :min="1" :step="1"  v-model="formService.prePay" placeholder="请输入" clearable />
+        </Form-item>
+        <Form-item label="总价" prop="totalPay" >
+          <InputNumber :max="99999" :min="1" :step="1" v-model="formService.totalPay" placeholder="请输入" clearable />
+        </Form-item>
+
+      </Form>
+      <div slot="footer" class="dialog-footer">
+        <Button type="primary" @click="onSaveService(true)">立即推单</Button>
+        <Button @click="onCloseService(false)">取 消</Button>
+      </div>
+    </Modal>
   </div>
 </template>
 
 <script>
 import {query,update} from '@/api/wxuser'
-// import Add from './add'
+import {loadSelect} from '@/api/common'
 export default {
   name: 'PagePermission',
-  // components: {
-  //   Add
-  // },
   data() {
     return {
+      animal:'维权',
       rulesRight: {
         realName: [{ required: true, message: '请输入', trigger: 'blur' }],
         // mobile: [{ required: true, message: '请输入', trigger: 'blur' }],
         // idCard: [{ required: true, message: '请输入', trigger: 'blur' }]
+      },
+      rulesRightService: {
+        prePay: [{ required: true, message: '请输入' }, { type:'number', message: '必须是数字' } ],
+        totalPay: [{ required: true, message: '请输入' }, { type:'number', message: '必须是数字' } ],
       },
       columns1: [
         {title: 'openID', key: 'minId', width: 250},
         {title: '昵称', key: 'nickName'},
         {title: '真实姓名', key: 'realName', width: 100},
         {title: '身份证', key: 'idCard'},
-        {title: '手机', key: 'mobile', width: 100},
+        {title: '手机', key: 'mobile', width: 120},
         {title: '地址', key: 'address'},
         {title: '关注时间', key: 'createTime'},
-        {title: '操作', slot: 'action', width: 70, align: 'center'}
+        {title: '操作', slot: 'action', width: 180, align: 'center'}
       ],
+      optionsPrice: [{
+        value: 1, label: '不限'
+      }, {
+        value: 2, label: '1万以下'
+      }, {
+        value: 3, label: '1-2万'
+      }, {
+        value: 4, label: '2-5万'
+      }, {
+        value: 5, label: '5万以上'
+      }],
       openType: 'add',
       form: {
         id: '',
@@ -87,11 +146,20 @@ export default {
         minId: '',
         idCard: ''
       },
+      formService: {
+        buyerId: '',
+        buyerName: '',
+        buyerMobile: '',
+        serviceId: '',
+        prePay: 0,
+        totalPay: 0,
+      },
       mobile: '',
       tableData: [],
       currentRow: null,
       currentPage: 1,
       popShow: false,
+      popShowService: false,
       currentIndex: null,
       pageSize: 10,
       totalPage: 1
@@ -117,8 +185,36 @@ export default {
   },
   created() {
     this.reqList()
+    this.loadSelect()
   },
   methods: {
+    loadSelect(){
+      loadSelect().then(res => {
+        console.log(res)
+        if (res.status === true) {
+          this.onClose()
+          this.reqList()
+        }else {
+          this.$notify({
+            title: 'Success',
+            message: 'Created Successfully',
+            type: 'success',
+            duration: 2000
+          })
+        }
+      })
+
+    },
+    radioChange(){
+      if(this.animal==='维权'){
+
+      }else{
+
+
+      }
+
+
+    },
     onSave(confirm) {
       this.$refs.formFields.validate(valid => {
         if (valid) {
@@ -126,6 +222,18 @@ export default {
             this.reqEdit()
           } else {
 
+          }
+        } else {
+          return false
+        }
+      })
+    },
+    onSaveService(confirm) {
+      this.$refs.formFields.validate(valid => {
+        if (valid) {
+          if(this.formService.prePay>= this.formService.totalPay){
+
+            return  false
           }
         } else {
           return false
@@ -159,9 +267,21 @@ export default {
       this.form.realName = item.realName
       this.form.idCard = item.idCard
 
-      // this.currentIndex = index
       this.popShow = true
     },
+    onMakeService(index){
+      const item = this.tableData[index]
+      if(item.mobile==='') {
+        this.$Notice.error({
+          title: '手机不能为空',
+        });
+      }else {
+        this.formService.buyerId = item.id
+        this.formService.buyerMobile = item.mobile
+        this.popShowService = true
+      }
+    },
+
     onPageChange(page) {
       this.currentPage = page
       this.reqList()
@@ -171,6 +291,11 @@ export default {
     },
     onClose( confirm) {
       this.popShow = false
+      // if (confirm) this.reqFun(data);
+      this.form = this.formClear()
+    },
+    onCloseService( confirm) {
+      this.popShowService = false
       // if (confirm) this.reqFun(data);
       this.form = this.formClear()
     },
