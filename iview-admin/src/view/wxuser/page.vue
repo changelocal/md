@@ -67,7 +67,13 @@
         <Form-item label="买家手机" prop="" >
           <Input v-model="formService.buyerMobile" disabled placeholder="" clearable />
         </Form-item>
-        <Form-item label="服务类型" prop="" >
+        <Form-item label="服务分类" prop="" >
+          <RadioGroup v-model="animal" @on-change="radioChange">
+            <Radio label="维权"></Radio>
+            <Radio label="信息变更"></Radio>
+          </RadioGroup>
+        </Form-item>
+        <Form-item label="服务内容" prop="" >
           <Select v-model="formService.brandType" placeholder="请选择">
             <Option
               v-for="item in optionsPrice"
@@ -95,14 +101,12 @@
 
 <script>
 import {query,update} from '@/api/wxuser'
-// import Add from './add'
+import {loadSelect} from '@/api/common'
 export default {
   name: 'PagePermission',
-  // components: {
-  //   Add
-  // },
   data() {
     return {
+      animal:'维权',
       rulesRight: {
         realName: [{ required: true, message: '请输入', trigger: 'blur' }],
         // mobile: [{ required: true, message: '请输入', trigger: 'blur' }],
@@ -181,8 +185,36 @@ export default {
   },
   created() {
     this.reqList()
+    this.loadSelect()
   },
   methods: {
+    loadSelect(){
+      loadSelect().then(res => {
+        console.log(res)
+        if (res.status === true) {
+          this.onClose()
+          this.reqList()
+        }else {
+          this.$notify({
+            title: 'Success',
+            message: 'Created Successfully',
+            type: 'success',
+            duration: 2000
+          })
+        }
+      })
+
+    },
+    radioChange(){
+      if(this.animal==='维权'){
+
+      }else{
+
+
+      }
+
+
+    },
     onSave(confirm) {
       this.$refs.formFields.validate(valid => {
         if (valid) {
@@ -200,7 +232,7 @@ export default {
       this.$refs.formFields.validate(valid => {
         if (valid) {
           if(this.formService.prePay>= this.formService.totalPay){
-            
+
             return  false
           }
         } else {

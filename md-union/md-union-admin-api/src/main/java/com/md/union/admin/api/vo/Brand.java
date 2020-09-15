@@ -385,4 +385,25 @@ public class Brand {
         @ApiModelProperty("总条数")
         private int count;
     }
+
+    @Data
+    @ApiModel("商标维权报价介绍")
+    public static class DealRight {
+        @ApiModelProperty("品牌权益")
+        private List<BrandRight> rights;
+        @ApiModelProperty("品牌信息变更")
+        private List<BrandRight> changes;
+
+    }
+    @Data
+    @ApiModel("商标维权报价介绍信息详情")
+    public static class BrandRight {
+        @ApiModelProperty("主键id")
+        private String id;
+        @ApiModelProperty("主题")
+        private String title;
+        @ApiModelProperty("报价")
+        private String price;
+        private String prepay;
+    }
 }
