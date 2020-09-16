@@ -119,6 +119,24 @@ public class MinCommon {
 
         sendMinTip(null);
     }
+
+    public void pushOrderProgress(WxMss.OrderProgress orderProgress){
+        //拼接推送的模版
+        WxMssVo wxMssVo = new WxMssVo();
+        wxMssVo.setTouser(orderProgress.getOpenid());//用户的openid（要发送给那个用户，通常这里应该动态传进来的）
+        wxMssVo.setTemplate_id("707M70HS7OtcHjjadGLyRjg-u1FkUE6S05JOjjM8K_4");//订阅消息模板id
+        wxMssVo.setPage("pages/index/index");
+
+        Map<String, TemplateData> m = new HashMap<>(4);
+        m.put("thing6", new TemplateData(orderProgress.getName()));
+        m.put("character_string1", new TemplateData(orderProgress.getOrderId()));
+        m.put("phrase2", new TemplateData(orderProgress.getStatus()));
+        m.put("date3", new TemplateData(orderProgress.getOperateTime()));
+        m.put("thing10", new TemplateData(orderProgress.getNote()));
+        wxMssVo.setData(m);
+
+        sendMinTip(null);
+    }
     /**
      * 发送保单消息
      *

@@ -44,9 +44,21 @@ public class WxMss {
         private String orderType;
         @ApiModelProperty("订单号")
         private String tradeType;
-
     }
-
+    @Data
+    @ApiModel("订单进度")
+    public static class OrderProgress {
+        @ApiModelProperty("openid")
+        private String openid;
+        @ApiModelProperty("商品名称")
+        private String name;
+        private String orderId;
+        @ApiModelProperty("状态")
+        private String status;
+        @ApiModelProperty("操作时间")
+        private String operateTime;
+        private String note;
+    }
 
 
 }
