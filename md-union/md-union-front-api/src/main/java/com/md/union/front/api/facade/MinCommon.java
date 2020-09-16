@@ -10,6 +10,9 @@ import com.arc.util.lang.EncryptUtil;
 import com.arc.util.lang.FaultException;
 import com.md.union.front.api.config.MinProperties;
 import com.md.union.front.api.vo.MinUser;
+import com.md.union.front.api.vo.TemplateData;
+import com.md.union.front.api.vo.WxMss;
+import com.md.union.front.api.vo.WxMssVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -68,6 +71,54 @@ public class MinCommon {
         return minUser;
     }
 
+    public void pushToPay(WxMss.ToPay toPay){
+        //拼接推送的模版
+        WxMssVo wxMssVo = new WxMssVo();
+        wxMssVo.setTouser(toPay.getOpenid());//用户的openid（要发送给那个用户，通常这里应该动态传进来的）
+        wxMssVo.setTemplate_id("a-Vu8j5AgGljf1hAmvoKIuI5WeL1VwrZtcnDBXC9RqE");//订阅消息模板id
+        wxMssVo.setPage("pages/index/index");
+
+        Map<String, TemplateData> m = new HashMap<>(4);
+        m.put("thing5", new TemplateData(toPay.getName()));
+        m.put("amount2", new TemplateData(toPay.getPayment()));
+        m.put("character_string3", new TemplateData(toPay.getOrderNo()));
+        m.put("thing4", new TemplateData(toPay.getNote()));
+        wxMssVo.setData(m);
+
+        sendMinTip(null);
+    }
+    public void pushMakeOrder(WxMss.MakeOrder makeOrder){
+        //拼接推送的模版
+        WxMssVo wxMssVo = new WxMssVo();
+        wxMssVo.setTouser(makeOrder.getOpenid());//用户的openid（要发送给那个用户，通常这里应该动态传进来的）
+        wxMssVo.setTemplate_id("Q-Ry38-lawOPAnu36powW9R6mySsWMfNf8CKwtL0rQ0");//订阅消息模板id
+        wxMssVo.setPage("pages/index/index");
+
+        Map<String, TemplateData> m = new HashMap<>(4);
+        m.put("number1", new TemplateData(makeOrder.getOrderNo()));
+        m.put("date2", new TemplateData(makeOrder.getOrderTime()));
+        m.put("thing3", new TemplateData(makeOrder.getOrderStatus()));
+        m.put("thing5", new TemplateData(makeOrder.getName()));
+        m.put("thing4", new TemplateData(makeOrder.getNote()));
+        wxMssVo.setData(m);
+
+        sendMinTip(null);
+    }
+    public void pushDelivery(WxMss.Delivery delivery){
+        //拼接推送的模版
+        WxMssVo wxMssVo = new WxMssVo();
+        wxMssVo.setTouser(delivery.getOpenid());//用户的openid（要发送给那个用户，通常这里应该动态传进来的）
+        wxMssVo.setTemplate_id("EvFuY2-cvHzY78b2FhdZYNeURAl4ocuT_FzUwUs22Og");//订阅消息模板id
+        wxMssVo.setPage("pages/index/index");
+
+        Map<String, TemplateData> m = new HashMap<>(4);
+        m.put("thing3", new TemplateData(delivery.getName()));
+        m.put("thing1", new TemplateData(delivery.getOrderType()));
+        m.put("thing2", new TemplateData(delivery.getTradeType()));
+        wxMssVo.setData(m);
+
+        sendMinTip(null);
+    }
     /**
      * 发送保单消息
      *
