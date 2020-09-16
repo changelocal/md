@@ -74,7 +74,7 @@
           </RadioGroup>
         </Form-item>
         <Form-item label="服务内容" prop="" >
-          <Select v-model="formService.brandType" placeholder="请选择" @on-change="selectChange">
+          <Select v-model="formService.serviceId" placeholder="请选择" @on-change="selectChange">
             <Option
               v-for="item in optionsPrice"
               :key="item.id"
@@ -114,8 +114,8 @@ export default {
         // idCard: [{ required: true, message: '请输入', trigger: 'blur' }]
       },
       rulesRightService: {
-        prePay: [{ required: true, message: '请输入' }, { type:'number', message: '必须是数字' } ],
-        totalPay: [{ required: true, message: '请输入' }, { type:'number', message: '必须是数字' } ],
+        prePay: [{ required: true, message: '请输入' }],
+        totalPay: [{ required: true, message: '请输入' } ],
       },
       columns1: [
         {title: 'openID', key: 'minId', width: 250},
@@ -181,6 +181,7 @@ export default {
         prePay: this.formService.prePay,
         totalPay: this.formService.totalPay,
         productNo: this.formService.serviceId,
+        orderType:this.animal==='维权'?2:3
       }
     }
 
@@ -193,14 +194,14 @@ export default {
     selectChange() {
       if(this.animal==='维权'){
         this.rights.forEach(p=>{
-          if(p.id === this.formService.brandType) {
+          if(p.id === this.formService.serviceId) {
             this.formService.prePay = p.prepay
             this.formService.totalPay = p.price
           }
         })
       }else{
         this.changes.forEach(p=>{
-          if(p.id === this.formService.brandType) {
+          if(p.id === this.formService.serviceId) {
             this.formService.prePay = p.prepay
             this.formService.totalPay = p.price
           }
@@ -252,7 +253,7 @@ export default {
     onSaveService(confirm) {
       this.$refs.formFields.validate(valid => {
         if (valid) {
-          if(this.formService.prePay>= this.formService.totalPay){
+          if(Number(this.formService.prePay)>= Number(this.formService.totalPay)){
             this.$Notice.error({
               title: '定金不能大于等于总价',
             });

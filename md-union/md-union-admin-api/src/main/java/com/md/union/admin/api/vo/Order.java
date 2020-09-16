@@ -128,5 +128,6 @@ public class Order {
         public long userId;
         @ApiModelProperty("产品编号")
         private String productNo;
+        private int orderType;
     }
 }

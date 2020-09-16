@@ -4,7 +4,6 @@ import com.arc.common.ServiceException;
 import com.arc.util.http.BaseResponse;
 import com.google.common.base.Strings;
 import com.md.union.admin.api.Enums.OrderStatusEnums;
-import com.md.union.admin.api.Enums.OrderTypeEnums;
 import com.md.union.admin.api.Enums.UploadPicEnums;
 import com.md.union.admin.api.vo.Order;
 import com.md.union.admin.api.vo.Ref;
@@ -131,7 +130,7 @@ public class OrderController {
         result.setCreateTime(new Date());
         result.setUpdateTime(new Date());
 
-        result.setOrderType(OrderTypeEnums.BRAND_REGISTER.getType());
+        result.setOrderType(serviceOrder.getOrderType());
         result.setProductNo(serviceOrder.getProductNo());
         result.setMinPrice(10000);
         result.setMaxPrice(10000);
