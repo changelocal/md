@@ -115,8 +115,8 @@ export default {
       },
       columns1: [
         {title: '订单号', key: 'orderNo', width: 150},
-        {title: '状态', key: 'orderStatus', slot: 'status'},
-        {title: '订单类型', key: 'OrderType', slot: 'type'},
+        {title: '状态', key: 'orderStatusName'},
+        {title: '订单类型', key: 'OrderTypeName'},
         {title: '商标类型', key: 'categoryName'},
         {title: '预付款', key: 'prePay', width: 80},
         {title: '剩余付款', key: 'restPay', width: 90},

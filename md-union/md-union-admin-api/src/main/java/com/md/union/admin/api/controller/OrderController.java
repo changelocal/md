@@ -4,6 +4,7 @@ import com.arc.common.ServiceException;
 import com.arc.util.http.BaseResponse;
 import com.google.common.base.Strings;
 import com.md.union.admin.api.Enums.OrderStatusEnums;
+import com.md.union.admin.api.Enums.OrderTypeEnums;
 import com.md.union.admin.api.Enums.UploadPicEnums;
 import com.md.union.admin.api.vo.Order;
 import com.md.union.admin.api.vo.Ref;
@@ -60,6 +61,8 @@ public class OrderController {
             query.getResult().getItems().forEach(p->{
                 Order.OrderRes info = new Order.OrderRes();
                 BeanUtils.copyProperties(p, info);
+                info.setOrderStatusName(OrderStatusEnums.valueType(info.getOrderStatus()).name());
+                info.setOrderTypeName(OrderTypeEnums.valueType(info.getOrderType()).name());
                 infos.add(info);
             });
 
@@ -70,7 +73,7 @@ public class OrderController {
         }
         return ret;
     }
-
+    @ApiOperation("更新订单")
     @PostMapping("/update")
     public void update(@RequestBody Order.OrderRes request) {
         OrderDTO.BrandOrderVO adminUser = new OrderDTO.BrandOrderVO();
@@ -80,7 +83,7 @@ public class OrderController {
             throw new ServiceException(query.getStatus(), query.getMessage());
         }
     }
-
+    @ApiOperation("获得订单相关图片")
     @PostMapping("/ref")
     public Ref.QueryResp ref(@RequestBody String  orderId) {
         Ref.QueryResp ret = new Ref.QueryResp();
@@ -110,7 +113,7 @@ public class OrderController {
 
     @ApiOperation("推送服务订单")
     @PostMapping("/service/push")
-    public void createOrder(@RequestBody Order.SubmitServiceOrder serviceOrder) {
+    public void createServiceOrder(@RequestBody Order.SubmitServiceOrder serviceOrder) {
         OrderDTO.BrandOrderVO order = convert(serviceOrder);
         BaseResponse response = orderClient.add(order);
         if (!BaseResponse.STATUS_HANDLE_SUCCESS.equals(response.getStatus())) {
@@ -149,9 +152,45 @@ public class OrderController {
     }
 
 
+    @ApiOperation("推送订单")
+    @PostMapping("/push")
+    public void createOrder(@RequestBody Order.SubmitServiceOrder serviceOrder) {
+        OrderDTO.BrandOrderVO order = convertOrder(serviceOrder);
+        BaseResponse response = orderClient.add(order);
+        if (!BaseResponse.STATUS_HANDLE_SUCCESS.equals(response.getStatus())) {
+            throw new ServiceException(response.getStatus(), response.getMessage());
+        }
+    }
 
+    private OrderDTO.BrandOrderVO convertOrder(Order.SubmitServiceOrder serviceOrder) {
+        OrderDTO.BrandOrderVO result = new OrderDTO.BrandOrderVO();
+        result.setOrderNo("" + System.currentTimeMillis());
+        result.setStatus(OrderStatusEnums.PRE_PAY.getType());
+        result.setPrePay(serviceOrder.getPrePay());
+        result.setRestPay(serviceOrder.getTotalPay()-serviceOrder.getPrePay());
+        result.setTotalPay(serviceOrder.getTotalPay());
+        result.setUserId(serviceOrder.getUserId());
+        result.setOpUserId(1);//todo
+        result.setCreateTime(new Date());
+        result.setUpdateTime(new Date());
 
+        result.setOrderType(OrderTypeEnums.BRAND_REGISTER.getType());
+        result.setProductNo(serviceOrder.getProductNo());
+        result.setMinPrice(10000);
+        result.setMaxPrice(10000);
+        if (Strings.isNullOrEmpty(serviceOrder.getProductNo())) {
+            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "商标服务主键不能为空");
+        }
+        BaseResponse<ServiceDTO.Service> serviceResp = frontClient.getService(serviceOrder.getProductNo());
+        if (!BaseResponse.STATUS_HANDLE_SUCCESS.equals(serviceResp.getStatus())) {
+            throw new ServiceException(serviceResp.getStatus(), serviceResp.getMessage());
+        }
+        result.setProductName(serviceResp.getResult().getServiceName());
+        result.setCategoryName(serviceResp.getResult().getServiceName());
+        result.setImg(serviceResp.getResult().getImageUrl());
 
+        return result;
+    }
 
 
 

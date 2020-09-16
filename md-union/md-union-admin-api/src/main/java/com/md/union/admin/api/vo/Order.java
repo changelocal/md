@@ -54,8 +54,10 @@ public class Order {
         public String prePrice;
         @ApiModelProperty("订单状态 1待支付定金 2待提交资料 3委托受理 4待支付尾款 5已完成")
         public int OrderStatus;
+        public String OrderStatusName;
         @ApiModelProperty("订单类型 1商标注册订单2商标维权订单3商标信息变更订单")
         public int OrderType;
+        public String OrderTypeName;
         /**
          * 创建时间
          */
