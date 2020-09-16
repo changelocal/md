@@ -2,7 +2,7 @@ import axios from '@/libs/api.request'
 
 export const loadSelect = () => {
   return axios.request({
-    url: '/admin/user/count',
+    url: '/web/common/loadService',
     method: 'get'
   })
 }

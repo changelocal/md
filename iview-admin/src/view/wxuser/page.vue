@@ -74,12 +74,12 @@
           </RadioGroup>
         </Form-item>
         <Form-item label="服务内容" prop="" >
-          <Select v-model="formService.brandType" placeholder="请选择">
+          <Select v-model="formService.brandType" placeholder="请选择" @on-change="selectChange">
             <Option
               v-for="item in optionsPrice"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              :key="item.id"
+              :label="item.title"
+              :value="item.id"
             />
           </Select>
         </Form-item>
@@ -102,6 +102,7 @@
 <script>
 import {query,update} from '@/api/wxuser'
 import {loadSelect} from '@/api/common'
+import {pushService} from '@/api/order'
 export default {
   name: 'PagePermission',
   data() {
@@ -126,17 +127,9 @@ export default {
         {title: '关注时间', key: 'createTime'},
         {title: '操作', slot: 'action', width: 180, align: 'center'}
       ],
-      optionsPrice: [{
-        value: 1, label: '不限'
-      }, {
-        value: 2, label: '1万以下'
-      }, {
-        value: 3, label: '1-2万'
-      }, {
-        value: 4, label: '2-5万'
-      }, {
-        value: 5, label: '5万以上'
-      }],
+      optionsPrice: [],
+      rights: [],
+      changes: [],
       openType: 'add',
       form: {
         id: '',
@@ -181,19 +174,47 @@ export default {
         realName: this.form.realName,
         idCard: this.form.idCard,
       }
+    },
+    formQueryPush() {
+      return {
+        userId: this.formService.buyerId,
+        prePay: this.formService.prePay,
+        totalPay: this.formService.totalPay,
+        productNo: this.formService.serviceId,
+      }
     }
+
   },
   created() {
     this.reqList()
     this.loadSelect()
   },
   methods: {
+    selectChange() {
+      if(this.animal==='维权'){
+        this.rights.forEach(p=>{
+          if(p.id === this.formService.brandType) {
+            this.formService.prePay = p.prepay
+            this.formService.totalPay = p.price
+          }
+        })
+      }else{
+        this.changes.forEach(p=>{
+          if(p.id === this.formService.brandType) {
+            this.formService.prePay = p.prepay
+            this.formService.totalPay = p.price
+          }
+        })
+      }
+    },
     loadSelect(){
       loadSelect().then(res => {
         console.log(res)
         if (res.status === true) {
-          this.onClose()
-          this.reqList()
+          const rdata = res.data
+          this.rights = rdata.rights
+          this.changes = rdata.changes
+          this.optionsPrice = this.rights
         }else {
           this.$notify({
             title: 'Success',
@@ -203,17 +224,13 @@ export default {
           })
         }
       })
-
     },
     radioChange(){
       if(this.animal==='维权'){
-
+        this.optionsPrice = this.rights
       }else{
-
-
+        this.optionsPrice = this.changes
       }
-
-
     },
     onSave(confirm) {
       this.$refs.formFields.validate(valid => {
@@ -228,13 +245,42 @@ export default {
         }
       })
     },
+    /**
+     * 推服务订单
+     * @param confirm
+     */
     onSaveService(confirm) {
       this.$refs.formFields.validate(valid => {
         if (valid) {
           if(this.formService.prePay>= this.formService.totalPay){
-
+            this.$Notice.error({
+              title: '定金不能大于等于总价',
+            });
             return  false
           }
+          pushService(this.formQueryPush).then(res => {
+            console.log(res)
+            if (res.status === true) {
+              this.onCloseService()
+              this.$notify({
+                title: 'Success',
+                message: '服务订单推送成功',
+                type: 'success',
+                duration: 2000
+              })
+            }else {
+              this.$notify({
+                title: 'Success',
+                message: 'Created Successfully',
+                type: 'success',
+                duration: 2000
+              })
+            }
+          })
+
+
+
+
         } else {
           return false
         }
@@ -297,7 +343,7 @@ export default {
     onCloseService( confirm) {
       this.popShowService = false
       // if (confirm) this.reqFun(data);
-      this.form = this.formClear()
+      this.form = this.formServiceClear()
     },
     formClear() {
       return {
@@ -307,6 +353,16 @@ export default {
         mobile: '',
         minId: '',
         idCard: ''
+      }
+    },
+    formServiceClear() {
+      return {
+        buyerId: '',
+        buyerName: '',
+        buyerMobile: '',
+        serviceId: '',
+        prePay: 0,
+        totalPay: 0,
       }
     },
     reqList() {

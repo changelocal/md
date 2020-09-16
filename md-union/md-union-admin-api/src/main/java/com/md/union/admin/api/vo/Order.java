@@ -116,4 +116,17 @@ public class Order {
         @ApiModelProperty("文件资料id")
         List<String> fileIds;
     }
+
+    @ApiModel("订单提交")
+    @Data
+    public static class SubmitServiceOrder{
+        @ApiModelProperty("预付款价格")
+        public int prePay;
+        @ApiModelProperty("总价")
+        public int totalPay;
+        @ApiModelProperty("后台运营下单人id")
+        public long userId;
+        @ApiModelProperty("产品编号")
+        private String productNo;
+    }
 }

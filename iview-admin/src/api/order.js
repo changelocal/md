@@ -21,6 +21,13 @@ export const push = (data) => {
     method: 'post'
   })
 }
+export const pushService = (data) => {
+  return axios.request({
+    url: '/web/order/service/push',
+    data,
+    method: 'post'
+  })
+}
 export const image = (data) => {
   return axios.request({
     url: '/web/order/ref',
