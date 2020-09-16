@@ -9,13 +9,13 @@ import com.arc.util.http.BaseResponse;
 public enum ChangeEnums {
 
 
-    BRAND_REFUSE_DEAL(1, "C0001", "商标转让", "商标权发生改变，依照商标法规定须向商标局提", 700, "https://pay.mdlogo.cn/file/brand-change/1.png"),
-    BRAND_DISCUSS_DEAL(2, "C0002", "商标宽展", "商标到期后6个月希望继续保有该商标，须向", 1200, "https://pay.mdlogo.cn/file/brand-change/2.png"),
-    BRAND_CANCEL_DEAL(3, "C0003", "商标续展", "保护商标品牌，延长有效期", 980, "https://pay.mdlogo.cn/file/brand-change/3.png"),
-    BRAND_OBJECTTION_DEAL(4, "C0004", "商标补证", "商标注册证遗失或破损，即刻为您申请补发证书", 800, "https://pay.mdlogo.cn/file/brand-change/4.png"),
-    BRAND_MONITOR_DEAL(5, "C0005", "商标更正", "如注册申报时公司名称或地址填写错误等，须向", 400, "https://pay.mdlogo.cn/file/brand-change/5.png"),
-    BRAND_APPEAL_DEAL(6, "C0006", "商标注销", "商标持有人放弃全部或部分商标权，须向商标局提出", 300, "https://pay.mdlogo.cn/file/brand-change/6.png"),
-    BRAND_INVALID_DEAL(7, "C0007", "商标变更", "如需变更注册人名义，等级地址等注册事项，需向", 350, "https://pay.mdlogo.cn/file/brand-change/7.png"),
+    BRAND_REFUSE_DEAL(1, "49de-4508-aa12-2173248de0d1-1d4c872533ca-d41d8", "商标转让", "商标权发生改变，依照商标法规定须向商标局提", 700, "https://pay.mdlogo.cn/file/brand-change/1.png"),
+    BRAND_DISCUSS_DEAL(2, "228b-40d1-b670-34790090d6b8-1d4c872533ca-d41d8", "商标宽展", "商标到期后6个月希望继续保有该商标，须向", 1200, "https://pay.mdlogo.cn/file/brand-change/2.png"),
+    BRAND_CANCEL_DEAL(3, "f161-4149-9520-3f39a179966c-1d4c872533ca-d41d8", "商标续展", "保护商标品牌，延长有效期", 980, "https://pay.mdlogo.cn/file/brand-change/3.png"),
+    BRAND_OBJECTTION_DEAL(4, "4e70-4039-a635-dd3aae3d9c7d-1d4c872533ca-d41d8", "商标补证", "商标注册证遗失或破损，即刻为您申请补发证书", 800, "https://pay.mdlogo.cn/file/brand-change/4.png"),
+    BRAND_MONITOR_DEAL(5, "66ff-4751-9628-1dd8330350ad-1d4c872533ca-d41d8", "商标更正", "如注册申报时公司名称或地址填写错误等，须向", 400, "https://pay.mdlogo.cn/file/brand-change/5.png"),
+    BRAND_APPEAL_DEAL(6, "e82b-4422-a030-3bb2c872699e-1d4c872533ca-d41d8", "商标注销", "商标持有人放弃全部或部分商标权，须向商标局提出", 300, "https://pay.mdlogo.cn/file/brand-change/6.png"),
+    BRAND_INVALID_DEAL(7, "4c33-4e72-bc7b-b49009ba27ad-1d4c872533ca-d41d8", "商标变更", "如需变更注册人名义，等级地址等注册事项，需向", 350, "https://pay.mdlogo.cn/file/brand-change/7.png"),
     ;
 
     ChangeEnums(int type, String no, String title, String brief, int price, String icon) {

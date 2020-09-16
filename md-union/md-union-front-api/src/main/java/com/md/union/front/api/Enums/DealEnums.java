@@ -10,7 +10,7 @@ public enum DealEnums {
 
 
 
-    BRAND_REFUSE_DEAL(1, "0191-4909-b5ed-5a075ed2fdd4-1d4c872533ca-d41d8","商标驳回复审","商标注册被驳回后的唯一救济方式",1800,"https://pay.mdlogo.cn/file/brand-power/1.png"),
+    BRAND_REFUSE_DEAL(1, "7de5-495d-ab49-248238f48a8d-1d4c872533ca-d41d8","商标驳回复审","商标注册被驳回后的唯一救济方式",1800,"https://pay.mdlogo.cn/file/brand-power/1.png"),
 
     BRAND_DISCUSS_DEAL(2, "1b48-4473-874b-39a517423882-1d4c872533ca-d41d8","商标异议答辩","商标在公示期内被他人提出异议，可以申请异议答辩",2000,"https://pay.mdlogo.cn/file/brand-power/2.png"),
 

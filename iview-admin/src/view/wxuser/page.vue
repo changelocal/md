@@ -264,7 +264,7 @@ export default {
               this.onCloseService()
               this.$notify({
                 title: 'Success',
-                message: '服务订单推送成功',
+                message: '服务订单推送成功，请在订单列表里查看',
                 type: 'success',
                 duration: 2000
               })
