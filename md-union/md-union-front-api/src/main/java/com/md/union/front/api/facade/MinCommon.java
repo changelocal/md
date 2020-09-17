@@ -142,12 +142,12 @@ public class MinCommon {
      *
      * @param request
      */
-    public void sendMinTip(JSONObject request) {
+    public void sendMinTip(Object request) {
         String accessToken = getMinAccessToken();
         String url = properties.getRouteHost() + "/cgi-bin/message/wxopen/template/send?access_token=" + accessToken;
-        log.info("sendMinTip url:{} data:{}", url, request.toJSONString());
+        log.info("sendMinTip url:{} data:{}", url, request);
         String result = HttpRequest.post(url).header("Content-Type", HttpRequest.CONTENT_TYPE_JSON)
-                .send(request.toJSONString()).body();
+                .send(request.toString()).body();
         log.info("sendMinTip result {}", result);
     }
 
