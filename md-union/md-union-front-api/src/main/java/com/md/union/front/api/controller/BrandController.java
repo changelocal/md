@@ -1,7 +1,6 @@
 package com.md.union.front.api.controller;
 
 import com.arc.common.ServiceException;
-import com.arc.util.auth.AppUserPrincipal;
 import com.arc.util.http.BaseResponse;
 import com.arc.util.tmkoo.Tmkoo;
 import com.arc.util.tmkoo.TmkooCommon;
@@ -322,7 +321,7 @@ public class BrandController {
         Map<Integer,String> name = responseCate.getResult().getCates().stream().collect(Collectors.toMap(p->p.getCode(), q->q.getCategoryName()));
 
         //获取商标list
-        SearchRecordDTO.Info req = new SearchRecordDTO.Info();
+        SearchRecordDTO.SearchRecordInfo req = new SearchRecordDTO.SearchRecordInfo();
         req.setSearchWord(request.getBrandName());
         req.setPageIndex(1);
         req.setPageSize(10);
@@ -397,7 +396,7 @@ public class BrandController {
                 });
 
                 //  增加到数据库
-                SearchRecordDTO.Info insert = new SearchRecordDTO.Info();
+                SearchRecordDTO.SearchRecordInfo insert = new SearchRecordDTO.SearchRecordInfo();
                 insert.setSearchWord(search.getBrandName());
                 insert.setRegistNo(StringUtils.join(search.getRegNos(),","));
 
@@ -406,13 +405,15 @@ public class BrandController {
                 List<Integer> collect2 = trademarkCatesUnRegis.stream().map(q -> q.getCateCode()).collect(Collectors.toList());
                 insert.setUnregistCate(StringUtils.join(collect2,","));
 
-                insert.setBuyerMobile(AppUserPrincipal.getPrincipal().getMobile());
-                insert.setOpenId(AppUserPrincipal.getPrincipal().getMinId());
+//                insert.setBuyerMobile(AppUserPrincipal.getPrincipal().getMobile());
+//                insert.setOpenId(AppUserPrincipal.getPrincipal().getMinId());
+                                insert.setBuyerMobile("8964");
+                insert.setOpenId("999999");
                 insert.setStatus(1);
-                BaseResponse<SearchRecordDTO.Resp> update = frontClient.add(insert);
-                if (!update.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
-                    throw new ServiceException(update.getStatus(), update.getMessage());
-                }
+//                BaseResponse<SearchRecordDTO.Resp> update = frontClient.add(insert);
+//                if (!update.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+//                    throw new ServiceException(update.getStatus(), update.getMessage());
+//                }
                 result.setTotal(1);
             }else{
                 result.setTotal(0);

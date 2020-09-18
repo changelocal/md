@@ -10,7 +10,7 @@ import java.util.List;
 public class SearchRecordDTO {
 
     @Data
-    public static class Info{
+    public static class SearchRecordInfo{
         /**
          * 主键id
          */
@@ -97,7 +97,7 @@ public class SearchRecordDTO {
 
     @Data
     public static class QueryResp{
-        private List<Info> infos;
+        private List<SearchRecordInfo> infos;
         private int total;
     }
     @Data

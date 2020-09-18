@@ -130,6 +130,8 @@ public interface FrontClient {
     @PostMapping(value = "/service/add/consultation", headers = { "Content-Type=application/json" })
     BaseResponse<ServiceDTO.Resp> addConsultation(@RequestBody ServiceDTO.Consultation consultation );
 
+
+
     /**********************************consultation***********************************/
     @PostMapping(value = "/consultation/query", headers = { "Content-Type=application/json" })
     BaseResponse<ConsultationDTO.QueryResp> query(@RequestBody ConsultationDTO.Info request);
@@ -139,11 +141,11 @@ public interface FrontClient {
 
     /**********************************searchRecord***********************************/
     @PostMapping(value = "/searchRecord/query", headers = { "Content-Type=application/json" })
-    BaseResponse<SearchRecordDTO.QueryResp> query(@RequestBody SearchRecordDTO.Info request);
+    BaseResponse<SearchRecordDTO.QueryResp> query(@RequestBody SearchRecordDTO.SearchRecordInfo request);
 
     @PostMapping(value = "/searchRecord/update", headers = { "Content-Type=application/json" })
-    BaseResponse<SearchRecordDTO.Resp> update(@RequestBody SearchRecordDTO.Info request);
+    BaseResponse<SearchRecordDTO.Resp> update(@RequestBody SearchRecordDTO.SearchRecordInfo request);
 
     @PostMapping(value = "/searchRecord/add", headers = { "Content-Type=application/json" })
-    BaseResponse<SearchRecordDTO.Resp> add(@RequestBody SearchRecordDTO.Info request);
+    BaseResponse<SearchRecordDTO.Resp> add(@RequestBody SearchRecordDTO.SearchRecordInfo request);
 }

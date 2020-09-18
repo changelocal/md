@@ -44,6 +44,12 @@
       <Form-item label="商标名字">
         <Input v-model="name" placeholder="请输入商标名字" clearable></Input>
       </Form-item>
+      <Form-item label="名典编号">
+        <Input v-model="brandId" placeholder="请输入商标名字" clearable></Input>
+      </Form-item>
+      <Form-item label="注册号">
+        <Input v-model="regNo" placeholder="请输入商标名字" clearable></Input>
+      </Form-item>
       <Form-item label>
         <Button type="primary" @click="onSearch">搜索</Button>
       </Form-item>
@@ -162,7 +168,8 @@ export default {
         },
         { title: "类型", key: "category" },
         { title: "名称", key: "brandName" },
-        { title: "注册号", key: "mobile" },
+        { title: "名典编号", key: "brandId" },
+        { title: "注册号", key: "regNo" },
         { title: "分类", key: "brandType" },
         { title: "价格区间", key: "price", slot: "price" },
         { title: "热门", key: "isQuality", slot: "isQuality" },
@@ -322,7 +329,9 @@ export default {
         },
       ],
       name: "",
-      tableData: [{ name: "sxj", title: "boss" }],
+      brandId: "",
+      regNo: "",
+      tableData: [],
       currentRow: null,
       currentPage: 1,
       popShow: false,
@@ -337,6 +346,8 @@ export default {
         pageIndex: this.currentPage,
         pageSize: this.pageSize,
         brandName: this.name,
+        brandId: this.brandId,
+        regNo: this.regNo,
         categoryNo: this.brandClass,
         priceType: this.brandPrice,
         unionType: this.brandType,

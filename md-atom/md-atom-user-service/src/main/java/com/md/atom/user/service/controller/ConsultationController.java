@@ -54,7 +54,7 @@ public class ConsultationController {
 
     @ApiOperation(value = "新增加管理人员", notes = "新增加管理人员")
     @PostMapping("/update")
-    public ConsultationVO.Resp update(@RequestBody Consultation request) {
+    public ConsultationVO.Resp update(@RequestBody ConsultationVO.Info request) {
         Consultation user = new Consultation();
         BeanUtils.copyProperties(request, user);
         user.setUpdateTime(new Date());
