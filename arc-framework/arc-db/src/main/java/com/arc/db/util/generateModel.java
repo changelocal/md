@@ -21,7 +21,7 @@ public class generateModel {
     private static String url = "jdbc:mysql://47.92.65.35:3306/md";
     private static String user = "root";
     private static String pwd = "tianxiuquan";
-    private static String tableName = "consultation"; //数据库表名
+    private static String tableName = "search_record"; //数据库表名
 
 //    private static String url = "jdbc:mysql://rm-2ze483z2gdr20974fuo.mysql.rds.aliyuncs.com:3306/db_ytmd_prod";
 //    private static String user = "mdlogo";
