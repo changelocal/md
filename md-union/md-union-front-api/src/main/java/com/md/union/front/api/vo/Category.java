@@ -36,7 +36,7 @@ public class Category {
     @Data
     @ApiModel("商标分类详情购买展示")
     public static class BuyDetailReq{
-        @ApiModelProperty("商标id")
+        @ApiModelProperty("商标")
         private String brandName;
     }
     @Data

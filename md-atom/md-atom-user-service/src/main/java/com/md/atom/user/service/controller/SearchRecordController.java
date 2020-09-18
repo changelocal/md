@@ -49,10 +49,18 @@ public class SearchRecordController {
         }
         return result;
     }
-
+    @PostMapping("/add")
+    public SearchRecordVO.Resp add(@RequestBody SearchRecordVO.Info request) {
+        SearchRecord user = new SearchRecord();
+        BeanUtils.copyProperties(request, user);
+        user.setCreateTime(new Date());
+        searchRecordDao.add(user);
+        SearchRecordVO.Resp result = new SearchRecordVO.Resp();
+        return result;
+    }
     @ApiOperation(value = "新增加管理人员", notes = "新增加管理人员")
     @PostMapping("/update")
-    public SearchRecordVO.Resp update(@RequestBody SearchRecord request) {
+    public SearchRecordVO.Resp update(@RequestBody SearchRecordVO.Info request) {
         SearchRecord user = new SearchRecord();
         BeanUtils.copyProperties(request, user);
         user.setUpdateTime(new Date());

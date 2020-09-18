@@ -13,6 +13,7 @@ import com.md.union.front.api.vo.MinUser;
 import com.md.union.front.api.vo.TemplateData;
 import com.md.union.front.api.vo.WxMss;
 import com.md.union.front.api.vo.WxMssVo;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -135,7 +136,27 @@ public class MinCommon {
         m.put("thing10", new TemplateData(orderProgress.getNote()));
         wxMssVo.setData(m);
 
+//        JSONObject data = new JSONObject();
+//        data.put("touser", "openid");
+//        data.put("template_id", ConfigTemplate.To_Pay_TmpId);
+//        data.put("page", "pages/insuranceDetail/insuranceDetail?insuranceId=" + "id");
+//        data.put("form_id", "formid");
+//        JSONObject content = new JSONObject();
+//        content.put("keyword1", new BrandController.Template("国内快件丢失保险（快递保）"));
+//        content.put("keyword2", new BrandController.Template("iddd"));
+//        content.put("keyword3", new BrandController.Template("idddd"));
+//        content.put("keyword4", new BrandController.Template("您可登录燕赵财险官网查询理赔进度，服务电话：4000-000-123"));
+//        data.put("data", content);
+
         sendMinTip(null);
+    }
+    @Data
+    public class Template {
+        Template(String value) {
+            this.value = value;
+        }
+
+        private String value;
     }
     /**
      * 发送保单消息

@@ -43,8 +43,10 @@ public class TmkooCommon {
             System.out.println(msg);
         }
     }
-    public static List<Tmkoo.RegisterInfo> search(String keyword) throws UnsupportedEncodingException {
+    public static Tmkoo.Result search(String keyword) throws UnsupportedEncodingException {
+        Tmkoo.Result res = new Tmkoo.Result();
         List<Tmkoo.RegisterInfo> result = new ArrayList<>();
+        List<String> regNoes = new ArrayList<>();
         String encode = URLEncoder.encode(keyword, "UTF-8");
         String url="http://api.tmkoo.com/search.php?keyword="+encode+"&apiKey="+apiKey +
                 "&apiPassword="+apiPassword+"&pageSize=50&pageNo=1&searchType=1";
@@ -58,21 +60,21 @@ public class TmkooCommon {
             if("0".equals(ret)){
                 JSONArray results = JSONObject.parseArray(data.getString("results"));
                 for(int i =0;i< results.size();i++){
+                    //和搜索的内容一致的
                     if(keyword.equals(results.getJSONObject(i).getString("tmName"))) {
                         Tmkoo.RegisterInfo info = new Tmkoo.RegisterInfo();
                         if ("商标已注册".equals(results.getJSONObject(i).getString("currentStatus"))) {
                             info.setCate(Integer.parseInt(results.getJSONObject(i).getString("intCls")));
                             info.setRegister(true);
-
                         } else if ("商标无效".equals(results.getJSONObject(i).getString("currentStatus"))) {
 //                            info.setCate(Integer.parseInt(results.getJSONObject(i).getString("intCls")));
 //                            info.setRegister(false);
                             continue;
-
                         } else {
                             info.setCate(Integer.parseInt(results.getJSONObject(i).getString("intCls")));
                             info.setRegister(true);
                         }
+                        regNoes.add(results.getJSONObject(i).getString("regNo"));
                         result.add(info);
                     }
                 }
@@ -80,7 +82,8 @@ public class TmkooCommon {
         }
         log.info("",result);
         System.out.println(result);
-        return  result;
+        res.setRegisters(result);
+        return  res;
     }
 
 }

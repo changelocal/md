@@ -1,28 +1,31 @@
 package com.md.union.front.api.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import com.arc.common.ServiceException;
+import com.arc.util.auth.AppUserPrincipal;
 import com.arc.util.http.BaseResponse;
-import com.md.union.front.api.facade.ConfigTemplate;
+import com.arc.util.tmkoo.Tmkoo;
+import com.arc.util.tmkoo.TmkooCommon;
+import com.md.union.front.api.Enums.BrandTypeEnums;
 import com.md.union.front.api.facade.MinCommon;
 import com.md.union.front.api.vo.Brand;
 import com.md.union.front.api.vo.Category;
-import com.md.union.front.api.Enums.BrandTypeEnums;
+import com.md.union.front.client.dto.SearchRecordDTO;
 import com.md.union.front.client.dto.ServiceDTO;
 import com.md.union.front.client.dto.TrademarkDTO;
 import com.md.union.front.client.feign.FrontClient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -38,30 +41,6 @@ public class BrandController {
     private FrontClient frontClient;
     SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-    @GetMapping("/test")
-    public void test() {
-
-        JSONObject data = new JSONObject();
-        data.put("touser", "openid");
-        data.put("template_id", ConfigTemplate.To_Pay_TmpId);
-        data.put("page", "pages/insuranceDetail/insuranceDetail?insuranceId=" + "id");
-        data.put("form_id", "formid");
-        JSONObject content = new JSONObject();
-        content.put("keyword1", new Template("国内快件丢失保险（快递保）"));
-        content.put("keyword2", new Template("iddd"));
-        content.put("keyword3", new Template("idddd"));
-        content.put("keyword4", new Template("您可登录燕赵财险官网查询理赔进度，服务电话：4000-000-123"));
-        data.put("data", content);
-        minCommon.sendMinTip(data);
-    }
-    @Data
-    public class Template {
-        Template(String value) {
-            this.value = value;
-        }
-
-        private String value;
-    }
     /**
      * 八大热门分类
      * @return
@@ -333,16 +312,8 @@ public class BrandController {
      */
     @ApiOperation("首页查商标的详情")
     @PostMapping("/home/search")
-    public Brand.SearchDetail searchDetail(@RequestBody Category.BuyDetailReq request) {
+    public Brand.SearchDetail searchDetail(@RequestBody Category.BuyDetailReq request) throws UnsupportedEncodingException {
         Brand.SearchDetail result = new Brand.SearchDetail();
-
-        //获取商标list
-        TrademarkDTO.MdBrand req = new TrademarkDTO.MdBrand();
-        req.setBrandName(request.getBrandName());
-        BaseResponse<TrademarkDTO.QueryResp> response = frontClient.find(req);
-        if (!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
-            throw new ServiceException(response.getStatus(), response.getMessage());
-        }
         //得到45大类
         BaseResponse<TrademarkDTO.RootBrandResp> responseCate = frontClient.root();
         if (!responseCate.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
@@ -350,50 +321,111 @@ public class BrandController {
         }
         Map<Integer,String> name = responseCate.getResult().getCates().stream().collect(Collectors.toMap(p->p.getCode(), q->q.getCategoryName()));
 
-        Map<String,String> ids = new HashMap<>();
-        Map<Integer,String> codes = new HashMap<>();
-        List<Brand.TrademarkCateSearch> trademarkCates = new ArrayList<>();
-        if(!CollectionUtils.isEmpty(response.getResult().getMdBrands())){
-            response.getResult().getMdBrands().forEach(e -> {
-                Brand.TrademarkCateSearch res = new Brand.TrademarkCateSearch();
-                res.setCateCode(e.getCategory());
-                if(e.getCategory()<10){
-                    res.setCateName("0"+e.getCategory()+"-"+name.get(e.getCategory()));
+        //获取商标list
+        SearchRecordDTO.Info req = new SearchRecordDTO.Info();
+        req.setSearchWord(request.getBrandName());
+        req.setPageIndex(1);
+        req.setPageSize(10);
+        BaseResponse<SearchRecordDTO.QueryResp> response = frontClient.query(req);
+        if (!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+            throw new ServiceException(response.getStatus(), response.getMessage());
+        }
+        List<Brand.TrademarkCateSearch> trademarkCatesRegis = new ArrayList<>();
+        List<Brand.TrademarkCateSearch> trademarkCatesUnRegis = new ArrayList<>();
+        //数据库有记录
+        if(!CollectionUtils.isEmpty(response.getResult().getInfos()) && response.getResult().getInfos().size()>0){
+            List<String> regis = Arrays.asList(response.getResult().getInfos().get(0).getRegistCate().split(","));
+            List<String> regisUn = Arrays.asList(response.getResult().getInfos().get(0).getUnregistCate().split(","));
+            responseCate.getResult().getCates().forEach(p->{
+                if(regis.contains(p.getCode())){
+                    Brand.TrademarkCateSearch info = new Brand.TrademarkCateSearch();
+                    if(p.getCode()<10){
+                        info.setCateName("0"+p.getCode()+"-"+p.getCategoryName());
+                    }else{
+                        info.setCateName(p.getCode()+"-"+p.getCategoryName());
+                    }
+                    info.setCateCode(p.getCode());
+                    trademarkCatesRegis.add(info);
+                }else if (regisUn.contains(p.getCode())){
+                    Brand.TrademarkCateSearch info = new Brand.TrademarkCateSearch();
+                    if(p.getCode()<10){
+                        info.setCateName("0"+p.getCode()+"-"+p.getCategoryName());
+                    }else{
+                        info.setCateName(p.getCode()+"-"+p.getCategoryName());
+                    }
+                    info.setCateCode(p.getCode());
+                    trademarkCatesUnRegis.add(info);
                 }else{
-                    res.setCateName(e.getCategory()+"-"+name.get(e.getCategory()));
+                    Brand.TrademarkCateSearch info = new Brand.TrademarkCateSearch();
+                    if(p.getCode()<10){
+                        info.setCateName("0"+p.getCode()+"-"+p.getCategoryName());
+                    }else{
+                        info.setCateName(p.getCode()+"-"+p.getCategoryName());
+                    }
+                    info.setCateCode(p.getCode());
+                    trademarkCatesUnRegis.add(info);
                 }
-
-                res.setId(e.getId());
-                res.setName(e.getBrandName());
-                trademarkCates.add(res);
             });
-            ids = response.getResult().getMdBrands().stream().collect(Collectors.toMap(p->p.getId(), q->q.getId()));
-            codes = response.getResult().getMdBrands().stream().collect(Collectors.toMap(p->p.getCategory(), q->q.getId()));
+            result.setTotal(1);
         }
-        result.setTrademarkCateListRegist(trademarkCates);
-        result.setRegistCount(trademarkCates.size());
-        result.setTotal(trademarkCates.size());
-        result.setSuccess("34");
+        //数据库没有记录，要发请求
+        else{
+            Tmkoo.Result search = TmkooCommon.search(request.getBrandName());
+            if(!CollectionUtils.isEmpty(search.getRegisters())){
 
-        //未注册的
-        List<Brand.TrademarkCateSearch> trademarkCatesUnRegist = new ArrayList<>();
-        for (TrademarkDTO.Cate cate : responseCate.getResult().getCates()) {
-            if (codes.containsKey(cate.getCode())) {
-                continue;
-            }
-            Brand.TrademarkCateSearch res = new Brand.TrademarkCateSearch();
-            res.setCateCode(cate.getCode());
-            if(cate.getCode()<10){
-                res.setCateName("0"+cate.getCode()+"-"+name.get(cate.getCode()));
+                List<Integer> collect = search.getRegisters().stream().map(p->p.getCate()).collect(Collectors.toList());
+                responseCate.getResult().getCates().forEach(p->{
+                    if(collect.contains(p.getCode())){
+                        Brand.TrademarkCateSearch info = new Brand.TrademarkCateSearch();
+                        if(p.getCode()<10){
+                            info.setCateName("0"+p.getCode()+"-"+p.getCategoryName());
+                        }else{
+                            info.setCateName(p.getCode()+"-"+p.getCategoryName());
+                        }
+                        info.setCateCode(p.getCode());
+                        trademarkCatesRegis.add(info);
+                    }else{
+                        Brand.TrademarkCateSearch info = new Brand.TrademarkCateSearch();
+                        if(p.getCode()<10){
+                            info.setCateName("0"+p.getCode()+"-"+p.getCategoryName());
+                        }else{
+                            info.setCateName(p.getCode()+"-"+p.getCategoryName());
+                        }
+                        info.setCateCode(p.getCode());
+                        trademarkCatesUnRegis.add(info);
+                    }
+                });
+
+                //  增加到数据库
+                SearchRecordDTO.Info insert = new SearchRecordDTO.Info();
+                insert.setSearchWord(search.getBrandName());
+                insert.setRegistNo(StringUtils.join(search.getRegNos(),","));
+
+                List<Integer> collect1 = search.getRegisters().stream().map(q -> q.getCate()).collect(Collectors.toList());
+                insert.setRegistCate(StringUtils.join(collect1,","));
+                List<Integer> collect2 = trademarkCatesUnRegis.stream().map(q -> q.getCateCode()).collect(Collectors.toList());
+                insert.setUnregistCate(StringUtils.join(collect2,","));
+
+                insert.setBuyerMobile(AppUserPrincipal.getPrincipal().getMobile());
+                insert.setOpenId(AppUserPrincipal.getPrincipal().getMinId());
+                insert.setStatus(1);
+                BaseResponse<SearchRecordDTO.Resp> update = frontClient.add(insert);
+                if (!update.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+                    throw new ServiceException(update.getStatus(), update.getMessage());
+                }
+                result.setTotal(1);
             }else{
-                res.setCateName(cate.getCode()+"-"+name.get(cate.getCode()));
+                result.setTotal(0);
             }
-            trademarkCatesUnRegist.add(res);
         }
-        result.setTrademarkCateListUnRegist(trademarkCatesUnRegist);
-        result.setUnRegistCount(trademarkCatesUnRegist.size());
 
-        //相似商标
+        result.setTrademarkCateListRegist(trademarkCatesRegis);
+        result.setRegistCount(trademarkCatesRegis.size());
+        result.setSuccess("34");
+        result.setTrademarkCateListUnRegist(trademarkCatesUnRegis);
+        result.setUnRegistCount(trademarkCatesUnRegis.size());
+
+        //****************************************相似商标
         TrademarkDTO.MdBrand requestFamilar = new TrademarkDTO.MdBrand();
         requestFamilar.setBrandName(request.getBrandName());
         requestFamilar.setPriceHigh(new BigDecimal(0));
@@ -407,7 +439,7 @@ public class BrandController {
         List<Brand.SpecialRes> trademarkCatesFamilar = new ArrayList<>();
         if(!CollectionUtils.isEmpty(responseFamilar.getResult().getMdBrands())){
             for (TrademarkDTO.MdBrand e : responseFamilar.getResult().getMdBrands()) {
-                if (ids.containsKey(e.getId())) {
+                if (request.getBrandName().equals(e.getBrandName())) {
                     continue;
                 }
                 Brand.SpecialRes res = new Brand.SpecialRes();
@@ -422,7 +454,6 @@ public class BrandController {
             }
         }
         result.setFamiliar(trademarkCatesFamilar);
-
         return result;
     }
 
