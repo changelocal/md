@@ -42,7 +42,7 @@
         </template>
         <template slot-scope="{ row, index }" slot="action">
           <Button type="primary" size="small" style="margin-right: 5px" @click="onEdit(index)">编辑</Button>
-          <Button type="error" size="small" style="margin-right: 5px" @click="onMakeOrder(index)">推单</Button>
+          <!-- <Button type="error" size="small" style="margin-right: 5px" @click="onMakeOrder(index)">推单</Button> -->
         </template>
       </Table>
       <Page
@@ -56,7 +56,7 @@
     </Form>
     <Modal
       v-model="popShow"
-      title="修改咨询"
+      title="修改搜索记录"
       :visible="true"
       :close-on-click-modal="false"
       width="30%"
@@ -94,21 +94,17 @@
 </template>
 
 <script>
-import { query, update } from "@/api/consultation";
-import NewOrder from "./newOrder";
+import { query, update } from "@/api/search";
+
 export default {
   name: "PagePermission",
-  components: {
-    // Add,
-    NewOrder,
-  },
   data() {
     return {
       rulesRight: {
         note: [{ required: true, message: "请输入", trigger: "blur" }],
       },
       columns1: [
-        { title: "咨询订单", key: "name" },
+        { title: "查询商标", key: "name" },
         { title: "咨询人", key: "buyerName" },
         { title: "咨询人手机", key: "buyerMobile" },
         { title: "状态", key: "status", slot: "status", width: 100 },
@@ -127,21 +123,21 @@ export default {
         },
         {
           value: 1,
-          label: "发起咨询",
+          label: "发起搜索",
         },
         {
           value: 2,
-          label: "完成咨询",
+          label: "完成搜索",
         },
       ],
       optionsStatus: [
         {
           value: 1,
-          label: "发起咨询",
+          label: "发起搜索",
         },
         {
           value: 2,
-          label: "完成咨询",
+          label: "完成搜索",
         },
       ],
       openType: "add",
@@ -314,6 +310,7 @@ export default {
     },
     reqList() {
       query(this.formQuery).then((res) => {
+        console.log(res);
         if (res.status === true) {
           const rdata = res.data;
           this.tableData = rdata.list;

@@ -199,6 +199,26 @@ export default [
     ]
   },
   {
+    path: '/search',
+    component: Main,
+    name: 'search',
+    meta: {
+      title: '搜索管理',
+      icon: 'qq',
+    },
+    children: [
+      {
+        path: 'page',
+        component: () => import('@/view/search/page.vue'),
+        name: 'Pagesearch',
+        meta: {
+          title: '搜索列表'
+        }
+      }
+
+    ]
+  },
+  {
     path: '/message',
     name: 'message',
     component: Main,
