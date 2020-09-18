@@ -5,27 +5,25 @@ import com.alibaba.fastjson.JSONObject;
 import com.arc.util.http.HttpRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @Slf4j
 public class TmkooCommon {
     public static final String apiPassword = "P8G3m5dR6Dj";
     public static final String apiKey = "QIJIAN_1819072015";
-
     public static void main(String[] args) {
+        try {
+            TmkooCommon.search("卓霸");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
-
-//        try {
-//            TmkooCommon.search("好利来");
-//        } catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
-//        }
-
-        TmkooCommon.info("9999212", 11);
+//        TmkooCommon.info("12816966", 25);
     }
 
     /**
@@ -45,20 +43,44 @@ public class TmkooCommon {
             System.out.println(msg);
         }
     }
-    public static void search(String keyword) throws UnsupportedEncodingException {
+    public static List<Tmkoo.RegisterInfo> search(String keyword) throws UnsupportedEncodingException {
+        List<Tmkoo.RegisterInfo> result = new ArrayList<>();
         String encode = URLEncoder.encode(keyword, "UTF-8");
         String url="http://api.tmkoo.com/search.php?keyword="+encode+"&apiKey="+apiKey +
-                "&apiPassword="+apiPassword+"&pageSize=50&pageNo=1&searchType=4";
-        System.out.println(url);
+                "&apiPassword="+apiPassword+"&pageSize=50&pageNo=1&searchType=1";
+//        System.out.println(url);
         String resp = HttpRequest.get(url).body();
-        System.out.println(resp);
-        log.info(resp);
-        JSONArray data = JSONObject.parseArray(resp);
+//        System.out.println(resp);
+        log.info("",resp);
+        JSONObject data = JSONObject.parseObject(resp);
         if (data != null) {
-            if (!CollectionUtils.isEmpty(data)) {
+            String ret = data.getString("ret");
+            if("0".equals(ret)){
+                JSONArray results = JSONObject.parseArray(data.getString("results"));
+                for(int i =0;i< results.size();i++){
+                    if(keyword.equals(results.getJSONObject(i).getString("tmName"))) {
+                        Tmkoo.RegisterInfo info = new Tmkoo.RegisterInfo();
+                        if ("商标已注册".equals(results.getJSONObject(i).getString("currentStatus"))) {
+                            info.setCate(Integer.parseInt(results.getJSONObject(i).getString("intCls")));
+                            info.setRegister(true);
 
+                        } else if ("商标无效".equals(results.getJSONObject(i).getString("currentStatus"))) {
+//                            info.setCate(Integer.parseInt(results.getJSONObject(i).getString("intCls")));
+//                            info.setRegister(false);
+                            continue;
+
+                        } else {
+                            info.setCate(Integer.parseInt(results.getJSONObject(i).getString("intCls")));
+                            info.setRegister(true);
+                        }
+                        result.add(info);
+                    }
+                }
             }
         }
+        log.info("",result);
+        System.out.println(result);
+        return  result;
     }
 
 }
