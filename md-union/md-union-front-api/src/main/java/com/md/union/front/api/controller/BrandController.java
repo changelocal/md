@@ -301,7 +301,7 @@ public class BrandController {
         person.setPhone(responsePerson.getResult().getMobile());
         person.setQq(responsePerson.getResult().getQqAccount());
         result.setPerson(person);
-
+        result.setOrderType("4");
         return result;
     }
 
@@ -491,7 +491,7 @@ public class BrandController {
         result.setPerson(person);
         result.setDes(responseFamilar.getResult().getDes());
         result.setId(id);
-        result.setOrderType("2");
+        result.setOrderType(String.valueOf(brandType));
 
         return result;
     }
