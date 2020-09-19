@@ -45,8 +45,8 @@ public class AdminUserController {
         PageResult<AdminUser> list = adminUserDao.query(para);
 
         List<AdminUserVO.AdminUser> adminUsers = new ArrayList<>();
-        if(!CollectionUtils.isEmpty(list.getItems())){
-            list.getItems().forEach(p->{
+        if (!CollectionUtils.isEmpty(list.getItems())) {
+            list.getItems().forEach(p -> {
                 AdminUserVO.AdminUser adminUser1 = new AdminUserVO.AdminUser();
                 BeanUtils.copyProperties(p, adminUser1);
                 adminUsers.add(adminUser1);
@@ -67,8 +67,8 @@ public class AdminUserController {
         List<AdminUser> list = adminUserDao.find(para);
 
         List<AdminUserVO.AdminUser> adminUsers = new ArrayList<>();
-        if(!CollectionUtils.isEmpty(list)){
-            list.forEach(p->{
+        if (!CollectionUtils.isEmpty(list)) {
+            list.forEach(p -> {
                 AdminUserVO.AdminUser adminUser1 = new AdminUserVO.AdminUser();
                 BeanUtils.copyProperties(p, adminUser1);
                 adminUsers.add(adminUser1);
@@ -88,7 +88,7 @@ public class AdminUserController {
         para.setIsEnable(1);
 
         List<AdminUser> list = adminUserDao.find(para);
-        if(!CollectionUtils.isEmpty(list)){
+        if (!CollectionUtils.isEmpty(list)) {
             Random random = new Random();
             BeanUtils.copyProperties(list.get(random.nextInt(list.size())), result);
         }
@@ -102,11 +102,13 @@ public class AdminUserController {
         AdminUser user = new AdminUser();
         BeanUtils.copyProperties(request, user);
         user.setCreateTime(new Date());
-        adminUserDao.add(user);
+        int id = adminUserDao.add(user);
 
         AdminUserVO.Resp result = new AdminUserVO.Resp();
+        result.setCode(id);
         return result;
     }
+
     @ApiOperation(value = "新增加管理人员", notes = "新增加管理人员")
     @PostMapping("/update")
     public AdminUserVO.Resp update(@RequestBody AdminUserVO.AdminUser request) {
@@ -127,14 +129,14 @@ public class AdminUserController {
         res.setCount(adminUserDao.counter());
         ret.add(res);
 
-         res = new AdminUserVO.HomeRes();
+        res = new AdminUserVO.HomeRes();
         res.setTitle("累计用户");
         res.setColor("#19be6b");
         res.setIcon("md-locate");
         res.setCount(wxUserDao.counter());
         ret.add(res);
 
-         res = new AdminUserVO.HomeRes();
+        res = new AdminUserVO.HomeRes();
         res.setTitle("累计商标");
         res.setColor("#ff9900");
         res.setIcon("md-help-circle");

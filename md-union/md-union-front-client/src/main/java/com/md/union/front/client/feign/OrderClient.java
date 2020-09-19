@@ -20,7 +20,7 @@ public interface OrderClient {
 
     @ApiOperation(value = "添加用户订单", notes = "添加用户订单")
     @PostMapping("/add")
-    BaseResponse add(@RequestBody OrderDTO.BrandOrderVO request);
+    BaseResponse<Integer> add(@RequestBody OrderDTO.BrandOrderVO request);
 
     @ApiOperation(value = "修改用户订单", notes = "修改用户订单")
     @PostMapping("/update")

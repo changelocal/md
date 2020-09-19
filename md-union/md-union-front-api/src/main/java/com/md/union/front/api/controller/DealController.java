@@ -38,6 +38,7 @@ public class DealController {
             item.setTitle(value.getTitle());
             item.setIcon(value.getIcon());
             item.setBrief(value.getBrief());
+            item.setBrandType(value.getType());
             result.add(item);
         }
 

@@ -122,6 +122,8 @@ public class Brand {
         private String qq;
         @ApiModelProperty("头衔")
         private String title;
+        @ApiModelProperty("主键id")
+        private int id;
     }
 
     @Data
@@ -257,6 +259,7 @@ public class Brand {
         @ApiModelProperty("品牌顾问信息")
         private Brand.Person person;
         private String brandNo;
+        private String OrderType;
     }
 
     @Data

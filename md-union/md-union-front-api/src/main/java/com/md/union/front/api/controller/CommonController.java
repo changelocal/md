@@ -110,7 +110,7 @@ public class CommonController {
 
     @ApiOperation("咨询按钮接口")
     @GetMapping("/consultation/{id}")
-    public Consultation.ConsultationResp dealDtail(@PathVariable("id") String id) {
+    public Consultation.ConsultationResp dealDtail(@PathVariable("id") int id) {
         Consultation.ConsultationResp result = new Consultation.ConsultationResp();
         //判断最近什么时候咨询过
         boolean hadConsultation = false;
@@ -150,7 +150,7 @@ public class CommonController {
 
         } else {
             TrademarkDTO.Consultation consultation = new TrademarkDTO.Consultation();
-            consultation.setId(id);
+            //consultation.setId(id);
             BaseResponse<TrademarkDTO.ConsultationResp> response = frontClient.consultation(consultation);
             if (!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
                 throw new ServiceException(response.getStatus(), response.getMessage());
@@ -168,14 +168,13 @@ public class CommonController {
         }
 
         //应该记录一下咨询记录
-        if (id == null || "666".equals(id) || "888".equals(id) || "8".equals(id)) {
-            id = "";
+        if(id == 666 || id == 888 || id == 8){
+
         }
-        consultation1.setOrderNo(id);
+        consultation1.setOrderNo("000000");
         consultation1.setStatus(1);
         consultation1.setOpenId(AppUserPrincipal.getPrincipal().getMinId());
         consultation1.setBuyerMobile(AppUserPrincipal.getPrincipal().getMobile());
-//        consultation1.setBuyerName(AppUserPrincipal.getPrincipal().getMinId());
 
         BaseResponse<ServiceDTO.Resp> responseAdd = frontClient.addConsultation(consultation1);
         if (!responseAdd.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
@@ -283,9 +282,8 @@ public class CommonController {
                     if (LoginInterceptor.loginStatus.containsKey(AppUserPrincipal.getPrincipal().getToken())) {
                         MinUser minUser = JSON.parseObject(LoginInterceptor.loginStatus.get(AppUserPrincipal.getPrincipal().getToken()), MinUser.class);
                         minUser.setMobile(phone);
-                        LoginInterceptor.loginStatus.put(AppUserPrincipal.getPrincipal().getToken(), JSON.toJSONString(minGetPhone));
+                        LoginInterceptor.loginStatus.put(AppUserPrincipal.getPrincipal().getToken(), JSON.toJSONString(minUser));
                     }
-
                 }
                 return jsonObject;
             }

@@ -88,13 +88,13 @@ public class TrademarkDTO {
     @ApiModel("发起咨询")
     public static class Consultation{
         @ApiModelProperty("商标ID")
-        private String id;
+        private int id;
     }
     @Data
     @ApiModel("咨询对象信息")
     public static class ConsultationResp{
-        @ApiModelProperty("姓名")
-        private String id;
+        @ApiModelProperty("主键id")
+        private int id;
         @ApiModelProperty("姓名")
         private String nickname;
         @ApiModelProperty("角色")
