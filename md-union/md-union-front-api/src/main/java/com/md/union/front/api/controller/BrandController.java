@@ -412,10 +412,10 @@ public class BrandController {
                 insert.setBuyerMobile("8964");
                 insert.setOpenId("999999");
                 insert.setStatus(1);
-//                BaseResponse<SearchRecordDTO.Resp> update = frontClient.add(insert);
-//                if (!update.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
-//                    throw new ServiceException(update.getStatus(), update.getMessage());
-//                }
+                BaseResponse<SearchRecordDTO.Resp> update = frontClient.add(insert);
+                if (!update.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+                    throw new ServiceException(update.getStatus(), update.getMessage());
+                }
                 result.setTotal(1);
             } else {
                 result.setTotal(0);
