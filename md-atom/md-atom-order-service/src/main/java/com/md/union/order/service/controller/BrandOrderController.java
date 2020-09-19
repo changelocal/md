@@ -70,11 +70,15 @@ public class BrandOrderController {
         param.setStatus(request.getStatus());
         param.setUserId(request.getUserId());
         param.setOpUserId(request.getOpUserId());
+        param.setProductNo(request.getProductNo());
+        param.setOpUserId(request.getOpUserId());
         param.setId(request.getId());
         log.info("brandOrderDao.find param:{}", JSON.toJSONString(param));
         List<BrandOrder> list = brandOrderDao.find(param);
         log.info("brandOrderDao.find list:{}", JSON.toJSONString(list));
-
+        if (CollectionUtils.isEmpty(list)) {
+            return null;
+        }
         if (list.size() > 1) {
             throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "订单不唯一");
         }

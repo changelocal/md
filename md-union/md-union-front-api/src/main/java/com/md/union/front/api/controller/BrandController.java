@@ -300,6 +300,7 @@ public class BrandController {
         person.setName(responsePerson.getResult().getNickname());
         person.setPhone(responsePerson.getResult().getMobile());
         person.setQq(responsePerson.getResult().getQqAccount());
+        person.setId(responsePerson.getResult().getId());
         result.setPerson(person);
         result.setOrderType("4");
         return result;

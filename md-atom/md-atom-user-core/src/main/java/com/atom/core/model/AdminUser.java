@@ -13,7 +13,7 @@ public class AdminUser {
 	/**
 	 * 
 	 */
-	private String id;
+	private int id;
 
 	/**
 	 * 

@@ -73,6 +73,17 @@ public class Order {
         private String productNo;
     }
 
+    @ApiModel("服务订单提交")
+    @Data
+    public static class BuyOrder{
+        @ApiModelProperty("订单类型")
+        public int orderType;
+        @ApiModelProperty("预付款价格")
+        public String code;
+        @ApiModelProperty("客服人员id")
+        private int personId;
+    }
+
     @ApiModel("我的订单列提交资料")
     @Data
     public static class SubmitOrderFile{

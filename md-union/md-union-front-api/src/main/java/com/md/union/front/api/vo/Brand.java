@@ -122,6 +122,8 @@ public class Brand {
         private String qq;
         @ApiModelProperty("头衔")
         private String title;
+        @ApiModelProperty("主键id")
+        private int id;
     }
 
     @Data

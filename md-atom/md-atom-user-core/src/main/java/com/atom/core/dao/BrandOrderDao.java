@@ -96,6 +96,9 @@ public class BrandOrderDao extends BaseDao {
         if (brandOrderParam.getStatus() > 0) {
             filter = filter.and(f("status", brandOrderParam.getStatus()));
         }
+        if (!Strings.isNullOrEmpty(brandOrderParam.getProductNo())) {
+            filter = filter.and(f("product_no", brandOrderParam.getProductNo()));
+        }
         List<BrandOrder> list = DB().select(BrandOrder.class)
                 .where(filter).result().all(BrandOrder.class);
         return list == null ? new ArrayList<>() : list;

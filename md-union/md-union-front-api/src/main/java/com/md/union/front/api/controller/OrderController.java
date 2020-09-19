@@ -149,10 +149,10 @@ public class OrderController {
     }
 
     @ApiOperation("提交订单")
-    @GetMapping("/submit/{orderType}/{code}")
-    public Integer submitOrder(@PathVariable("ordertype") int ordertype, @PathVariable("code") String code) {
+    @PostMapping("/submit")
+    public Integer submitOrder(@RequestBody Order.BuyOrder request) {
         OrderDTO.BrandOrderVO orderReq = new OrderDTO.BrandOrderVO();
-        orderReq.setProductNo(code);
+        orderReq.setProductNo(request.getCode());
         orderReq.setUserId(AppUserPrincipal.getPrincipal().getId());
         log.info("orderClient.getByCondition param:{}", JSON.toJSONString(orderReq));
         BaseResponse<OrderDTO.BrandOrderVO> orderResp = orderClient.getByCondition(orderReq);
@@ -164,7 +164,7 @@ public class OrderController {
             return orderResp.getResult().getId();
         }
         //生成订单
-        OrderDTO.BrandOrderVO order = convert(code, ordertype);
+        OrderDTO.BrandOrderVO order = convert(request);
         BaseResponse<Integer> response = orderClient.add(order);
         if (!BaseResponse.STATUS_HANDLE_SUCCESS.equals(response.getStatus())) {
             throw new ServiceException(response.getStatus(), response.getMessage());
@@ -313,11 +313,11 @@ public class OrderController {
         return result;
     }
 
-    private OrderDTO.BrandOrderVO convert(String code, int orderType) {
-        if (Strings.isNullOrEmpty(code)) {
+    private OrderDTO.BrandOrderVO convert(Order.BuyOrder request) {
+        if (Strings.isNullOrEmpty(request.getCode())) {
             throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "商标服务主键不能为空");
         }
-        BaseResponse<ServiceDTO.Service> serviceResp = frontClient.getService(code);
+        BaseResponse<ServiceDTO.Service> serviceResp = frontClient.getService(request.getCode());
         if (!BaseResponse.STATUS_HANDLE_SUCCESS.equals(serviceResp.getStatus())) {
             throw new ServiceException(serviceResp.getStatus(), serviceResp.getMessage());
         }
@@ -329,13 +329,13 @@ public class OrderController {
         result.setRestPay(serviceResp.getResult().getPrice().intValue());
         result.setTotalPay(serviceResp.getResult().getPrice().intValue());
         result.setUserId(AppUserPrincipal.getPrincipal().getId());
-        result.setOpUserId(0);
+        result.setOpUserId(request.getPersonId());
         result.setCreateTime(new Date());
         result.setUpdateTime(new Date());
 
 
-        result.setOrderType(orderType);
-        result.setProductNo(code);
+        result.setOrderType(request.getOrderType());
+        result.setProductNo(request.getCode());
         result.setMinPrice(serviceResp.getResult().getPrice().intValue());
         result.setMaxPrice(serviceResp.getResult().getPrice().intValue());
         result.setProductName(serviceResp.getResult().getServiceName());
