@@ -151,6 +151,19 @@ public class OrderController {
     @ApiOperation("提交订单")
     @PostMapping("/submit")
     public Integer submitOrder(@RequestBody Order.BuyOrder request) {
+        log.info("OrderController.submitOrder param:{}", JSON.toJSONString(request));
+        if (Strings.isNullOrEmpty(request.getCode())) {
+            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "商品编号不能为空");
+        }
+        if (request.getOrderType() == 0) {
+            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "订单类型不能为空");
+        }
+        if (request.getPersonId() == 0) {
+            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "客服id不能为空");
+        }
+        if (Strings.isNullOrEmpty(request.getCode())) {
+            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "商品编号不能为空");
+        }
         OrderDTO.BrandOrderVO orderReq = new OrderDTO.BrandOrderVO();
         orderReq.setProductNo(request.getCode());
         orderReq.setUserId(AppUserPrincipal.getPrincipal().getId());
@@ -165,7 +178,9 @@ public class OrderController {
         }
         //生成订单
         OrderDTO.BrandOrderVO order = convert(request);
+        log.info("orderClient.add param:{}", JSON.toJSONString(order));
         BaseResponse<Integer> response = orderClient.add(order);
+        log.info("orderClient.add result:{}", JSON.toJSONString(response));
         if (!BaseResponse.STATUS_HANDLE_SUCCESS.equals(response.getStatus())) {
             throw new ServiceException(response.getStatus(), response.getMessage());
         }
