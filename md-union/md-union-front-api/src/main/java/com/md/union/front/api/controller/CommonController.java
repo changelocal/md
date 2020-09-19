@@ -295,7 +295,7 @@ public class CommonController {
 
     @ApiOperation("首页热门搜索，搜索次数")
     @PostMapping("/update/wxuser")
-    public void updateWxuser(@RequestBody Consultation.WxUser request) {
+    public Consultation.HomeHotResp updateWxuser(@RequestBody Consultation.WxUser request) {
         Consultation.HomeHotResp res = new Consultation.HomeHotResp();
         res.setSearchCount("26354");
         List<String> strings = new ArrayList<>();
