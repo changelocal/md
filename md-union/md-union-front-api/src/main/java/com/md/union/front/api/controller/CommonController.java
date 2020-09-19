@@ -283,9 +283,8 @@ public class CommonController {
                     if (LoginInterceptor.loginStatus.containsKey(AppUserPrincipal.getPrincipal().getToken())) {
                         MinUser minUser = JSON.parseObject(LoginInterceptor.loginStatus.get(AppUserPrincipal.getPrincipal().getToken()), MinUser.class);
                         minUser.setMobile(phone);
-                        LoginInterceptor.loginStatus.put(AppUserPrincipal.getPrincipal().getToken(), JSON.toJSONString(minGetPhone));
+                        LoginInterceptor.loginStatus.put(AppUserPrincipal.getPrincipal().getToken(), JSON.toJSONString(minUser));
                     }
-
                 }
                 return jsonObject;
             }
