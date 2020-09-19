@@ -42,6 +42,7 @@ public class BrandController {
 
     /**
      * 八大热门分类
+     *
      * @return
      */
     @ApiOperation("热门商标分类")
@@ -59,11 +60,11 @@ public class BrandController {
             Brand.HotRes brand = new Brand.HotRes();
             brand.setCategoryName(e.getCategoryName());
             brand.setCode(e.getCode());
-            brand.setIcon("https://pay.mdlogo.cn/file/brand_class/"+e.getCode()+".png");
-            brand.setTypeName(e.getCode()+"类");
+            brand.setIcon("https://pay.mdlogo.cn/file/brand_class/" + e.getCode() + ".png");
+            brand.setTypeName(e.getCode() + "类");
             result.add(brand);
 
-            Brand.GroupRes list = list(e.getCode(),e.getCategoryName());
+            Brand.GroupRes list = list(e.getCode(), e.getCategoryName());
             groups.add(list);
         });
         res.setCate(result);
@@ -74,10 +75,11 @@ public class BrandController {
 
     /**
      * 点击热门分类后获取几个热门商标
+     *
      * @param code
      * @return
      */
-    private Brand.GroupRes list(int code,String cateName) {
+    private Brand.GroupRes list(int code, String cateName) {
         //获取商标list
         TrademarkDTO.MdBrand req = new TrademarkDTO.MdBrand();
         req.setCategory(code);
@@ -91,17 +93,17 @@ public class BrandController {
         if (!responseCate.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(responseCate.getStatus(), responseCate.getMessage());
         }
-        Map<Integer,String> name = responseCate.getResult().getCates().stream().collect(Collectors.toMap(p->p.getCode(), q->q.getCategoryName()));
+        Map<Integer, String> name = responseCate.getResult().getCates().stream().collect(Collectors.toMap(p -> p.getCode(), q -> q.getCategoryName()));
 
         Brand.GroupRes brand = new Brand.GroupRes();
         brand.setCode(code);
         brand.setName(cateName);
         List<Brand.SpecialRes> specialRes = new ArrayList<>();
-        if(!CollectionUtils.isEmpty(response.getResult().getMdBrands())){
-            response.getResult().getMdBrands().forEach(e->{
+        if (!CollectionUtils.isEmpty(response.getResult().getMdBrands())) {
+            response.getResult().getMdBrands().forEach(e -> {
                 Brand.SpecialRes res = new Brand.SpecialRes();
                 res.setId(e.getId());
-                res.setCategoryName(e.getCategory()+"类 "+name.get(e.getCategory()));
+                res.setCategoryName(e.getCategory() + "类 " + name.get(e.getCategory()));
                 res.setBrandName(e.getBrandName());
                 res.setImgUrl(e.getImageUrl());
                 res.setMaxPrice(e.getPriceHigh().toString());
@@ -116,13 +118,14 @@ public class BrandController {
 
     /**
      * 查商标，准备购买
+     *
      * @param request
      * @return
      */
     @ApiOperation("买商标查询")
     @PostMapping("/search")
     public Brand.SearchRes brandSearch(@RequestBody Brand.SearchReq request) {
-        log.info("brand search:",request);
+        log.info("brand search:", request);
         Brand.SearchRes result = new Brand.SearchRes();
 
         TrademarkDTO.MdBrand req = new TrademarkDTO.MdBrand();
@@ -132,17 +135,14 @@ public class BrandController {
         req.setCategory(request.getCategoryNo());
         //字符数
         req.setBrandNameLength(request.getBrandSize());
-        if(request.getBrandSize()==1){
+        if (request.getBrandSize() == 1) {
             req.setBrandNameLengthLow(1);
             req.setBrandNameLengthHigh(2);
-        }
-        else if (request.getBrandSize()==2){
+        } else if (request.getBrandSize() == 2) {
             req.setBrandNameLength(3);
-        }
-        else if (request.getBrandSize()==3){
+        } else if (request.getBrandSize() == 3) {
             req.setBrandNameLength(4);
-        }
-        else if (request.getBrandSize()==4){
+        } else if (request.getBrandSize() == 4) {
             req.setBrandNameLengthLow(5);
             req.setBrandNameLengthHigh(99);
         }
@@ -150,19 +150,19 @@ public class BrandController {
         //组合  0 不限
         req.setComType(request.getUnionType());
         //价格
-        if(request.getPriceType()==1){
+        if (request.getPriceType() == 1) {
             req.setPriceLow(new BigDecimal(1));
             req.setPriceHigh(new BigDecimal(2000000));
-        }else if (request.getPriceType()==2) {
+        } else if (request.getPriceType() == 2) {
             req.setPriceLow(new BigDecimal(1));
             req.setPriceHigh(new BigDecimal(10000));
-        }else if (request.getPriceType()==3) {
+        } else if (request.getPriceType() == 3) {
             req.setPriceLow(new BigDecimal(10000));
             req.setPriceHigh(new BigDecimal(20000));
-        }else if (request.getPriceType()==4) {
+        } else if (request.getPriceType() == 4) {
             req.setPriceLow(new BigDecimal(20000));
             req.setPriceHigh(new BigDecimal(50000));
-        }else if (request.getPriceType()==5) {
+        } else if (request.getPriceType() == 5) {
             req.setPriceLow(new BigDecimal(50000));
             req.setPriceHigh(new BigDecimal(2000000));
         }
@@ -180,17 +180,17 @@ public class BrandController {
         if (!responseCate.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(responseCate.getStatus(), responseCate.getMessage());
         }
-        Map<Integer,String> name = responseCate.getResult().getCates().stream().collect(Collectors.toMap(p->p.getCode(), q->q.getCategoryName()));
+        Map<Integer, String> name = responseCate.getResult().getCates().stream().collect(Collectors.toMap(p -> p.getCode(), q -> q.getCategoryName()));
 
         List<Brand.SpecialRes> specialRes = new ArrayList<>();
-        if(!CollectionUtils.isEmpty(response.getResult().getMdBrands())){
+        if (!CollectionUtils.isEmpty(response.getResult().getMdBrands())) {
             response.getResult().getMdBrands().forEach(e -> {
                 Brand.SpecialRes res = new Brand.SpecialRes();
                 res.setBrandName(e.getBrandName());
-                res.setCategoryName(e.getCategory()+"类 "+name.get(e.getCategory()));
+                res.setCategoryName(e.getCategory() + "类 " + name.get(e.getCategory()));
                 res.setId(e.getId());
                 res.setImgUrl(e.getImageUrl());
-                res.setSpecial(e.getPromoteFlag()==1);
+                res.setSpecial(e.getPromoteFlag() == 1);
                 res.setMinPrice(e.getPrice().toString());
                 res.setMaxPrice(e.getPriceHigh().toString());
                 specialRes.add(res);
@@ -207,10 +207,10 @@ public class BrandController {
     public Category.SearchRes categorySearch(@RequestBody Category.SearchReq request) {
         Category.SearchRes result = new Category.SearchRes();
         List<Category.Info> infos = new ArrayList<>();
-        for(int i = 0;i<5;i++){
+        for (int i = 0; i < 5; i++) {
             Category.Info e = new Category.Info();
-            e.setCategoryName("name"+i);
-            e.setCategoryNo(""+i);
+            e.setCategoryName("name" + i);
+            e.setCategoryNo("" + i);
             e.setDesc("desc");
             e.setIcon("icon");
             e.setRegisterStatus(true);
@@ -231,6 +231,7 @@ public class BrandController {
 
     /**
      * 查到商标以后，点击购买
+     *
      * @param request
      * @return
      */
@@ -251,14 +252,14 @@ public class BrandController {
         if (!responseCate.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(responseCate.getStatus(), responseCate.getMessage());
         }
-        Map<Integer,String> name = responseCate.getResult().getCates().stream().collect(Collectors.toMap(p->p.getCode(), q->q.getCategoryName()));
+        Map<Integer, String> name = responseCate.getResult().getCates().stream().collect(Collectors.toMap(p -> p.getCode(), q -> q.getCategoryName()));
 
         List<Brand.TrademarkCate> trademarkCates = new ArrayList<>();
-        if(!CollectionUtils.isEmpty(response.getResult().getMdBrands())){
+        if (!CollectionUtils.isEmpty(response.getResult().getMdBrands())) {
             response.getResult().getMdBrands().forEach(e -> {
                 Brand.TrademarkCate res = new Brand.TrademarkCate();
                 res.setCateCode(e.getCategory());
-                res.setCateName(e.getCategory()+"类 "+name.get(e.getCategory()));
+                res.setCateName(e.getCategory() + "类 " + name.get(e.getCategory()));
                 res.setDeposit(e.getPrice().multiply(new BigDecimal(0.2)).toString());
                 res.setPriceLow(e.getPrice().toString());
                 res.setPriceHigh(e.getPriceHigh().toString());
@@ -267,11 +268,11 @@ public class BrandController {
                 res.setPic(e.getImageUrl());
                 trademarkCates.add(res);
 
-                result.setFirstDate(null == e.getFirstCheckTime()?"":timeFormat.format(e.getFirstCheckTime()));
-                result.setFirstNo(e.getFirstCheckId()==null?"":e.getFirstCheckId());
-                result.setEndDate(null ==e.getTimeLimitEnd()?"":timeFormat.format(e.getTimeLimitEnd()));
-                result.setSignUpDate(null == e.getRegisterCheckTime()?"":timeFormat.format(e.getRegisterCheckTime()));
-                result.setSignUpNo(e.getRegisterCheckId()==null?"":e.getRegisterCheckId());
+                result.setFirstDate(null == e.getFirstCheckTime() ? "" : timeFormat.format(e.getFirstCheckTime()));
+                result.setFirstNo(e.getFirstCheckId() == null ? "" : e.getFirstCheckId());
+                result.setEndDate(null == e.getTimeLimitEnd() ? "" : timeFormat.format(e.getTimeLimitEnd()));
+                result.setSignUpDate(null == e.getRegisterCheckTime() ? "" : timeFormat.format(e.getRegisterCheckTime()));
+                result.setSignUpNo(e.getRegisterCheckId() == null ? "" : e.getRegisterCheckId());
                 result.setTrademarkType(BrandTypeEnums.valueType(e.getComType()).getTitle());
 
                 result.setLikeCate(e.getGroup());
@@ -306,6 +307,7 @@ public class BrandController {
 
     /**
      * 首页查商标的详情，有成功率的
+     *
      * @param request
      * @return
      */
@@ -318,7 +320,7 @@ public class BrandController {
         if (!responseCate.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(responseCate.getStatus(), responseCate.getMessage());
         }
-        Map<Integer,String> name = responseCate.getResult().getCates().stream().collect(Collectors.toMap(p->p.getCode(), q->q.getCategoryName()));
+        Map<Integer, String> name = responseCate.getResult().getCates().stream().collect(Collectors.toMap(p -> p.getCode(), q -> q.getCategoryName()));
 
         //获取商标list
         SearchRecordDTO.SearchRecordInfo req = new SearchRecordDTO.SearchRecordInfo();
@@ -332,34 +334,34 @@ public class BrandController {
         List<Brand.TrademarkCateSearch> trademarkCatesRegis = new ArrayList<>();
         List<Brand.TrademarkCateSearch> trademarkCatesUnRegis = new ArrayList<>();
         //数据库有记录
-        if(!CollectionUtils.isEmpty(response.getResult().getInfos()) && response.getResult().getInfos().size()>0){
+        if (!CollectionUtils.isEmpty(response.getResult().getInfos()) && response.getResult().getInfos().size() > 0) {
             List<String> regis = Arrays.asList(response.getResult().getInfos().get(0).getRegistCate().split(","));
             List<String> regisUn = Arrays.asList(response.getResult().getInfos().get(0).getUnregistCate().split(","));
-            responseCate.getResult().getCates().forEach(p->{
-                if(regis.contains(p.getCode())){
+            responseCate.getResult().getCates().forEach(p -> {
+                if (regis.contains(p.getCode())) {
                     Brand.TrademarkCateSearch info = new Brand.TrademarkCateSearch();
-                    if(p.getCode()<10){
-                        info.setCateName("0"+p.getCode()+"-"+p.getCategoryName());
-                    }else{
-                        info.setCateName(p.getCode()+"-"+p.getCategoryName());
+                    if (p.getCode() < 10) {
+                        info.setCateName("0" + p.getCode() + "-" + p.getCategoryName());
+                    } else {
+                        info.setCateName(p.getCode() + "-" + p.getCategoryName());
                     }
                     info.setCateCode(p.getCode());
                     trademarkCatesRegis.add(info);
-                }else if (regisUn.contains(p.getCode())){
+                } else if (regisUn.contains(p.getCode())) {
                     Brand.TrademarkCateSearch info = new Brand.TrademarkCateSearch();
-                    if(p.getCode()<10){
-                        info.setCateName("0"+p.getCode()+"-"+p.getCategoryName());
-                    }else{
-                        info.setCateName(p.getCode()+"-"+p.getCategoryName());
+                    if (p.getCode() < 10) {
+                        info.setCateName("0" + p.getCode() + "-" + p.getCategoryName());
+                    } else {
+                        info.setCateName(p.getCode() + "-" + p.getCategoryName());
                     }
                     info.setCateCode(p.getCode());
                     trademarkCatesUnRegis.add(info);
-                }else{
+                } else {
                     Brand.TrademarkCateSearch info = new Brand.TrademarkCateSearch();
-                    if(p.getCode()<10){
-                        info.setCateName("0"+p.getCode()+"-"+p.getCategoryName());
-                    }else{
-                        info.setCateName(p.getCode()+"-"+p.getCategoryName());
+                    if (p.getCode() < 10) {
+                        info.setCateName("0" + p.getCode() + "-" + p.getCategoryName());
+                    } else {
+                        info.setCateName(p.getCode() + "-" + p.getCategoryName());
                     }
                     info.setCateCode(p.getCode());
                     trademarkCatesUnRegis.add(info);
@@ -368,27 +370,27 @@ public class BrandController {
             result.setTotal(1);
         }
         //数据库没有记录，要发请求
-        else{
+        else {
             Tmkoo.Result search = TmkooCommon.search(request.getBrandName());
-            if(!CollectionUtils.isEmpty(search.getRegisters())){
+            if (!CollectionUtils.isEmpty(search.getRegisters())) {
 
-                List<Integer> collect = search.getRegisters().stream().map(p->p.getCate()).collect(Collectors.toList());
-                responseCate.getResult().getCates().forEach(p->{
-                    if(collect.contains(p.getCode())){
+                List<Integer> collect = search.getRegisters().stream().map(p -> p.getCate()).collect(Collectors.toList());
+                responseCate.getResult().getCates().forEach(p -> {
+                    if (collect.contains(p.getCode())) {
                         Brand.TrademarkCateSearch info = new Brand.TrademarkCateSearch();
-                        if(p.getCode()<10){
-                            info.setCateName("0"+p.getCode()+"-"+p.getCategoryName());
-                        }else{
-                            info.setCateName(p.getCode()+"-"+p.getCategoryName());
+                        if (p.getCode() < 10) {
+                            info.setCateName("0" + p.getCode() + "-" + p.getCategoryName());
+                        } else {
+                            info.setCateName(p.getCode() + "-" + p.getCategoryName());
                         }
                         info.setCateCode(p.getCode());
                         trademarkCatesRegis.add(info);
-                    }else{
+                    } else {
                         Brand.TrademarkCateSearch info = new Brand.TrademarkCateSearch();
-                        if(p.getCode()<10){
-                            info.setCateName("0"+p.getCode()+"-"+p.getCategoryName());
-                        }else{
-                            info.setCateName(p.getCode()+"-"+p.getCategoryName());
+                        if (p.getCode() < 10) {
+                            info.setCateName("0" + p.getCode() + "-" + p.getCategoryName());
+                        } else {
+                            info.setCateName(p.getCode() + "-" + p.getCategoryName());
                         }
                         info.setCateCode(p.getCode());
                         trademarkCatesUnRegis.add(info);
@@ -398,16 +400,16 @@ public class BrandController {
                 //  增加到数据库
                 SearchRecordDTO.SearchRecordInfo insert = new SearchRecordDTO.SearchRecordInfo();
                 insert.setSearchWord(search.getBrandName());
-                insert.setRegistNo(StringUtils.join(search.getRegNos(),","));
+                insert.setRegistNo(StringUtils.join(search.getRegNos(), ","));
 
                 List<Integer> collect1 = search.getRegisters().stream().map(q -> q.getCate()).collect(Collectors.toList());
-                insert.setRegistCate(StringUtils.join(collect1,","));
+                insert.setRegistCate(StringUtils.join(collect1, ","));
                 List<Integer> collect2 = trademarkCatesUnRegis.stream().map(q -> q.getCateCode()).collect(Collectors.toList());
-                insert.setUnregistCate(StringUtils.join(collect2,","));
+                insert.setUnregistCate(StringUtils.join(collect2, ","));
 
 //                insert.setBuyerMobile(AppUserPrincipal.getPrincipal().getMobile());
 //                insert.setOpenId(AppUserPrincipal.getPrincipal().getMinId());
-                                insert.setBuyerMobile("8964");
+                insert.setBuyerMobile("8964");
                 insert.setOpenId("999999");
                 insert.setStatus(1);
 //                BaseResponse<SearchRecordDTO.Resp> update = frontClient.add(insert);
@@ -415,7 +417,7 @@ public class BrandController {
 //                    throw new ServiceException(update.getStatus(), update.getMessage());
 //                }
                 result.setTotal(1);
-            }else{
+            } else {
                 result.setTotal(0);
             }
         }
@@ -438,7 +440,7 @@ public class BrandController {
             throw new ServiceException(responseFamilar.getStatus(), responseFamilar.getMessage());
         }
         List<Brand.SpecialRes> trademarkCatesFamilar = new ArrayList<>();
-        if(!CollectionUtils.isEmpty(responseFamilar.getResult().getMdBrands())){
+        if (!CollectionUtils.isEmpty(responseFamilar.getResult().getMdBrands())) {
             for (TrademarkDTO.MdBrand e : responseFamilar.getResult().getMdBrands()) {
                 if (request.getBrandName().equals(e.getBrandName())) {
                     continue;
@@ -450,7 +452,7 @@ public class BrandController {
                 res.setImgUrl(e.getImageUrl());
                 res.setMinPrice(e.getPrice().toString());
                 res.setMaxPrice(e.getPriceHigh().toString());
-                res.setSpecial(e.getPromoteFlag()==1);
+                res.setSpecial(e.getPromoteFlag() == 1);
                 trademarkCatesFamilar.add(res);
             }
         }
@@ -496,12 +498,13 @@ public class BrandController {
 
     /**
      * 查到商标以后，点击购买
+     *
      * @param request
      * @return
      */
     @ApiOperation("购买商标详情")
     @PostMapping("/buy/regist/detail")
-    public Brand.Detail registDetail(@RequestBody Category.BuyDetailReq request){
+    public Brand.Detail registDetail(@RequestBody Category.BuyDetailReq request) {
         Brand.Detail detail = new Brand.Detail();
         return detail;
 

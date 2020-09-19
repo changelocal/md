@@ -59,7 +59,7 @@ public class OrderController {
         return result;
     }
 
-    @ApiOperation("提交订单")
+    /*@ApiOperation("提交订单")
     @PostMapping("submit")
     public void submitOrder(@RequestBody Order.SubmitOrder request) {
         OrderDTO.BrandOrderVO order = convert(request);
@@ -67,7 +67,7 @@ public class OrderController {
         if (!BaseResponse.STATUS_HANDLE_SUCCESS.equals(response.getStatus())) {
             throw new ServiceException(response.getStatus(), response.getMessage());
         }
-    }
+    }*/
 
     /*@ApiOperation("我的订单提交资料")
     @PostMapping("submit/file")
@@ -124,19 +124,53 @@ public class OrderController {
     @GetMapping("/deal/detail/{id}")
     public Order.Detail OrderDealDtail(@PathVariable("id") int id) {
         Order.Detail result = new Order.Detail();
-        result = getOrderDetail(id);
+        OrderDTO.BrandOrderVO orderReq = new OrderDTO.BrandOrderVO();
+        orderReq.setId(id);
+        BaseResponse<OrderDTO.BrandOrderVO> orderResp = orderClient.getByCondition(orderReq);
+        if (!BaseResponse.STATUS_HANDLE_SUCCESS.equals(orderResp.getStatus()) || orderResp.getResult() == null) {
+            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "查询订单失败");
+        }
+        OrderDTO.BrandOrderVO order = orderResp.getResult();
+        result.setId(order.getId());
+        result.setUserId(order.getUserId());
+        result.setOrderNo(order.getOrderNo());
+        result.setImgUrl(order.getImg());
+        result.setCategoryName(order.getCategoryName());
+        result.setPayPrice(String.valueOf(order.getPrePay()));
+        result.setPrePrice(String.valueOf(order.getPrePay()));
+        result.setOrderStatus(order.getStatus());
+        result.setTotalPrice(String.valueOf(order.getTotalPay()));
+        result.setOverTime(null);
+        result.setCreateTime(sf.format(order.getCreateTime()));
+        result.setPerson(getPerson());
+        result.setCategroyList(getlist());
+        result.setPerson(getPerson());
+        result.setCategroyList(getlist());
         return result;
-
     }
 
-    @ApiOperation("我的服务订单详情")
-    @GetMapping("/service/{code}")
-    public void createOrder(@PathVariable("code") String code) {
+    @ApiOperation("提交订单")
+    @GetMapping("/submit/{code}")
+    public Integer submitOrder(@PathVariable("code") String code) {
+        OrderDTO.BrandOrderVO orderReq = new OrderDTO.BrandOrderVO();
+        orderReq.setProductNo(code);
+        orderReq.setUserId(AppUserPrincipal.getPrincipal().getId());
+        log.info("orderClient.getByCondition param:{}", JSON.toJSONString(orderReq));
+        BaseResponse<OrderDTO.BrandOrderVO> orderResp = orderClient.getByCondition(orderReq);
+        log.info("orderClient.getByCondition result:{}", JSON.toJSONString(orderResp));
+        if (!BaseResponse.STATUS_HANDLE_SUCCESS.equals(orderResp.getStatus())) {
+            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "查询订单失败");
+        }
+        if (orderResp.getResult() != null) {
+            return orderResp.getResult().getId();
+        }
+        //生成订单
         OrderDTO.BrandOrderVO order = convert(code);
-        BaseResponse response = orderClient.add(order);
+        BaseResponse<Integer> response = orderClient.add(order);
         if (!BaseResponse.STATUS_HANDLE_SUCCESS.equals(response.getStatus())) {
             throw new ServiceException(response.getStatus(), response.getMessage());
         }
+        return response.getResult();
     }
 
     private List<Order.OrderRes> convertOrder(List<OrderDTO.BrandOrderVO> request) {
@@ -187,24 +221,6 @@ public class OrderController {
             item.setOrderStatus(5);
             result.add(item);
         }*/
-        return result;
-    }
-
-    private Order.Detail getOrderDetail(int id) {
-        Order.Detail result = new Order.Detail();
-        result.setId(id);
-        result.setUserId(id);
-        result.setOrderNo("BR854nnjj" + id);
-        result.setImgUrl("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1595652523529&di=17f6912c66cdd33b2feec7fc7394ab4a&imgtype=0&src=http%3A%2F%2Fimg1.cache.netease.com%2Fcatchpic%2FC%2FCD%2FCDE2DE878F89F6244CEF5F6894EFA642.jpeg");
-        result.setCategoryName("汽车");
-        result.setPayPrice("1000");
-        result.setPrePrice("500");
-        result.setOrderStatus(3);
-        result.setTotalPrice("2000");
-        result.setOverTime("2020-07-01");
-        result.setCreateTime("2020-01-01");
-        result.setPerson(getPerson());
-        result.setCategroyList(getlist());
         return result;
     }
 
@@ -299,22 +315,6 @@ public class OrderController {
     }
 
     private OrderDTO.BrandOrderVO convert(String code) {
-        OrderDTO.BrandOrderVO result = new OrderDTO.BrandOrderVO();
-        result.setOrderNo("" + System.currentTimeMillis());
-        result.setStatus(OrderStatusEnums.PRE_PAY.getType());
-        result.setPrePay(1000);
-        result.setRestPay(1000);
-        result.setTotalPay(2000);
-        result.setUserId(AppUserPrincipal.getPrincipal().getId());
-        result.setOpUserId(1);
-        result.setCreateTime(new Date());
-        result.setUpdateTime(new Date());
-
-
-        result.setOrderType(OrderTypeEnums.BRAND_REGISTER.getType());
-        result.setProductNo(code);
-        result.setMinPrice(10000);
-        result.setMaxPrice(10000);
         if (Strings.isNullOrEmpty(code)) {
             throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "商标服务主键不能为空");
         }
@@ -322,6 +322,23 @@ public class OrderController {
         if (!BaseResponse.STATUS_HANDLE_SUCCESS.equals(serviceResp.getStatus())) {
             throw new ServiceException(serviceResp.getStatus(), serviceResp.getMessage());
         }
+
+        OrderDTO.BrandOrderVO result = new OrderDTO.BrandOrderVO();
+        result.setOrderNo("" + System.currentTimeMillis());
+        result.setStatus(OrderStatusEnums.PRE_PAY.getType());
+        result.setPrePay(serviceResp.getResult().getPrice().intValue());
+        result.setRestPay(serviceResp.getResult().getPrice().intValue());
+        result.setTotalPay(serviceResp.getResult().getPrice().intValue());
+        result.setUserId(AppUserPrincipal.getPrincipal().getId());
+        result.setOpUserId(0);
+        result.setCreateTime(new Date());
+        result.setUpdateTime(new Date());
+
+
+        result.setOrderType(OrderTypeEnums.BRAND_REGISTER.getType());
+        result.setProductNo(code);
+        result.setMinPrice(serviceResp.getResult().getPrice().intValue());
+        result.setMaxPrice(serviceResp.getResult().getPrice().intValue());
         result.setProductName(serviceResp.getResult().getServiceName());
         result.setCategoryName(serviceResp.getResult().getServiceName());
         result.setImg(serviceResp.getResult().getImageUrl());

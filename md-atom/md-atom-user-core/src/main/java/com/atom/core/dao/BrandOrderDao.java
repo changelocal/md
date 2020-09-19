@@ -19,7 +19,7 @@ import static com.arc.db.jsd.Shortcut.*;
 public class BrandOrderDao extends BaseDao {
 
     public long counter() {
-        long total=(long)this.DB().select(count()).from("brand_order").result().value();
+        long total = (long) this.DB().select(count()).from("brand_order").result().value();
         return total;
     }
 
@@ -27,11 +27,11 @@ public class BrandOrderDao extends BaseDao {
         PageResult<BrandOrder> result = new PageResult<>();
         Filter filter = Filter.create();
 
-        if(null!=(brandOrderParam.getCreateTimeBegin())){
-            filter=filter.and(f("create_time", FilterType.GTE,brandOrderParam.getCreateTimeBegin()));
+        if (null != (brandOrderParam.getCreateTimeBegin())) {
+            filter = filter.and(f("create_time", FilterType.GTE, brandOrderParam.getCreateTimeBegin()));
         }
-        if(null!=(brandOrderParam.getCreateTimeEnd())){
-            filter=filter.and(f("create_time",FilterType.LTE,brandOrderParam.getCreateTimeEnd()));
+        if (null != (brandOrderParam.getCreateTimeEnd())) {
+            filter = filter.and(f("create_time", FilterType.LTE, brandOrderParam.getCreateTimeEnd()));
         }
 
         if (brandOrderParam.getStatus() > 0) {
@@ -107,8 +107,9 @@ public class BrandOrderDao extends BaseDao {
         return result;
     }
 
-    public void add(BrandOrder brandOrder) {
-        DB().insert(brandOrder).result();
+    public int add(BrandOrder brandOrder) {
+        long id = (long) DB().insert(brandOrder).result(true).getKeys().get(0);
+        return (int) id;
     }
 
     public void update(BrandOrder brandOrder) {

@@ -50,11 +50,12 @@ public class BrandOrderController {
     }
 
     @PostMapping("/add")
-    public void add(@RequestBody OrderVO.BrandOrderVO request) {
+    public int add(@RequestBody OrderVO.BrandOrderVO request) {
         log.info("BrandOrderController.add param:{}", JSON.toJSONString(request));
         checkAddOrder(request);
-        brandOrderDao.add(convertAdd(request));
+        int id = brandOrderDao.add(convertAdd(request));
         log.info("BrandOrderController.add success orderNo:{}", request.getOrderNo());
+        return id;
     }
 
     @PostMapping("/update")

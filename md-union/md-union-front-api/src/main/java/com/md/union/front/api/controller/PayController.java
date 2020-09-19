@@ -52,9 +52,9 @@ public class PayController {
      */
     @PostMapping("/order")
     public PayInfo.Order payOrder(@RequestBody Order.PayParam request) {
-        if (request.getBrandNo() != null) {
+        /*if (request.getBrandNo() != null) {
             createOrder(request.getBrandNo());
-        }
+        }*/
         PayInfo.Order result = new PayInfo.Order();
         log.info("prePay param:{}", JSON.toJSONString(request));
         Map<String, String> ret = minCommon.appletPay();

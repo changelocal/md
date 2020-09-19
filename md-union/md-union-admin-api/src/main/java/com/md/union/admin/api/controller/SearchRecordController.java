@@ -32,7 +32,7 @@ public class SearchRecordController {
     public SearchRecord.SearchRes query(@RequestBody SearchRecord.SearchReq request) {
         log.info("query:"+request);
         SearchRecord.SearchRes ret = new SearchRecord.SearchRes();
-        SearchRecordDTO.Info adminUser = new SearchRecordDTO.Info();
+        /*SearchRecordDTO.Info adminUser = new SearchRecordDTO.Info();
         BeanUtils.copyProperties(request, adminUser);
 
         if(request.getDateRange().length>0){
@@ -59,19 +59,19 @@ public class SearchRecordController {
             ret.setCount(query.getResult().getTotal());
         }else{
             ret.setCount(0);
-        }
+        }*/
         return ret;
     }
 
     @PostMapping("/update")
     public void update(@RequestBody SearchRecord.Info request) {
-        SearchRecordDTO.Info info = new SearchRecordDTO.Info();
+        /*SearchRecordDTO.Info info = new SearchRecordDTO.Info();
         BeanUtils.copyProperties(request, info);
         info.setUpdateTime(new Date());
         BaseResponse<SearchRecordDTO.Resp> query = frontClient.update(info);
         if (!query.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(query.getStatus(), query.getMessage());
-        }
+        }*/
     }
 
 }
