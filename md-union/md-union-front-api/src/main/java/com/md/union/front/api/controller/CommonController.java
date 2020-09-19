@@ -295,16 +295,13 @@ public class CommonController {
 
     @ApiOperation("首页热门搜索，搜索次数")
     @PostMapping("/update/wxuser")
-    public void updateWxuser(@RequestBody Consultation.WxUser request) {
-        Consultation.HomeHotResp res = new Consultation.HomeHotResp();
-        res.setSearchCount("26354");
-        List<String> strings = new ArrayList<>();
-        strings.add("口罩");
-        strings.add("新基建");
-        strings.add("医学鉴证");
-        strings.add("环保材料");
-        strings.add("5G");
-        res.setHotSearch(strings);
-        return res;
+    public void updateWxuser(@RequestBody Consultation.WxUser minUser) {
+        WxUserDTO.UpdateWxUser user = new WxUserDTO.UpdateWxUser();
+        user.setMinId(minUser.getMinId());
+        user.setNickName(minUser.getNickName());
+        BaseResponse<Long> userRes = userClient.update(user);
+        if (!BaseResponse.STATUS_HANDLE_SUCCESS.equals(userRes.getStatus())) {
+            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "添加用户失败");
+        }
     }
 }

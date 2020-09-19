@@ -72,9 +72,8 @@ public class Consultation {
     @ApiModel("更新头像")
     public static class WxUser{
         @ApiModelProperty("名字")
-        private String openId;
+        private String minId;
         @ApiModelProperty("详情")
         private String nickName;
-        private String avatar;
     }
 }
