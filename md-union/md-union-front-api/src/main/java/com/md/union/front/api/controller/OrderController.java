@@ -150,7 +150,7 @@ public class OrderController {
 
     @ApiOperation("提交订单")
     @GetMapping("/submit/{orderType}/{code}")
-    public Integer submitOrder(@PathVariable("code") int ordertype, @PathVariable("code") String code) {
+    public Integer submitOrder(@PathVariable("ordertype") int ordertype, @PathVariable("code") String code) {
         OrderDTO.BrandOrderVO orderReq = new OrderDTO.BrandOrderVO();
         orderReq.setProductNo(code);
         orderReq.setUserId(AppUserPrincipal.getPrincipal().getId());
