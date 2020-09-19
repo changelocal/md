@@ -286,10 +286,10 @@ public class BrandController {
                 result.setBigPic(e.getImageUrl());
 
                 String concept = " 简约又不失时尚的【"+e.getBrandName()+"】是属于【"+res.getCateName()+"】商标， 该商标设计匠心独运，构思大胆且贴近商品，" +
-                        "传达出与众不同的独特意义。同时符合使用在【{商标二类全部显示}】等领域。目前的最新状态是{最新状态}," +
-                        "使用期限于 【{使用期限}】到期。商标是走向市场，打造品牌的第一 步，亚太名典知识产权助您第一时间拥有自己的品牌!\n" +
+                        "传达出与众不同的独特意义。同时符合使用在【"+e.getFitCategory()+"】等领域。目前的最新状态是{最新状态}," +
+                        "使用期限于 【"+e.getOwnTimeEnd()+"】到期。商标是走向市场，打造品牌的第一 步，亚太名典知识产权助您第一时间拥有自己的品牌!\n" +
                         "\n" +
-                        "注册类别分析：当前商标属于【"+res.getCateName()+"】类商品，主要用于{商标二类全部显示}行业核心类别。价格从20000到90000不等，" +
+                        "注册类别分析：当前商标属于【"+res.getCateName()+"】类商品，主要用于"+e.getFitCategory()+"行业核心类别。价格从20000到90000不等，" +
                         "总体来说价值比一般的商标要高得多。随着商标名称不断得被注册，价值还会攀升。";
                 result.setConcept(concept);
                 result.setBrandNo(e.getBrandId());
