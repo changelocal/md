@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @RestController
@@ -255,6 +257,8 @@ public class BrandController {
         Map<Integer, String> name = responseCate.getResult().getCates().stream().collect(Collectors.toMap(p -> p.getCode(), q -> q.getCategoryName()));
 
         List<Brand.TrademarkCate> trademarkCates = new ArrayList<>();
+        AtomicInteger cate = new AtomicInteger();
+        AtomicReference<String> regNo = new AtomicReference<>("");
         if (!CollectionUtils.isEmpty(response.getResult().getMdBrands())) {
             response.getResult().getMdBrands().forEach(e -> {
                 Brand.TrademarkCate res = new Brand.TrademarkCate();
@@ -280,8 +284,11 @@ public class BrandController {
                 result.setColor(e.getThemeColor());
 
                 result.setBigPic(e.getImageUrl());
-                result.setConcept("设计理念");
+                result.setConcept("设计理念不知道是什么");
                 result.setBrandNo(e.getBrandId());
+
+                cate.set(e.getCategory());
+                regNo.set(e.getRegNo());
             });
         }
         result.setTrademarkCateList(trademarkCates);
@@ -302,6 +309,19 @@ public class BrandController {
         person.setId(responsePerson.getResult().getId());
         result.setPerson(person);
         result.setOrderType("4");
+
+        if (null != regNo.get()) {
+            Tmkoo.Flow info = TmkooCommon.info(minCommon.getHost(), regNo.get(), cate.get());
+            List<Brand.FlowInfo> flowInfos = new ArrayList<>();
+            for (Tmkoo.FlowInfo p : info.getFlowInfos()) {
+                Brand.FlowInfo flowInfo = new Brand.FlowInfo();
+                flowInfo.setDate(p.getDate());
+                flowInfo.setName(p.getName());
+                flowInfos.add(flowInfo);
+            }
+            result.setFlowInfos(flowInfos);
+        }
+
         return result;
     }
 

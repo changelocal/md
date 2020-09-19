@@ -19,5 +19,13 @@ public final class Tmkoo {
         private int cate;
         private boolean register;
     }
-
+    @Data
+    public static class Flow{
+        private List<FlowInfo> flowInfos;
+    }
+    @Data
+    public static class FlowInfo{
+        private String date;
+        private String name;
+    }
 }
