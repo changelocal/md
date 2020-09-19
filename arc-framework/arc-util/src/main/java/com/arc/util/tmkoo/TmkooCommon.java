@@ -16,7 +16,8 @@ import java.util.List;
 public class TmkooCommon {
     public static final String apiPassword = "P8G3m5dR6Dj";
     public static final String apiKey = "QIJIAN_1819072015";
-    public static void main(String[] args) {
+
+   /* public static void main(String[] args) {
 //        try {
 //            TmkooCommon.search("卓霸");
 //        } catch (UnsupportedEncodingException e) {
@@ -24,16 +25,15 @@ public class TmkooCommon {
 //        }
 
         TmkooCommon.info("12816966", 25);
-    }
+    }*/
 
     /**
-     *
      * @param regNo 注册号
-     * @param cls  国际分类
+     * @param cls   国际分类
      */
-    public static Tmkoo.Flow info(String regNo, int cls) {
+    public static Tmkoo.Flow info(String host, String regNo, int cls) {
         Tmkoo.Flow flow = new Tmkoo.Flow();
-        String url="http://api.tmkoo.com/info.php?apiKey="+apiKey+"&apiPassword="+apiPassword+"&regNo="+regNo+"&intCls="+cls;
+        String url = host + "?apiKey=" + apiKey + "&apiPassword=" + apiPassword + "&regNo=" + regNo + "&intCls=" + cls;
         System.out.println(url);
         String resp = HttpRequest.get(url).body();
         System.out.println(resp);
@@ -55,25 +55,26 @@ public class TmkooCommon {
         }
         return flow;
     }
-    public static Tmkoo.Result search(String keyword) throws UnsupportedEncodingException {
+
+    public static Tmkoo.Result search(String host, String keyword) throws UnsupportedEncodingException {
         Tmkoo.Result res = new Tmkoo.Result();
         List<Tmkoo.RegisterInfo> result = new ArrayList<>();
         List<String> regNoes = new ArrayList<>();
         String encode = URLEncoder.encode(keyword, "UTF-8");
-        String url="http://api.tmkoo.com/search.php?keyword="+encode+"&apiKey="+apiKey +
-                "&apiPassword="+apiPassword+"&pageSize=50&pageNo=1&searchType=1";
+        String url = host + "/search.php?keyword=" + encode + "&apiKey=" + apiKey +
+                "&apiPassword=" + apiPassword + "&pageSize=50&pageNo=1&searchType=1";
 //        System.out.println(url);
         String resp = HttpRequest.get(url).body();
 //        System.out.println(resp);
-        log.info("",resp);
+        log.info("", resp);
         JSONObject data = JSONObject.parseObject(resp);
         if (data != null) {
             String ret = data.getString("ret");
-            if("0".equals(ret)){
+            if ("0".equals(ret)) {
                 JSONArray results = JSONObject.parseArray(data.getString("results"));
-                for(int i =0;i< results.size();i++){
+                for (int i = 0; i < results.size(); i++) {
                     //和搜索的内容一致的
-                    if(keyword.equals(results.getJSONObject(i).getString("tmName"))) {
+                    if (keyword.equals(results.getJSONObject(i).getString("tmName"))) {
                         Tmkoo.RegisterInfo info = new Tmkoo.RegisterInfo();
                         if ("商标已注册".equals(results.getJSONObject(i).getString("currentStatus"))) {
                             info.setCate(Integer.parseInt(results.getJSONObject(i).getString("intCls")));
@@ -92,10 +93,10 @@ public class TmkooCommon {
                 }
             }
         }
-        log.info("",result);
+        log.info("", result);
         System.out.println(result);
         res.setRegisters(result);
-        return  res;
+        return res;
     }
 
 }

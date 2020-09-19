@@ -317,8 +317,8 @@ public class BrandController {
         result.setPerson(person);
         result.setOrderType("4");
 
-        if(null != regNo.get()) {
-            Tmkoo.Flow info = TmkooCommon.info(regNo.get(), cate.get());
+        if (null != regNo.get()) {
+            Tmkoo.Flow info = TmkooCommon.info(minCommon.getHost(), regNo.get(), cate.get());
             List<Brand.FlowInfo> flowInfos = new ArrayList<>();
             for (Tmkoo.FlowInfo p : info.getFlowInfos()) {
                 Brand.FlowInfo flowInfo = new Brand.FlowInfo();
@@ -398,7 +398,7 @@ public class BrandController {
         }
         //数据库没有记录，要发请求
         else {
-            Tmkoo.Result search = TmkooCommon.search(request.getBrandName());
+            Tmkoo.Result search = TmkooCommon.search(minCommon.getHost(), request.getBrandName());
             if (!CollectionUtils.isEmpty(search.getRegisters())) {
 
                 List<Integer> collect = search.getRegisters().stream().map(p -> p.getCate()).collect(Collectors.toList());
