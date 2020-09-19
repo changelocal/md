@@ -480,6 +480,7 @@ public class BrandController {
         person.setPhone(response.getResult().getMobile());
         person.setHeadImg(response.getResult().getAvatar());
         person.setName(response.getResult().getNickname());
+        person.setId(response.getResult().getId());
 
 
         result.setTitle(responseFamilar.getResult().getServiceName());
