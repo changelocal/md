@@ -89,7 +89,6 @@ public class AdminuserController {
     public void add(@RequestBody Adminuser.Info request) {
         AdminUserDTO.AdminUser adminUser = new AdminUserDTO.AdminUser();
         BeanUtils.copyProperties(request, adminUser);
-        adminUser.setId(UUID.randomUUID().toString());
         //password
         String salt = DigestUtils.md5Hex(request.getPassword() + System.currentTimeMillis());
         adminUser.setPassword(DigestUtils.md5Hex(request.getPassword() + salt));//md5 getBusinessNo

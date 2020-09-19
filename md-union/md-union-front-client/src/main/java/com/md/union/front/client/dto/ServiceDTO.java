@@ -157,7 +157,7 @@ public class ServiceDTO {
         /**
          * 后台运营人id被咨询者
          */
-        private String opUserId;
+        private int opUserId;
 
         /**
          * 创建时间

@@ -139,8 +139,9 @@ public class AdminUserDao extends BaseDao {
         return result;
     }
 
-    public void add(AdminUser adminUser) {
-        DB().insert(adminUser).result();
+    public int add(AdminUser adminUser) {
+        long id = (long) DB().insert(adminUser).result(true).getKeys().get(0);
+        return (int) id;
     }
 
     public void update(AdminUser adminUser) {

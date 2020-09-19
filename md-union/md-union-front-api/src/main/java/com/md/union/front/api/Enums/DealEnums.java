@@ -10,21 +10,21 @@ public enum DealEnums {
 
 
 
-    BRAND_REFUSE_DEAL(2, "7de5-495d-ab49-248238f48a8d-1d4c872533ca-d41d8","商标驳回复审","商标注册被驳回后的唯一救济方式",1800,"https://pay.mdlogo.cn/file/brand-power/1.png"),
+    BRAND_REFUSE_DEAL(2, "1","商标驳回复审","商标注册被驳回后的唯一救济方式",1800,"https://pay.mdlogo.cn/file/brand-power/1.png"),
 
-    BRAND_DISCUSS_DEAL(2, "1b48-4473-874b-39a517423882-1d4c872533ca-d41d8","商标异议答辩","商标在公示期内被他人提出异议，可以申请异议答辩",2000,"https://pay.mdlogo.cn/file/brand-power/2.png"),
+    BRAND_DISCUSS_DEAL(2, "2","商标异议答辩","商标在公示期内被他人提出异议，可以申请异议答辩",2000,"https://pay.mdlogo.cn/file/brand-power/2.png"),
 
-    BRAND_CANCEL_DEAL(2, "e017-43a1-baf0-2d40f9d749d2-1d4c872533ca-d41d8","商标撤三申请","撤销他人三年不使用商标，扫清障碍",1500,"https://pay.mdlogo.cn/file/brand-power/3.png"),
+    BRAND_CANCEL_DEAL(2, "3","商标撤三申请","撤销他人三年不使用商标，扫清障碍",1500,"https://pay.mdlogo.cn/file/brand-power/3.png"),
 
-    BRAND_OBJECTTION_DEAL(2, "2f03-49a7-8ac2-cad776e771ea-1d4c872533ca-d41d8","商标异议申请","异议公示期近似商标，阻止其注册成功，维护品牌权益",1500,"https://pay.mdlogo.cn/file/brand-power/4.png"),
+    BRAND_OBJECTTION_DEAL(2, "4","商标异议申请","异议公示期近似商标，阻止其注册成功，维护品牌权益",1500,"https://pay.mdlogo.cn/file/brand-power/4.png"),
 
-    BRAND_MONITOR_DEAL(2, "9dae-4db4-8e1a-93f8515c9791-1d4c872533ca-d41d8","侵权监测","拒绝搭便车，蹭热度，多个类别同时查询",2300,"https://pay.mdlogo.cn/file/brand-power/5.png"),
+    BRAND_MONITOR_DEAL(2, "5","侵权监测","拒绝搭便车，蹭热度，多个类别同时查询",2300,"https://pay.mdlogo.cn/file/brand-power/5.png"),
 
-    BRAND_APPEAL_DEAL(2, "a82a-4cb0-a1c6-1774f77f3e76-1d4c872533ca-d41d8","电商申诉","针对店铺品牌，产品被投诉，侵权，提供一站式申诉服务",1600,"https://pay.mdlogo.cn/file/brand-power/6.png"),
+    BRAND_APPEAL_DEAL(2, "6","电商申诉","针对店铺品牌，产品被投诉，侵权，提供一站式申诉服务",1600,"https://pay.mdlogo.cn/file/brand-power/6.png"),
 
-    BRAND_INVALID_DEAL(2, "4c00-4a54-9a51-2ec3adb57454-1d4c872533ca-d41d8","商标无效宣告","宣告他人商标无效，扫清障碍",1200,"https://pay.mdlogo.cn/file/brand-power/7.png"),
+    BRAND_INVALID_DEAL(2, "7","商标无效宣告","宣告他人商标无效，扫清障碍",1200,"https://pay.mdlogo.cn/file/brand-power/7.png"),
 
-    BRAND_PERMIT_DEAL(2, "0191-4909-b5ed-5a075ed2fdd4-1d4c872533ca-d41d8","商标许可备案","不放弃商标权，但允许他人使用该商标",1200,"https://pay.mdlogo.cn/file/brand-power/8.png"),
+    BRAND_PERMIT_DEAL(2, "8","商标许可备案","不放弃商标权，但允许他人使用该商标",1200,"https://pay.mdlogo.cn/file/brand-power/8.png"),
             ;
 
     DealEnums(int type, String no, String title, String brief, int price, String icon) {
@@ -60,7 +60,6 @@ public enum DealEnums {
         return no;
     }
 
-    private String def_img = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1595638504208&di=754606fdcb88e6b4ee9ea1476f4c2a5f&imgtype=0&src=http%3A%2F%2Fimage-ali.bianjiyi.com%2F1%2F2018%2F0710%2F14%2F15312043093853.jpg";
 
     //维权类型
     private int type;

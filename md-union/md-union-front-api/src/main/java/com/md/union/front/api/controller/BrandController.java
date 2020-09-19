@@ -288,7 +288,6 @@ public class BrandController {
 
         //获取咨询人信息
         TrademarkDTO.Consultation consultation = new TrademarkDTO.Consultation();
-        consultation.setId("");
         BaseResponse<TrademarkDTO.ConsultationResp> responsePerson = frontClient.consultation(consultation);
         if (!responsePerson.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(responsePerson.getStatus(), responsePerson.getMessage());
@@ -470,7 +469,7 @@ public class BrandController {
         }
 
         TrademarkDTO.Consultation consultation = new TrademarkDTO.Consultation();
-        consultation.setId(id);
+        //consultation.setId(id);
         BaseResponse<TrademarkDTO.ConsultationResp> response = frontClient.consultation(consultation);
         if (!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(response.getStatus(), response.getMessage());

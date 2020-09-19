@@ -12,7 +12,7 @@ public class AdminUserDTO {
 
     @Data
     public static class AdminUser{
-        private String id;
+        private int id;
 
         /**
          *
