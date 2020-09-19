@@ -17,13 +17,13 @@ public class TmkooCommon {
     public static final String apiPassword = "P8G3m5dR6Dj";
     public static final String apiKey = "QIJIAN_1819072015";
     public static void main(String[] args) {
-        try {
-            TmkooCommon.search("卓霸");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            TmkooCommon.search("卓霸");
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
 
-//        TmkooCommon.info("12816966", 25);
+        TmkooCommon.info("12816966", 25);
     }
 
     /**
@@ -31,7 +31,8 @@ public class TmkooCommon {
      * @param regNo 注册号
      * @param cls  国际分类
      */
-    public static void info(String regNo, int cls) {
+    public static Tmkoo.Flow info(String regNo, int cls) {
+        Tmkoo.Flow flow = new Tmkoo.Flow();
         String url="http://api.tmkoo.com/info.php?apiKey="+apiKey+"&apiPassword="+apiPassword+"&regNo="+regNo+"&intCls="+cls;
         System.out.println(url);
         String resp = HttpRequest.get(url).body();
@@ -39,9 +40,20 @@ public class TmkooCommon {
         log.info(resp);
         JSONObject data = JSONObject.parseObject(resp);
         if (data != null) {
-            String msg = data.getString("msg");
-            System.out.println(msg);
+            String ret = data.getString("ret");
+            if("0".equals(ret)){
+                List<Tmkoo.FlowInfo> flowInfos = new ArrayList<>();
+                JSONArray results = JSONObject.parseArray(data.getString("flow"));
+                for(int i =0;i< results.size();i++){
+                    Tmkoo.FlowInfo info = new Tmkoo.FlowInfo();
+                    info.setDate(results.getJSONObject(i).getString("flowDate"));
+                    info.setName(results.getJSONObject(i).getString("flowName"));
+                    flowInfos.add(info);
+                }
+                flow.setFlowInfos(flowInfos);
+            }
         }
+        return flow;
     }
     public static Tmkoo.Result search(String keyword) throws UnsupportedEncodingException {
         Tmkoo.Result res = new Tmkoo.Result();

@@ -260,8 +260,13 @@ public class Brand {
         private Brand.Person person;
         private String brandNo;
         private String OrderType;
+        private List<FlowInfo> flowInfos;
     }
-
+    @Data
+    public static class FlowInfo{
+        private String date;
+        private String name;
+    }
     @Data
     @ApiModel("展示商标详情")
     public static class RegistDetail{
