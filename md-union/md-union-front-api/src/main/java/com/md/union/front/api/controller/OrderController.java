@@ -6,7 +6,6 @@ import com.arc.util.auth.AppUserPrincipal;
 import com.arc.util.http.BaseResponse;
 import com.google.common.base.Strings;
 import com.md.union.front.api.Enums.OrderStatusEnums;
-import com.md.union.front.api.Enums.OrderTypeEnums;
 import com.md.union.front.api.vo.Brand;
 import com.md.union.front.api.vo.Category;
 import com.md.union.front.api.vo.Order;
@@ -150,8 +149,8 @@ public class OrderController {
     }
 
     @ApiOperation("提交订单")
-    @GetMapping("/submit/{code}")
-    public Integer submitOrder(@PathVariable("code") String code) {
+    @GetMapping("/submit/{orderType}/{code}")
+    public Integer submitOrder(@PathVariable("code") int ordertype, @PathVariable("code") String code) {
         OrderDTO.BrandOrderVO orderReq = new OrderDTO.BrandOrderVO();
         orderReq.setProductNo(code);
         orderReq.setUserId(AppUserPrincipal.getPrincipal().getId());
@@ -165,7 +164,7 @@ public class OrderController {
             return orderResp.getResult().getId();
         }
         //生成订单
-        OrderDTO.BrandOrderVO order = convert(code);
+        OrderDTO.BrandOrderVO order = convert(code, ordertype);
         BaseResponse<Integer> response = orderClient.add(order);
         if (!BaseResponse.STATUS_HANDLE_SUCCESS.equals(response.getStatus())) {
             throw new ServiceException(response.getStatus(), response.getMessage());
@@ -314,7 +313,7 @@ public class OrderController {
         return result;
     }
 
-    private OrderDTO.BrandOrderVO convert(String code) {
+    private OrderDTO.BrandOrderVO convert(String code, int orderType) {
         if (Strings.isNullOrEmpty(code)) {
             throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "商标服务主键不能为空");
         }
@@ -335,7 +334,7 @@ public class OrderController {
         result.setUpdateTime(new Date());
 
 
-        result.setOrderType(OrderTypeEnums.BRAND_REGISTER.getType());
+        result.setOrderType(orderType);
         result.setProductNo(code);
         result.setMinPrice(serviceResp.getResult().getPrice().intValue());
         result.setMaxPrice(serviceResp.getResult().getPrice().intValue());
