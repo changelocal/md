@@ -68,4 +68,13 @@ public class Consultation {
         @ApiModelProperty("详情")
         private String desc;
     }
+    @Data
+    @ApiModel("更新头像")
+    public static class WxUser{
+        @ApiModelProperty("名字")
+        private String openId;
+        @ApiModelProperty("详情")
+        private String nickName;
+        private String avatar;
+    }
 }

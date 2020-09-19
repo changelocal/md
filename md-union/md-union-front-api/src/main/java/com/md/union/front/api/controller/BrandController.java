@@ -310,16 +310,17 @@ public class BrandController {
         result.setPerson(person);
         result.setOrderType("4");
 
-
-        Tmkoo.Flow info = TmkooCommon.info(regNo.get(), cate.get());
-        List<Brand.FlowInfo> flowInfos = new ArrayList<>();
-        for (Tmkoo.FlowInfo p : info.getFlowInfos()) {
-            Brand.FlowInfo flowInfo = new Brand.FlowInfo();
-            flowInfo.setDate(p.getDate());
-            flowInfo.setName(p.getName());
-            flowInfos.add(flowInfo);
+        if(null != regNo.get()) {
+            Tmkoo.Flow info = TmkooCommon.info(regNo.get(), cate.get());
+            List<Brand.FlowInfo> flowInfos = new ArrayList<>();
+            for (Tmkoo.FlowInfo p : info.getFlowInfos()) {
+                Brand.FlowInfo flowInfo = new Brand.FlowInfo();
+                flowInfo.setDate(p.getDate());
+                flowInfo.setName(p.getName());
+                flowInfos.add(flowInfo);
+            }
+            result.setFlowInfos(flowInfos);
         }
-        result.setFlowInfos(flowInfos);
 
         return result;
     }
