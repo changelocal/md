@@ -389,4 +389,8 @@ public class MinCommon {
         }
     }
 
+    public String getHost(){
+        return properties.getRouteHost();
+    }
+
 }

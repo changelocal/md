@@ -371,7 +371,7 @@ public class BrandController {
         }
         //数据库没有记录，要发请求
         else {
-            Tmkoo.Result search = TmkooCommon.search(request.getBrandName());
+            Tmkoo.Result search = TmkooCommon.search(minCommon.getHost(), request.getBrandName());
             if (!CollectionUtils.isEmpty(search.getRegisters())) {
 
                 List<Integer> collect = search.getRegisters().stream().map(p -> p.getCate()).collect(Collectors.toList());
