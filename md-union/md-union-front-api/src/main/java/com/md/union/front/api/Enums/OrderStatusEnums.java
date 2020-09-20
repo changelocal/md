@@ -8,6 +8,7 @@ public enum OrderStatusEnums {
     TRUST(3, "委托受理"),
     END_PAY(4, "待支付尾款"),
     END(5, "已完成"),
+    DISABLE(9, "已失效"),
     ;
 
     OrderStatusEnums(int type, String title) {

@@ -122,32 +122,30 @@ public class PayController {
                     userid = query.getResult().getItems().get(0).getUserId();
                     productName = query.getResult().getItems().get(0).getProductName();
                 }
-
-                OrderDTO.BrandOrderVO brandOrderVO = new OrderDTO.BrandOrderVO();
-                brandOrderVO.setId(key);
-                brandOrderVO.setOrderNo(orderNo);
-                brandOrderVO.setStatus(OrderStatusEnums.PRE_SUB.getType());
-                brandOrderVO.setPreTime(new Date());
-                brandOrderVO.setOverTime(new Date());
-                BaseResponse update = orderClient.update(brandOrderVO);
-                if (!update.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
-                    throw new ServiceException(update.getStatus(), update.getMessage());
+                if(query.getResult().getItems().get(0).getStatus()==OrderStatusEnums.PRE_PAY.getType()){
+                    OrderDTO.BrandOrderVO brandOrderVO = new OrderDTO.BrandOrderVO();
+                    brandOrderVO.setId(key);
+                    brandOrderVO.setOrderNo(orderNo);
+                    brandOrderVO.setStatus(OrderStatusEnums.PRE_SUB.getType());
+                    brandOrderVO.setPreTime(new Date());
+                    brandOrderVO.setOverTime(new Date());
+                    BaseResponse update = orderClient.update(brandOrderVO);
+                    if (!update.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+                        throw new ServiceException(update.getStatus(), update.getMessage());
+                    }
+                    //获得用户openid，推送通知
+                    WxUserDTO.WxUser adminUser = new WxUserDTO.WxUser();
+                    adminUser.setId((int)userid);
+                    BaseResponse<WxUserDTO.QueryResp> queryRespBaseResponse = frontClient.query(adminUser);
+                    WxMss.MakeOrder makeOrder = new WxMss.MakeOrder();
+                    makeOrder.setOpenid(queryRespBaseResponse.getResult().getItems().get(0).getMinId());
+                    makeOrder.setOrderNo(orderNo);
+                    makeOrder.setOrderStatus(OrderStatusEnums.PRE_SUB.getTitle());
+                    makeOrder.setName(productName);
+                    makeOrder.setOrderTime(LocalDate.now().toString());
+                    makeOrder.setNote("名典商标");
+                    minCommon.pushMakeOrder(makeOrder);
                 }
-                //获得用户openid，推送通知
-
-                WxUserDTO.WxUser adminUser = new WxUserDTO.WxUser();
-                adminUser.setId((int)userid);
-                BaseResponse<WxUserDTO.QueryResp> queryRespBaseResponse = frontClient.query(adminUser);
-
-
-                WxMss.MakeOrder makeOrder = new WxMss.MakeOrder();
-                makeOrder.setOpenid(queryRespBaseResponse.getResult().getItems().get(0).getMinId());
-                makeOrder.setOrderNo(orderNo);
-                makeOrder.setOrderStatus(OrderStatusEnums.PRE_SUB.getTitle());
-                makeOrder.setName(productName);
-                makeOrder.setOrderTime(LocalDate.now().toString());
-                makeOrder.setNote("名典商标");
-                minCommon.pushMakeOrder(makeOrder);
                 //支付成功
                 resXml = "<xml>" + "<return_code><![CDATA[SUCCESS]]></return_code>"
                         + "<return_msg><![CDATA[OK]]></return_msg>" + "</xml>";

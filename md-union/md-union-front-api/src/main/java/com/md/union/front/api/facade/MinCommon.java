@@ -36,14 +36,10 @@ import java.util.*;
 @EnableConfigurationProperties(MinProperties.class)
 @Slf4j
 public class MinCommon {
-
     private final MinProperties properties;
-
     public MinCommon(MinProperties properties) {
         this.properties = properties;
     }
-
-
     /**
      * 微信小程序登录
      *
@@ -67,42 +63,26 @@ public class MinCommon {
         minUser.setMinId(resp.getString("openid"));
         minUser.setType(2);
         minUser.setSessionId(EncryptUtil.md5("wxlogin" + new Date().getTime() + minUser.getMinId() + minUser.getSessionKey()));
-
         log.info("minLogin return===>{}", minUser);
         return minUser;
     }
 
     public void pushToPay(WxMss.ToPay toPay){
         //拼接推送的模版
-        WxMssVo wxMssVo = new WxMssVo();
-        wxMssVo.setTouser(toPay.getOpenid());//用户的openid（要发送给那个用户，通常这里应该动态传进来的）
-        wxMssVo.setTemplate_id("a-Vu8j5AgGljf1hAmvoKIuI5WeL1VwrZtcnDBXC9RqE");//订阅消息模板id
-        wxMssVo.setPage("pages/index/index");
-
-        Map<String, TemplateData> m = new HashMap<>(4);
-        m.put("thing5", new TemplateData(toPay.getName()));
-        m.put("amount2", new TemplateData(toPay.getPayment()));
-        m.put("character_string3", new TemplateData(toPay.getOrderNo()));
-        m.put("thing4", new TemplateData(toPay.getNote()));
-        wxMssVo.setData(m);
-
-        sendMinTip(null);
+        JSONObject data = new JSONObject();
+        data.put("touser", toPay.getOpenid());
+        data.put("template_id", "a-Vu8j5AgGljf1hAmvoKIuI5WeL1VwrZtcnDBXC9RqE");
+        data.put("page", "pages/index/index");
+        JSONObject content = new JSONObject();
+        content.put("thing5", new Template(toPay.getName()));
+        content.put("amount2", new Template(toPay.getPayment()));
+        content.put("character_string3", new Template(toPay.getOrderNo()));
+        content.put("thing4", new Template(toPay.getNote()));
+        data.put("data", content);
+        sendMinTip(data);
     }
     public void pushMakeOrder(WxMss.MakeOrder makeOrder){
         //拼接推送的模版
-//        WxMssVo wxMssVo = new WxMssVo();
-//        wxMssVo.setTouser(makeOrder.getOpenid());//用户的openid（要发送给那个用户，通常这里应该动态传进来的）
-//        wxMssVo.setTemplate_id("Q-Ry38-lawOPAnu36powW9R6mySsWMfNf8CKwtL0rQ0");//订阅消息模板id
-//        wxMssVo.setPage("pages/index/index");
-//
-//        Map<String, TemplateData> m = new HashMap<>(4);
-//        m.put("number1", new TemplateData(makeOrder.getOrderNo()));
-//        m.put("date2", new TemplateData(makeOrder.getOrderTime()));
-//        m.put("thing3", new TemplateData(makeOrder.getOrderStatus()));
-//        m.put("thing5", new TemplateData(makeOrder.getName()));
-//        m.put("thing4", new TemplateData(makeOrder.getNote()));
-//        wxMssVo.setData(m);
-
         JSONObject data = new JSONObject();
         data.put("touser", makeOrder.getOpenid());
         data.put("template_id", "Q-Ry38-lawOPAnu36powW9R6mySsWMfNf8CKwtL0rQ0");
