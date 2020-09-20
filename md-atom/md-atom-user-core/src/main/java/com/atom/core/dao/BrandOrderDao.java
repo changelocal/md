@@ -111,8 +111,8 @@ public class BrandOrderDao extends BaseDao {
     }
 
     public int add(BrandOrder brandOrder) {
-        long id = (long) DB().insert(brandOrder).result(true).getKeys().get(0);
-        return Integer.parseInt(String.valueOf(id));
+        int id = (int) DB().insert(brandOrder).result(true).getKeys().get(0);
+        return id;
     }
 
     public void update(BrandOrder brandOrder) {
