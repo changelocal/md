@@ -57,7 +57,7 @@ public class PayController {
         }*/
         PayInfo.Order result = new PayInfo.Order();
         log.info("prePay param:{}", JSON.toJSONString(request));
-        Map<String, String> ret = minCommon.appletPay();
+        Map<String, String> ret = minCommon.appletPay(request.getOrderNo());
         for (String key : ret.keySet()) {
             if ("appId".equals(key)) {
                 result.setAppId(ret.get(key));
@@ -105,8 +105,17 @@ public class PayController {
             String returnmsg = (String) map.get("result_code");
             if ("SUCCESS".equals(returnmsg)) {
                 //更新数据
-//                int result = paymentService.xcxNotify(map);
-//                if(result > 0){
+
+                OrderDTO.BrandOrderVO brandOrderVO = new OrderDTO.BrandOrderVO();
+                brandOrderVO.setOrderNo((String) map.get("out_trade_no"));
+                brandOrderVO.setStatus(OrderStatusEnums.PRE_SUB.getType());
+                brandOrderVO.setPreTime(new Date());
+                brandOrderVO.setOverTime(new Date());
+                BaseResponse update = orderClient.update(brandOrderVO);
+                if (!update.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+                    throw new ServiceException(update.getStatus(), update.getMessage());
+                }
+
                 //支付成功
                 resXml = "<xml>" + "<return_code><![CDATA[SUCCESS]]></return_code>"
                         + "<return_msg><![CDATA[OK]]></return_msg>" + "</xml>";

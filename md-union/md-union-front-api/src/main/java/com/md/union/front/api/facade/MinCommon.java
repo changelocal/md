@@ -201,7 +201,7 @@ public class MinCommon {
      *
      * @return
      */
-    public Map<String, String> appletPay() {
+    public Map<String, String> appletPay(String orderNo) {
         String OrderId = "P" + System.currentTimeMillis();
         String openId = AppUserPrincipal.getPrincipal().getMinId();
         String mapStr = "";
@@ -220,7 +220,7 @@ public class MinCommon {
             //随机字符串，长度要求在32位以内。
             dataMap.put("body", "商标");
             //商品描述,通过订单id获得
-            dataMap.put("out_trade_no", OrderId);
+            dataMap.put("out_trade_no", orderNo);
             //商品订单号,用户下订单后台生成
             dataMap.put("total_fee", "1");
             //商品金,通过订单id获得
