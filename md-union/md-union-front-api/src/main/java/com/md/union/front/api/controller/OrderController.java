@@ -336,6 +336,7 @@ public class OrderController {
 
         OrderDTO.BrandOrderVO result = new OrderDTO.BrandOrderVO();
         int prePrice = 0;
+        //服务订单查询
         if (request.getOrderType() != OrderTypeEnums.BRAND_BUY.getType()) {
             BaseResponse<ServiceDTO.Service> serviceResp = frontClient.getService(request.getCode());
             if (!BaseResponse.STATUS_HANDLE_SUCCESS.equals(serviceResp.getStatus())) {
@@ -349,6 +350,7 @@ public class OrderController {
             result.setCategoryName(serviceResp.getResult().getServiceName());
             result.setImg(serviceResp.getResult().getImageUrl());
         } else {
+            //商标订单查询
             TrademarkDTO.MdBrand brandReq = new TrademarkDTO.MdBrand();
             brandReq.setBrandId(request.getCode());
             BaseResponse<TrademarkDTO.QueryResp> brandResp = frontClient.find(brandReq);
@@ -363,7 +365,7 @@ public class OrderController {
             }
             prePrice = brandResp.getResult().getMdBrands().get(0).getPrice().intValue();
             result.setProductName(brandResp.getResult().getMdBrands().get(0).getBrandName());
-            result.setCategoryName(brandResp.getResult().getMdBrands().get(0).getCategoryName());
+            result.setCategoryName("商标订单");
             result.setImg(brandResp.getResult().getMdBrands().get(0).getImageUrl());
         }
 

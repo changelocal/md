@@ -112,7 +112,7 @@ public class BrandOrderDao extends BaseDao {
 
     public int add(BrandOrder brandOrder) {
         long id = (long) DB().insert(brandOrder).result(true).getKeys().get(0);
-        return (int) id;
+        return Integer.parseInt(String.valueOf(id));
     }
 
     public void update(BrandOrder brandOrder) {
@@ -123,13 +123,13 @@ public class BrandOrderDao extends BaseDao {
         if (!Strings.isNullOrEmpty(brandOrder.getOrderNo())) {
             updateValues.add("order_no", brandOrder.getOrderNo());
         }
-        if (0<(brandOrder.getStatus())) {
+        if (0 < (brandOrder.getStatus())) {
             updateValues.add("status", brandOrder.getStatus());
         }
-        if (null!=(brandOrder.getPreTime())) {
+        if (null != (brandOrder.getPreTime())) {
             updateValues.add("pre_time", brandOrder.getPreTime());
         }
-        if (null!=(brandOrder.getOverTime())) {
+        if (null != (brandOrder.getOverTime())) {
             updateValues.add("over_time", brandOrder.getOverTime());
         }
         if (brandOrder.getPrePay() > 0) {
