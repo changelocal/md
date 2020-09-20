@@ -6,6 +6,7 @@ import com.arc.util.auth.AppUserPrincipal;
 import com.arc.util.http.BaseResponse;
 import com.google.common.base.Strings;
 import com.md.union.front.api.Enums.OrderStatusEnums;
+import com.md.union.front.api.Enums.OrderTypeEnums;
 import com.md.union.front.api.vo.Brand;
 import com.md.union.front.api.vo.Category;
 import com.md.union.front.api.vo.Order;
@@ -173,7 +174,7 @@ public class OrderController {
         if (!BaseResponse.STATUS_HANDLE_SUCCESS.equals(orderResp.getStatus())) {
             throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "查询订单失败");
         }
-        if (orderResp.getResult() != null) {
+        if (orderResp.getResult() != null && orderResp.getResult().getId() > 0) {
             return orderResp.getResult().getId();
         }
         //生成订单
@@ -330,19 +331,48 @@ public class OrderController {
 
     private OrderDTO.BrandOrderVO convert(Order.BuyOrder request) {
         if (Strings.isNullOrEmpty(request.getCode())) {
-            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "商标服务主键不能为空");
-        }
-        BaseResponse<ServiceDTO.Service> serviceResp = frontClient.getService(request.getCode());
-        if (!BaseResponse.STATUS_HANDLE_SUCCESS.equals(serviceResp.getStatus())) {
-            throw new ServiceException(serviceResp.getStatus(), serviceResp.getMessage());
+            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "商标主键不能为空");
         }
 
         OrderDTO.BrandOrderVO result = new OrderDTO.BrandOrderVO();
+        int prePrice = 0;
+        if (request.getOrderType() != OrderTypeEnums.BRAND_BUY.getType()) {
+            BaseResponse<ServiceDTO.Service> serviceResp = frontClient.getService(request.getCode());
+            if (!BaseResponse.STATUS_HANDLE_SUCCESS.equals(serviceResp.getStatus())) {
+                throw new ServiceException(serviceResp.getStatus(), serviceResp.getMessage());
+            }
+            if (serviceResp.getResult() == null) {
+                throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "服务主键查询不存在");
+            }
+            prePrice = serviceResp.getResult().getPrice().intValue();
+            result.setProductName(serviceResp.getResult().getServiceName());
+            result.setCategoryName(serviceResp.getResult().getServiceName());
+            result.setImg(serviceResp.getResult().getImageUrl());
+        } else {
+            TrademarkDTO.MdBrand brandReq = new TrademarkDTO.MdBrand();
+            brandReq.setBrandId(request.getCode());
+            BaseResponse<TrademarkDTO.QueryResp> brandResp = frontClient.find(brandReq);
+            if (!BaseResponse.STATUS_HANDLE_SUCCESS.equals(brandResp.getStatus())) {
+                throw new ServiceException(brandResp.getStatus(), brandResp.getMessage());
+            }
+            if (brandResp.getResult() == null) {
+                throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "商标主键查询不存在");
+            }
+            if (brandResp.getResult().getMdBrands().size() > 1) {
+                throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "商标主键查询不唯一");
+            }
+            prePrice = brandResp.getResult().getMdBrands().get(0).getPrice().intValue();
+            result.setProductName(brandResp.getResult().getMdBrands().get(0).getBrandName());
+            result.setCategoryName(brandResp.getResult().getMdBrands().get(0).getCategoryName());
+            result.setImg(brandResp.getResult().getMdBrands().get(0).getImageUrl());
+        }
+
+
         result.setOrderNo("" + System.currentTimeMillis());
         result.setStatus(OrderStatusEnums.PRE_PAY.getType());
-        result.setPrePay(serviceResp.getResult().getPrice().intValue());
-        result.setRestPay(serviceResp.getResult().getPrice().intValue());
-        result.setTotalPay(serviceResp.getResult().getPrice().intValue());
+        result.setPrePay(prePrice);
+        result.setRestPay(prePrice + 5000);
+        result.setTotalPay(prePrice + 5000);
         result.setUserId(AppUserPrincipal.getPrincipal().getId());
         result.setOpUserId(request.getPersonId());
         result.setCreateTime(new Date());
@@ -351,11 +381,11 @@ public class OrderController {
 
         result.setOrderType(request.getOrderType());
         result.setProductNo(request.getCode());
-        result.setMinPrice(serviceResp.getResult().getPrice().intValue());
-        result.setMaxPrice(serviceResp.getResult().getPrice().intValue());
-        result.setProductName(serviceResp.getResult().getServiceName());
+        result.setMinPrice(prePrice);
+        result.setMaxPrice(prePrice);
+       /* result.setProductName(serviceResp.getResult().getServiceName());
         result.setCategoryName(serviceResp.getResult().getServiceName());
-        result.setImg(serviceResp.getResult().getImageUrl());
+        result.setImg(serviceResp.getResult().getImageUrl());*/
 
         return result;
     }

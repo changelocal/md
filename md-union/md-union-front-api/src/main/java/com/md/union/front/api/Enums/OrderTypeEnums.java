@@ -6,6 +6,7 @@ public enum OrderTypeEnums {
     BRAND_REGISTER(1, "商标注册订单"),
     BRAND_DEAL(2, "商标维权订单"),
     BRAND_CHANGE(3, "商标信息变更订单"),
+    BRAND_BUY(4, "普通商标订单"),
     ;
 
     OrderTypeEnums(int type, String title) {
