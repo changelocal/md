@@ -90,20 +90,32 @@ public class MinCommon {
     }
     public void pushMakeOrder(WxMss.MakeOrder makeOrder){
         //拼接推送的模版
-        WxMssVo wxMssVo = new WxMssVo();
-        wxMssVo.setTouser(makeOrder.getOpenid());//用户的openid（要发送给那个用户，通常这里应该动态传进来的）
-        wxMssVo.setTemplate_id("Q-Ry38-lawOPAnu36powW9R6mySsWMfNf8CKwtL0rQ0");//订阅消息模板id
-        wxMssVo.setPage("pages/index/index");
+//        WxMssVo wxMssVo = new WxMssVo();
+//        wxMssVo.setTouser(makeOrder.getOpenid());//用户的openid（要发送给那个用户，通常这里应该动态传进来的）
+//        wxMssVo.setTemplate_id("Q-Ry38-lawOPAnu36powW9R6mySsWMfNf8CKwtL0rQ0");//订阅消息模板id
+//        wxMssVo.setPage("pages/index/index");
+//
+//        Map<String, TemplateData> m = new HashMap<>(4);
+//        m.put("number1", new TemplateData(makeOrder.getOrderNo()));
+//        m.put("date2", new TemplateData(makeOrder.getOrderTime()));
+//        m.put("thing3", new TemplateData(makeOrder.getOrderStatus()));
+//        m.put("thing5", new TemplateData(makeOrder.getName()));
+//        m.put("thing4", new TemplateData(makeOrder.getNote()));
+//        wxMssVo.setData(m);
 
-        Map<String, TemplateData> m = new HashMap<>(4);
-        m.put("number1", new TemplateData(makeOrder.getOrderNo()));
-        m.put("date2", new TemplateData(makeOrder.getOrderTime()));
-        m.put("thing3", new TemplateData(makeOrder.getOrderStatus()));
-        m.put("thing5", new TemplateData(makeOrder.getName()));
-        m.put("thing4", new TemplateData(makeOrder.getNote()));
-        wxMssVo.setData(m);
+        JSONObject data = new JSONObject();
+        data.put("touser", makeOrder.getOpenid());
+        data.put("template_id", "Q-Ry38-lawOPAnu36powW9R6mySsWMfNf8CKwtL0rQ0");
+        data.put("page", "pages/index/index");
+        JSONObject content = new JSONObject();
+        content.put("number1", new Template(makeOrder.getOrderNo()));
+        content.put("date2", new Template(makeOrder.getOrderTime()));
+        content.put("thing3", new Template(makeOrder.getOrderStatus()));
+        content.put("thing5", new Template(makeOrder.getName()));
+        content.put("thing4", new Template(makeOrder.getNote()));
+        data.put("data", content);
 
-        sendMinTip(null);
+        sendMinTip(data);
     }
     public void pushDelivery(WxMss.Delivery delivery){
         //拼接推送的模版
@@ -165,7 +177,7 @@ public class MinCommon {
      */
     public void sendMinTip(Object request) {
         String accessToken = getMinAccessToken();
-        String url = properties.getRouteHost() + "/cgi-bin/message/wxopen/template/send?access_token=" + accessToken;
+        String url = properties.getRouteHost() + "/cgi-bin/message/subscribe/send?access_token=" + accessToken;
         log.info("sendMinTip url:{} data:{}", url, request);
         String result = HttpRequest.post(url).header("Content-Type", HttpRequest.CONTENT_TYPE_JSON)
                 .send(request.toString()).body();
@@ -182,7 +194,8 @@ public class MinCommon {
 //        if (redisClient.exists(tokenCache)) {
 //            return redisClient.get(tokenCache);
 //        }
-        String accessTokenUrl = properties.getRouteHost() + "/cgi-bin/token?grant_type=client_credential&appid=" + properties.getMinAppId() + "&secret=" + properties.getMinSecret();
+        String accessTokenUrl = properties.getRouteHost() + "/cgi-bin/token?grant_type=client_credential&appid="
+                + properties.getMinAppId() + "&secret=" + properties.getMinSecret();
         log.info("getMinAccessToken req url {}", accessTokenUrl);
         String result = HttpRequest.get(accessTokenUrl).body();
         log.info("common getMinAccessToken result:{}", result);
