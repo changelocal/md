@@ -123,6 +123,15 @@ public class BrandOrderDao extends BaseDao {
         if (!Strings.isNullOrEmpty(brandOrder.getOrderNo())) {
             updateValues.add("order_no", brandOrder.getOrderNo());
         }
+        if (0<(brandOrder.getStatus())) {
+            updateValues.add("status", brandOrder.getStatus());
+        }
+        if (null!=(brandOrder.getPreTime())) {
+            updateValues.add("pre_time", brandOrder.getPreTime());
+        }
+        if (null!=(brandOrder.getOverTime())) {
+            updateValues.add("over_time", brandOrder.getOverTime());
+        }
         if (brandOrder.getPrePay() > 0) {
             updateValues.add("pre_pay", brandOrder.getPrePay());
         }

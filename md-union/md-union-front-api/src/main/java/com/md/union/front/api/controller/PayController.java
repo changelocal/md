@@ -105,9 +105,20 @@ public class PayController {
             String returnmsg = (String) map.get("result_code");
             if ("SUCCESS".equals(returnmsg)) {
                 //更新数据
+                String orderNo = (String) map.get("out_trade_no");
+                OrderDTO.BrandOrderVO brandOrderVO1 = new OrderDTO.BrandOrderVO();
+                brandOrderVO1.setOrderNo(orderNo);
+                brandOrderVO1.setPageIndex(1);
+                brandOrderVO1.setPageSize(10);
+                BaseResponse<OrderDTO.QueryResp> query = orderClient.query(brandOrderVO1);
+                int key = 0;
+                if(!CollectionUtils.isEmpty(query.getResult().getItems())){
+                    key = query.getResult().getItems().get(0).getId();
+                }
 
                 OrderDTO.BrandOrderVO brandOrderVO = new OrderDTO.BrandOrderVO();
-                brandOrderVO.setOrderNo((String) map.get("out_trade_no"));
+                brandOrderVO.setId(key);
+                brandOrderVO.setOrderNo(orderNo);
                 brandOrderVO.setStatus(OrderStatusEnums.PRE_SUB.getType());
                 brandOrderVO.setPreTime(new Date());
                 brandOrderVO.setOverTime(new Date());
