@@ -167,6 +167,7 @@ public class OrderController {
         }
         OrderDTO.BrandOrderVO orderReq = new OrderDTO.BrandOrderVO();
         orderReq.setProductNo(request.getCode());
+        orderReq.setStatus(OrderStatusEnums.PRE_PAY.getType());
         orderReq.setUserId(AppUserPrincipal.getPrincipal().getId());
         log.info("orderClient.getByCondition param:{}", JSON.toJSONString(orderReq));
         BaseResponse<OrderDTO.BrandOrderVO> orderResp = orderClient.getByCondition(orderReq);
