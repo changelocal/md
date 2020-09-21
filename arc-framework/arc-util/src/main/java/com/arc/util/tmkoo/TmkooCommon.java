@@ -17,15 +17,15 @@ public class TmkooCommon {
     public static final String apiPassword = "P8G3m5dR6Dj";
     public static final String apiKey = "QIJIAN_1819072015";
 
-   /* public static void main(String[] args) {
-//        try {
-//            TmkooCommon.search("卓霸");
-//        } catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
-//        }
+   public static void main(String[] args) {
+        try {
+            TmkooCommon.search("http://api.tmkoo.com","卓霸");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
-        TmkooCommon.info("12816966", 25);
-    }*/
+//        TmkooCommon.info("http://api.tmkoo.com/info.php","12816966", 25);
+    }
 
     /**
      * @param regNo 注册号
@@ -58,6 +58,7 @@ public class TmkooCommon {
 
     public static Tmkoo.Result search(String host, String keyword) throws UnsupportedEncodingException {
         Tmkoo.Result res = new Tmkoo.Result();
+        int otherCnt = 0;
         List<Tmkoo.RegisterInfo> result = new ArrayList<>();
         List<String> regNoes = new ArrayList<>();
         String encode = URLEncoder.encode(keyword, "UTF-8");
@@ -65,7 +66,7 @@ public class TmkooCommon {
                 "&apiPassword=" + apiPassword + "&pageSize=50&pageNo=1&searchType=1";
 //        System.out.println(url);
         String resp = HttpRequest.get(url).body();
-//        System.out.println(resp);
+        System.out.println(resp);
         log.info("", resp);
         JSONObject data = JSONObject.parseObject(resp);
         if (data != null) {
@@ -89,12 +90,15 @@ public class TmkooCommon {
                         }
                         regNoes.add(results.getJSONObject(i).getString("regNo"));
                         result.add(info);
+                    }else{
+                        otherCnt++;
                     }
                 }
             }
         }
         log.info("", result);
         System.out.println(result);
+        res.setOtherCnt(otherCnt);
         res.setRegisters(result);
         return res;
     }

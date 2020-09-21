@@ -1,6 +1,7 @@
 package com.md.union.front.api.controller;
 
 import com.arc.common.ServiceException;
+import com.arc.util.auth.AppUserPrincipal;
 import com.arc.util.http.BaseResponse;
 import com.arc.util.tmkoo.Tmkoo;
 import com.arc.util.tmkoo.TmkooCommon;
@@ -397,6 +398,7 @@ public class BrandController {
                 }
             });
             result.setTotal(1);
+            result.setSuccess(response.getResult().getInfos().get(0).getSuccess());
         }
         //数据库没有记录，要发请求
         else {
@@ -426,6 +428,10 @@ public class BrandController {
                     }
                 });
 
+
+                int success = (45-search.getRegisters().size() )*2 + search.getOtherCnt();
+                result.setSuccess(String.valueOf(success));
+
                 //  增加到数据库
                 SearchRecordDTO.SearchRecordInfo insert = new SearchRecordDTO.SearchRecordInfo();
                 insert.setSearchWord(search.getBrandName());
@@ -436,10 +442,11 @@ public class BrandController {
                 List<Integer> collect2 = trademarkCatesUnRegis.stream().map(q -> q.getCateCode()).collect(Collectors.toList());
                 insert.setUnregistCate(StringUtils.join(collect2, ","));
 
-//                insert.setBuyerMobile(AppUserPrincipal.getPrincipal().getMobile());
-//                insert.setOpenId(AppUserPrincipal.getPrincipal().getMinId());
-                insert.setBuyerMobile("8964");
-                insert.setOpenId("999999");
+                insert.setSuccess(result.getSuccess());
+                insert.setBuyerMobile(AppUserPrincipal.getPrincipal().getMobile());
+                insert.setOpenId(AppUserPrincipal.getPrincipal().getMinId());
+//                insert.setBuyerMobile("8964");
+//                insert.setOpenId("999999");
                 insert.setStatus(1);
                 BaseResponse<SearchRecordDTO.Resp> update = frontClient.add(insert);
                 if (!update.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
@@ -451,9 +458,10 @@ public class BrandController {
             }
         }
 
+
         result.setTrademarkCateListRegist(trademarkCatesRegis);
         result.setRegistCount(trademarkCatesRegis.size());
-        result.setSuccess("34");
+
         result.setTrademarkCateListUnRegist(trademarkCatesUnRegis);
         result.setUnRegistCount(trademarkCatesUnRegis.size());
 

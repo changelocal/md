@@ -10,6 +10,7 @@ import java.util.List;
 public final class Tmkoo {
     @Data
     public static class Result{
+        private int otherCnt;
         private String brandName;
         private List<String> regNos;
         private List<RegisterInfo> registers;

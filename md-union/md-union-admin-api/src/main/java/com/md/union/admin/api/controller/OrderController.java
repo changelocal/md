@@ -61,7 +61,7 @@ public class OrderController {
             query.getResult().getItems().forEach(p->{
                 Order.OrderRes info = new Order.OrderRes();
                 BeanUtils.copyProperties(p, info);
-                info.setOrderStatusName(OrderStatusEnums.valueType(info.getOrderStatus()).name());
+                info.setStatusName(OrderStatusEnums.valueType(info.getStatus()).name());
                 info.setOrderTypeName(OrderTypeEnums.valueType(info.getOrderType()).name());
                 infos.add(info);
             });
@@ -120,7 +120,6 @@ public class OrderController {
             throw new ServiceException(response.getStatus(), response.getMessage());
         }
     }
-
     private OrderDTO.BrandOrderVO convert(Order.SubmitServiceOrder serviceOrder) {
         OrderDTO.BrandOrderVO result = new OrderDTO.BrandOrderVO();
         result.setOrderNo("" + System.currentTimeMillis());
@@ -132,7 +131,6 @@ public class OrderController {
         result.setOpUserId(1);//todo
         result.setCreateTime(new Date());
         result.setUpdateTime(new Date());
-
         result.setOrderType(serviceOrder.getOrderType());
         result.setProductNo(serviceOrder.getProductNo());
         result.setMinPrice(10000);
@@ -151,7 +149,6 @@ public class OrderController {
         return result;
     }
 
-
     @ApiOperation("推送订单")
     @PostMapping("/push")
     public void createOrder(@RequestBody Order.SubmitServiceOrder serviceOrder) {
@@ -161,7 +158,6 @@ public class OrderController {
             throw new ServiceException(response.getStatus(), response.getMessage());
         }
     }
-
     private OrderDTO.BrandOrderVO convertOrder(Order.SubmitServiceOrder serviceOrder) {
         OrderDTO.BrandOrderVO result = new OrderDTO.BrandOrderVO();
         result.setOrderNo("" + System.currentTimeMillis());
@@ -173,7 +169,6 @@ public class OrderController {
         result.setOpUserId(1);//todo
         result.setCreateTime(new Date());
         result.setUpdateTime(new Date());
-
         result.setOrderType(OrderTypeEnums.BRAND_REGISTER.getType());
         result.setProductNo(serviceOrder.getProductNo());
         result.setMinPrice(10000);
@@ -188,7 +183,6 @@ public class OrderController {
         result.setProductName(serviceResp.getResult().getServiceName());
         result.setCategoryName(serviceResp.getResult().getServiceName());
         result.setImg(serviceResp.getResult().getImageUrl());
-
         return result;
     }
 

@@ -32,10 +32,10 @@ public class SearchRecordController {
     public SearchRecord.SearchRes query(@RequestBody SearchRecord.SearchReq request) {
         log.info("query:"+request);
         SearchRecord.SearchRes ret = new SearchRecord.SearchRes();
-        /*SearchRecordDTO.Info adminUser = new SearchRecordDTO.Info();
+        SearchRecordDTO.SearchRecordInfo adminUser = new SearchRecordDTO.SearchRecordInfo();
         BeanUtils.copyProperties(request, adminUser);
 
-        if(request.getDateRange().length>0){
+        if(request.getDateRange()!=null && request.getDateRange().length>0){
             adminUser.setCreateTimeBegin(new Date(request.getDateRange()[0]));
             adminUser.setCreateTimeEnd(new Date(request.getDateRange()[1]));
         }else{
@@ -43,7 +43,7 @@ public class SearchRecordController {
             adminUser.setCreateTimeEnd(null);
         }
 
-        log.info("adminUser:"+adminUser);
+        log.info("SearchRecord:"+adminUser);
         BaseResponse<SearchRecordDTO.QueryResp> query = frontClient.query(adminUser);
         if (!query.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(query.getStatus(), query.getMessage());
@@ -59,19 +59,19 @@ public class SearchRecordController {
             ret.setCount(query.getResult().getTotal());
         }else{
             ret.setCount(0);
-        }*/
+        }
         return ret;
     }
 
     @PostMapping("/update")
     public void update(@RequestBody SearchRecord.Info request) {
-        /*SearchRecordDTO.Info info = new SearchRecordDTO.Info();
+        SearchRecordDTO.SearchRecordInfo info = new SearchRecordDTO.SearchRecordInfo();
         BeanUtils.copyProperties(request, info);
         info.setUpdateTime(new Date());
         BaseResponse<SearchRecordDTO.Resp> query = frontClient.update(info);
         if (!query.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(query.getStatus(), query.getMessage());
-        }*/
+        }
     }
 
 }

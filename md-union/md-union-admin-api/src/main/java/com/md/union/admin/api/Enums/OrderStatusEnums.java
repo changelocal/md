@@ -6,7 +6,7 @@ import com.arc.util.http.BaseResponse;
 //订单状态 1待支付定金 2待提交资料 3委托受理 4待支付尾款 5已完成
 public enum OrderStatusEnums {
 
-    DISABLE(0, "无效"),
+    DISABLE(9, "无效"),
     PRE_PAY(1, "待支付定金"),
     PRE_SUB(2, "待提交资料"),
     TRUST(3, "委托受理"),

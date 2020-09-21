@@ -19,6 +19,7 @@ public class SearchRecordVO {
          * 搜索关键字
          */
         private String searchWord;
+        private String success;
 
         /**
          * 注册号

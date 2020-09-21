@@ -29,6 +29,9 @@
           :picker-options="pickerOptions2"
         />
       </Form-item>
+      <Form-item label="订单号">
+        <Input v-model="orderNo" placeholder="请输入电话" clearable></Input>
+      </Form-item>
       <Form-item label>
         <Button type="primary" @click="onSearch">搜索</Button>
       </Form-item>
@@ -142,8 +145,8 @@ export default {
       },
       columns1: [
         { title: "订单号", key: "orderNo", width: 150 },
-        { title: "状态", key: "orderStatusName" },
-        { title: "订单类型", key: "OrderTypeName" },
+        { title: "状态", key: "statusName" },
+        { title: "订单类型", key: "orderTypeName" },
         { title: "商标类型", key: "categoryName" },
         { title: "预付款", key: "prePay", width: 80 },
         { title: "剩余付款", key: "restPay", width: 90 },
@@ -155,6 +158,7 @@ export default {
         { title: "操作", slot: "action", width: 170, align: "center" },
       ],
       openType: "add",
+      orderNo: "",
       form: {
         no: "",
         status: "",
@@ -188,6 +192,10 @@ export default {
         {
           value: 5,
           label: "已完成",
+        },
+        {
+          value: 9,
+          label: "已作废",
         },
       ],
       kinds: [
@@ -257,8 +265,9 @@ export default {
       return {
         pageIndex: this.currentPage,
         pageSize: this.pageSize,
-        OrderStatus: this.status,
-        OrderType: this.kind,
+        orderStatus: this.status,
+        orderType: this.kind,
+        orderNo: this.orderNo,
         dateRange: this.planStartTime,
       };
     },
@@ -295,6 +304,8 @@ export default {
         return "待支付尾款";
       } else if (row === 5) {
         return "已完成";
+      } else if (row === 9) {
+        return "已作废";
       }
     },
     formatMapType(row) {

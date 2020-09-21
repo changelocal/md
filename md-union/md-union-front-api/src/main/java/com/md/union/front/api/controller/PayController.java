@@ -143,7 +143,7 @@ public class PayController {
                     makeOrder.setOrderStatus(OrderStatusEnums.PRE_SUB.getTitle());
                     makeOrder.setName(productName);
                     makeOrder.setOrderTime(LocalDate.now().toString());
-                    makeOrder.setNote("名典商标");
+                    makeOrder.setNote("请上传办理资料，确保办理流程顺利进行，感谢您的配合！如有问题请联系专属顾问。");
                     minCommon.pushMakeOrder(makeOrder);
                 }
                 //支付成功
