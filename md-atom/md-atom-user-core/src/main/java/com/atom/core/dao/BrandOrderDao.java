@@ -7,6 +7,7 @@ import com.atom.core.model.BrandOrderParam;
 import com.google.common.base.Strings;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -111,8 +112,8 @@ public class BrandOrderDao extends BaseDao {
     }
 
     public int add(BrandOrder brandOrder) {
-        int id = (int) DB().insert(brandOrder).result(true).getKeys().get(0);
-        return id;
+        BigInteger id = (BigInteger) DB().insert(brandOrder).result(true).getKeys().get(0);
+        return id.intValue();
     }
 
     public void update(BrandOrder brandOrder) {

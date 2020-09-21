@@ -7,9 +7,11 @@ import com.arc.util.http.BaseResponse;
 import com.google.common.base.Strings;
 import com.md.union.front.api.Enums.OrderStatusEnums;
 import com.md.union.front.api.Enums.OrderTypeEnums;
+import com.md.union.front.api.facade.MinCommon;
 import com.md.union.front.api.vo.Brand;
 import com.md.union.front.api.vo.Category;
 import com.md.union.front.api.vo.Order;
+import com.md.union.front.api.vo.WxMss;
 import com.md.union.front.client.dto.OrderDTO;
 import com.md.union.front.client.dto.ServiceDTO;
 import com.md.union.front.client.dto.TrademarkDTO;
@@ -36,6 +38,8 @@ public class OrderController {
     private OrderClient orderClient;
     @Autowired
     private FrontClient frontClient;
+    @Autowired
+    private MinCommon minCommon;
     private SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 
@@ -117,6 +121,16 @@ public class OrderController {
         result.setBrandName(order.getProductName());
         result.setMinPrice("" + order.getMinPrice());
         result.setMaxPrice("" + order.getMaxPrice());
+
+        //发消息，等待支付
+        WxMss.ToPay toPay = new WxMss.ToPay();
+        toPay.setName(order.getProductName());
+        toPay.setOpenid(AppUserPrincipal.getPrincipal().getMinId());
+        toPay.setOrderNo(order.getOrderNo());
+        toPay.setPayment(String.valueOf(order.getPrePay()));
+        toPay.setNote("请尽快支付");
+        minCommon.pushToPay(toPay);
+
         return result;
     }
 
@@ -186,6 +200,7 @@ public class OrderController {
         if (!BaseResponse.STATUS_HANDLE_SUCCESS.equals(response.getStatus())) {
             throw new ServiceException(response.getStatus(), response.getMessage());
         }
+
         return response.getResult();
     }
 
@@ -359,6 +374,9 @@ public class OrderController {
                 throw new ServiceException(brandResp.getStatus(), brandResp.getMessage());
             }
             if (brandResp.getResult() == null) {
+                throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "商标主键查询不存在");
+            }
+            if (CollectionUtils.isEmpty(brandResp.getResult().getMdBrands())) {
                 throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "商标主键查询不存在");
             }
             if (brandResp.getResult().getMdBrands().size() > 1) {
