@@ -5,6 +5,7 @@ import com.arc.util.data.PageResult;
 import com.atom.core.model.Consultation;
 import com.atom.core.model.ConsultationParam;
 import com.google.common.base.Strings;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigInteger;
@@ -17,18 +18,20 @@ import static com.arc.db.jsd.Shortcut.*;
  * Created by md on 2020/07/25.
  */
 @Repository
+@Slf4j
 public class ConsultationDao extends BaseDao  {
 
 	public PageResult<Consultation> query(ConsultationParam consultationParam) {
+	    log.info("consultationParam:"+consultationParam);
 		PageResult<Consultation> result = new PageResult<>();
 		Filter filter= Filter.create();
 
-        if(null!=(consultationParam.getCreateTimeBegin())){
-            filter=filter.and(f("create_time", FilterType.GTE,consultationParam.getCreateTimeBegin()));
-        }
-        if(null!=(consultationParam.getCreateTimeEnd())){
-            filter=filter.and(f("create_time",FilterType.LTE,consultationParam.getCreateTimeEnd()));
-        }
+//        if(null!=(consultationParam.getCreateTimeBegin())){
+//            filter=filter.and(f("create_time", FilterType.GTE,consultationParam.getCreateTimeBegin()));
+//        }
+//        if(null!=(consultationParam.getCreateTimeEnd())){
+//            filter=filter.and(f("create_time",FilterType.LTE,consultationParam.getCreateTimeEnd()));
+//        }
 
 		if(consultationParam.getId()>0){
 			filter=filter.and(f("id",consultationParam.getId()));
@@ -54,7 +57,7 @@ public class ConsultationDao extends BaseDao  {
 		if(!Strings.isNullOrEmpty(consultationParam.getNote())){
 			filter=filter.and(f("note",consultationParam.getNote()));
 		}
-		if(!Strings.isNullOrEmpty(consultationParam.getOpUserId())){
+		if(0<(consultationParam.getOpUserId())){
 			filter=filter.and(f("op_user_id",consultationParam.getOpUserId()));
 		}
 		if(!Strings.isNullOrEmpty(consultationParam.getOpUserMobile())){
@@ -98,7 +101,7 @@ public class ConsultationDao extends BaseDao  {
 		if(!Strings.isNullOrEmpty(consultationParam.getNote())){
 			filter=filter.and(f("note",consultationParam.getNote()));
 		}
-		if(!Strings.isNullOrEmpty(consultationParam.getOpUserId())){
+		if(0<(consultationParam.getOpUserId())){
 			filter=filter.and(f("op_user_id",consultationParam.getOpUserId()));
 		}
 		if(!Strings.isNullOrEmpty(consultationParam.getOpUserMobile())){
@@ -146,7 +149,7 @@ public class ConsultationDao extends BaseDao  {
 		if(!Strings.isNullOrEmpty(consultation.getNote())){
 			updateValues.add("note",consultation.getNote());
 		}
-		if(!Strings.isNullOrEmpty(consultation.getOpUserId())){
+		if(0<(consultation.getOpUserId())){
 			updateValues.add("op_user_id",consultation.getOpUserId());
 		}
 		if(!Strings.isNullOrEmpty(consultation.getOpUserMobile())){

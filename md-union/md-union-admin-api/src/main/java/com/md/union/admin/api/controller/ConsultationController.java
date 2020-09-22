@@ -17,9 +17,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 @RestController
 @RequestMapping("/web/consultation")
@@ -28,6 +32,22 @@ import java.util.List;
 public class ConsultationController {
     @Autowired
     private FrontClient frontClient;
+    public static Date dealDateFormat(String oldDate) {
+        Date date1 = null;
+        DateFormat df2 = null;
+        try {
+            oldDate= oldDate.replace("Z", " UTC");
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS Z");
+            Date date = df.parse(oldDate);
+            SimpleDateFormat df1 = new SimpleDateFormat ("EEE MMM dd HH:mm:ss Z yyyy", Locale.UK);
+            date1 = df1.parse(date.toString());
+            df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+//        return df2.format(date1);
+        return date1;
+    }
     @ApiOperation("商标起名查询")
     @PostMapping("/query")
     public Consultation.SearchRes query(@RequestBody Consultation.SearchReq request) {
@@ -36,9 +56,9 @@ public class ConsultationController {
         ConsultationDTO.Info adminUser = new ConsultationDTO.Info();
         BeanUtils.copyProperties(request, adminUser);
 
-        if(request.getDateRange().length>0){
-            adminUser.setCreateTimeBegin(new Date(request.getDateRange()[0]));
-            adminUser.setCreateTimeEnd(new Date(request.getDateRange()[1]));
+        if(request.getDateRange()!=null && request.getDateRange().length>0){
+            adminUser.setCreateTimeBegin(dealDateFormat(request.getDateRange()[0]));
+            adminUser.setCreateTimeEnd(dealDateFormat(request.getDateRange()[1]));
         }else{
             adminUser.setCreateTimeBegin(null);
             adminUser.setCreateTimeEnd(null);
@@ -57,15 +77,15 @@ public class ConsultationController {
 
                 TrademarkDTO.MdBrand mdBrand = new TrademarkDTO.MdBrand();
                 mdBrand.setId(info.getOrderNo());
-                BaseResponse<TrademarkDTO.QueryResp> queryRespBaseResponse = frontClient.find(mdBrand);
-                if (!queryRespBaseResponse.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
-                    throw new ServiceException(queryRespBaseResponse.getStatus(), queryRespBaseResponse.getMessage());
-                }
-                if(!CollectionUtils.isEmpty(queryRespBaseResponse.getResult().getMdBrands())){
-                    info.setName(queryRespBaseResponse.getResult().getMdBrands().get(0).getBrandName());
-                }else{
-                    info.setName("无");
-                }
+//                BaseResponse<TrademarkDTO.QueryResp> queryRespBaseResponse = frontClient.find(mdBrand);
+//                if (!queryRespBaseResponse.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+//                    throw new ServiceException(queryRespBaseResponse.getStatus(), queryRespBaseResponse.getMessage());
+//                }
+//                if(!CollectionUtils.isEmpty(queryRespBaseResponse.getResult().getMdBrands())){
+//                    info.setName(queryRespBaseResponse.getResult().getMdBrands().get(0).getBrandName());
+//                }else{
+//                    info.setName("无");
+//                }
                 infos.add(info);
             });
             ret.setList(infos);

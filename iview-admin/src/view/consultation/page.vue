@@ -204,6 +204,7 @@ export default {
         mobile: this.mobile,
         buyerMobile: this.buyerMobile,
         status: this.mapType,
+        dateRange: this.planStartTime,
       };
     },
     formQueryUpdate() {

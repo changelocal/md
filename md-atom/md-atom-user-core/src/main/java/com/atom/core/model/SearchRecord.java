@@ -67,7 +67,7 @@ public class SearchRecord {
 	/**
 	 * 后台运营人id被咨询者
 	 */
-	private String opUserId;
+	private int opUserId;
 
 	/**
 	 * 销售手机

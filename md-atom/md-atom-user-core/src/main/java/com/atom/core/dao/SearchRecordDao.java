@@ -56,7 +56,7 @@ public class SearchRecordDao extends BaseDao  {
 		if(!Strings.isNullOrEmpty(searchRecordParam.getNote())){
 			filter=filter.and(f("note",searchRecordParam.getNote()));
 		}
-		if(!Strings.isNullOrEmpty(searchRecordParam.getOpUserId())){
+		if(0<(searchRecordParam.getOpUserId())){
 			filter=filter.and(f("op_user_id",searchRecordParam.getOpUserId()));
 		}
 		if(!Strings.isNullOrEmpty(searchRecordParam.getOpUserMobile())){
@@ -106,7 +106,7 @@ public class SearchRecordDao extends BaseDao  {
 		if(!Strings.isNullOrEmpty(searchRecordParam.getNote())){
 			filter=filter.and(f("note",searchRecordParam.getNote()));
 		}
-		if(!Strings.isNullOrEmpty(searchRecordParam.getOpUserId())){
+		if(0<(searchRecordParam.getOpUserId())){
 			filter=filter.and(f("op_user_id",searchRecordParam.getOpUserId()));
 		}
 		if(!Strings.isNullOrEmpty(searchRecordParam.getOpUserMobile())){
@@ -160,7 +160,7 @@ public class SearchRecordDao extends BaseDao  {
 		if(!Strings.isNullOrEmpty(searchRecord.getNote())){
 			updateValues.add("note",searchRecord.getNote());
 		}
-		if(!Strings.isNullOrEmpty(searchRecord.getOpUserId())){
+		if(0<(searchRecord.getOpUserId())){
 			updateValues.add("op_user_id",searchRecord.getOpUserId());
 		}
 		if(!Strings.isNullOrEmpty(searchRecord.getOpUserMobile())){
