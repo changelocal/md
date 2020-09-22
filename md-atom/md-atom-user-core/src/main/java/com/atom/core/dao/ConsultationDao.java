@@ -26,12 +26,12 @@ public class ConsultationDao extends BaseDao  {
 		PageResult<Consultation> result = new PageResult<>();
 		Filter filter= Filter.create();
 
-//        if(null!=(consultationParam.getCreateTimeBegin())){
-//            filter=filter.and(f("create_time", FilterType.GTE,consultationParam.getCreateTimeBegin()));
-//        }
-//        if(null!=(consultationParam.getCreateTimeEnd())){
-//            filter=filter.and(f("create_time",FilterType.LTE,consultationParam.getCreateTimeEnd()));
-//        }
+        if(null!=(consultationParam.getCreateTimeBegin())){
+            filter=filter.and(f("create_time", FilterType.GTE,consultationParam.getCreateTimeBegin()));
+        }
+        if(null!=(consultationParam.getCreateTimeEnd())){
+            filter=filter.and(f("create_time",FilterType.LTE,consultationParam.getCreateTimeEnd()));
+        }
 
 		if(consultationParam.getId()>0){
 			filter=filter.and(f("id",consultationParam.getId()));

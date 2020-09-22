@@ -45,10 +45,10 @@
         <Input v-model="name" placeholder="请输入商标名字" clearable></Input>
       </Form-item>
       <Form-item label="名典编号">
-        <Input v-model="brandId" placeholder="请输入商标名字" clearable></Input>
+        <Input v-model="brandId" placeholder="请输入名典编号" clearable></Input>
       </Form-item>
       <Form-item label="注册号">
-        <Input v-model="regNo" placeholder="请输入商标名字" clearable></Input>
+        <Input v-model="regNo" placeholder="请输入注册号" clearable></Input>
       </Form-item>
       <Form-item label>
         <Button type="primary" @click="onSearch">搜索</Button>
@@ -145,7 +145,7 @@ export default {
   data() {
     return {
       columns1: [
-        { title: "编号", key: "brandId" },
+        { title: "名典编号", key: "brandId" },
         {
           title: "图片",
           key: "imageUrl",
@@ -168,7 +168,6 @@ export default {
         },
         { title: "类型", key: "category" },
         { title: "名称", key: "brandName" },
-        { title: "名典编号", key: "brandId" },
         { title: "注册号", key: "regNo" },
         { title: "分类", key: "brandType" },
         { title: "价格区间", key: "price", slot: "price" },
@@ -432,6 +431,7 @@ export default {
       this.form = this.formClear();
     },
     onSearch() {
+      this.currentPage = 1
       this.reqList();
     },
     reqList() {

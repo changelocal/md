@@ -57,7 +57,7 @@
       :mask-closable="false"
       @close="onClose(false)"
     >
-      <Form :label-width="70" ref="formFields" :model="form" :rules="rulesRight">
+      <Form :label-width="80" ref="formFields" :model="form" :rules="rulesRight">
         <Form-item label="姓名" prop="name">
           <Input v-model="form.name" placeholder="请输入姓名" clearable />
         </Form-item>
@@ -299,6 +299,7 @@ export default {
       this.reqList();
     },
     onSearch() {
+      this.currentPage = 1
       this.reqList();
     },
     close() {

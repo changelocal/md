@@ -24,7 +24,7 @@
           :picker-options="pickerOptions2"
         />
       </Form-item>
-      <Form-item label="客户电话">
+      <Form-item label="咨询人电话">
         <Input v-model="buyerMobile" placeholder="请输入电话" clearable></Input>
       </Form-item>
       <FormItem>
@@ -305,6 +305,7 @@ export default {
       this.reqList();
     },
     onSearch() {
+      this.currentPage = 1
       this.reqList();
     },
     onClose(confirm) {

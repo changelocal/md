@@ -82,8 +82,8 @@ public class OrderController {
             query.getResult().getItems().forEach(p->{
                 Order.OrderRes info = new Order.OrderRes();
                 BeanUtils.copyProperties(p, info);
-                info.setStatusName(OrderStatusEnums.valueType(info.getStatus()).name());
-                info.setOrderTypeName(OrderTypeEnums.valueType(info.getOrderType()).name());
+                info.setStatusName(OrderStatusEnums.valueType(info.getStatus()).getTitle());
+                info.setOrderTypeName(OrderTypeEnums.valueType(info.getOrderType()).getTitle());
                 infos.add(info);
             });
 

@@ -346,6 +346,7 @@ export default {
       this.reqList();
     },
     onSearch() {
+      this.currentPage = 1
       this.reqList();
     },
     onClose(confirm) {

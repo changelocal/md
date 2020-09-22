@@ -30,7 +30,7 @@
         />
       </Form-item>
       <Form-item label="订单号">
-        <Input v-model="orderNo" placeholder="请输入电话" clearable></Input>
+        <Input v-model="orderNo" placeholder="请输入订单号" clearable></Input>
       </Form-item>
       <Form-item label>
         <Button type="primary" @click="onSearch">搜索</Button>
@@ -144,9 +144,9 @@ export default {
         status: [{ required: true, message: "请输入", trigger: "blur" }],
       },
       columns1: [
-        { title: "订单号", key: "orderNo", width: 150 },
-        { title: "状态", key: "statusName" },
-        { title: "订单类型", key: "orderTypeName" },
+        { title: "订单号", key: "orderNo", width: 130 },
+        { title: "状态", key: "statusName" , width: 100},
+        { title: "订单类型", key: "orderTypeName" , width: 120},
         { title: "商标类型", key: "categoryName" },
         { title: "预付款", key: "prePay", width: 80 },
         { title: "剩余付款", key: "restPay", width: 90 },
@@ -333,6 +333,7 @@ export default {
       this.reqList();
     },
     onSearch() {
+      this.currentPage = 1
       this.reqList();
     },
     reqList() {
