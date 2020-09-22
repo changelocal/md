@@ -76,6 +76,7 @@ public class WxUserController {
         wxUser.setId(request.getId());
         wxUser.setMobile(request.getMobile());
         wxUser.setNickName(request.getNickName());
+        wxUser.setRealName(request.getRealName());
         wxUser.setMinId(request.getMinId());
         wxUser.setIdCard(request.getIdCard());
         wxUser.setAddress(request.getAddress());
