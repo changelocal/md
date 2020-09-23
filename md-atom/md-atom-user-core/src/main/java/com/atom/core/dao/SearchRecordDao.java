@@ -175,6 +175,9 @@ public class SearchRecordDao extends BaseDao  {
 		if(!Strings.isNullOrEmpty(searchRecord.getOpUserName())){
 			updateValues.add("op_user_name",searchRecord.getOpUserName());
 		}
+        if(null !=(searchRecord.getUpdateTime())){
+            updateValues.add("update_time",searchRecord.getUpdateTime());
+        }
 		DB().update("search_record").set(updateValues).where(f("id",searchRecord.getId())).result();
 	}
 

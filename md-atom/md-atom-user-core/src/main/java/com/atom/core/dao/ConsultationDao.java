@@ -158,6 +158,9 @@ public class ConsultationDao extends BaseDao  {
 		if(!Strings.isNullOrEmpty(consultation.getOpUserName())){
 			updateValues.add("op_user_name",consultation.getOpUserName());
 		}
+        if(null!=(consultation.getUpdateTime())){
+            updateValues.add("update_time",consultation.getUpdateTime());
+        }
 		DB().update("consultation").set(updateValues).where(f("id",consultation.getId())).result();
 	}
 

@@ -148,6 +148,9 @@ public class BrandOrderDao extends BaseDao {
         if (brandOrder.getOpUserId() > 0) {
             updateValues.add("op_user_id", brandOrder.getOpUserId());
         }
+        if (brandOrder.getUpdateTime() != null) {
+            updateValues.add("update_time", brandOrder.getUpdateTime());
+        }
         DB().update("brand_order").set(updateValues).where(f("id", brandOrder.getId())).result();
     }
 

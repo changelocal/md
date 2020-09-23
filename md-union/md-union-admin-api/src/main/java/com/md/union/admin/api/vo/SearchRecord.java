@@ -73,6 +73,7 @@ public class SearchRecord {
          * 销售手机
          */
         private String opUserMobile;
+        private String success;
 
         /**
          * 销售名字
