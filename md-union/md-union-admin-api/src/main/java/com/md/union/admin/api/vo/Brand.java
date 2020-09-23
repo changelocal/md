@@ -375,6 +375,7 @@ public class Brand {
         @ApiModelProperty("每页显示条数")
         public int pageSize;
         private String[] dateRange;
+        private String[] groups;
     }
 
     @Data

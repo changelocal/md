@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -28,6 +29,9 @@ public class BrandController {
     public Brand.SearchRes query(@RequestBody Brand.SearchReq request) {
         Brand.SearchRes ret = new Brand.SearchRes();
         TrademarkDTO.MdBrand req = new TrademarkDTO.MdBrand();
+        if(request.getGroups().length>0){
+            req.setGroups(Arrays.asList(request.getGroups()));
+        }
         //名字
         req.setBrandName(request.getBrandName());
         //分类

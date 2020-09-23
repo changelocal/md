@@ -61,6 +61,9 @@
       <Form-item label>
         <Button type="primary" @click="onAdd">添加商标</Button>
       </Form-item>
+      <Form-item label>
+        <Button type="primary" @click="clear">清空条件</Button>
+      </Form-item>
       <Table
         :columns="columns1"
         ref="singleTable"
@@ -350,7 +353,6 @@ export default {
   },
   computed: {
     formQuery() {
-      this.checked.
       return {
         pageIndex: this.currentPage,
         pageSize: this.pageSize,
@@ -361,7 +363,7 @@ export default {
         priceType: this.brandPrice,
         unionType: this.brandType,
         brandSize: this.charLength,
-        groups:
+        groups:Object.keys(this.checked)
       };
     },
     formQueryUpdate() {
@@ -381,16 +383,21 @@ export default {
   },
   methods: {
     brandClassChange(code) {
-      subClass(code).then((res) => {
-        console.log(res);
-        if (res.status === true) {
-          this.subClass = res.data.brandClasses
-        } else {
-          this.$Notice.error({
-            title: "客户端请求错误",
-          });
-        }
-      });
+      if(code>0) {
+        subClass(code).then((res) => {
+          // console.log(res);
+          if (res.status === true) {
+            this.subClass = res.data.brandClasses
+          } else {
+            this.$Notice.error({
+              title: "客户端请求错误",
+            });
+          }
+        });
+      }
+      else{
+        this.subClass = []
+      }
     },
     onSave(confirm) {
       this.$refs.formFields.validate((valid) => {
@@ -406,7 +413,7 @@ export default {
     },
     reqEdit() {
       update(this.formQueryUpdate).then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.status === true) {
           this.onClose();
           this.reqList();
@@ -429,6 +436,16 @@ export default {
     onAdd() {
       this.openType = "add";
       this.popShow = true;
+    },
+    clear() {
+      this.subClass = []
+      this.regNo = '';
+      this.brandId = '';
+      this.name =  '';
+      this.brandClass = 0;
+      this.brandPrice = 1;
+      this.brandType =0;
+      this.charLength = 0;
     },
     onEdit(index) {
       const item = this.tableData[index];
@@ -454,13 +471,13 @@ export default {
       this.form = this.formClear();
     },
     onSearch() {
-      console.log(this.checked)
+      // console.log(this.checked)
       this.currentPage = 1
       this.reqList();
     },
     reqList() {
       query(this.formQuery).then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.status === true) {
           const rdata = res.data;
           this.tableData = rdata.list;

@@ -382,5 +382,6 @@ public class BrandVO {
          * 商标编号
          */
         private List<String> brandIds;
+        private List<String> groups;
     }
 }

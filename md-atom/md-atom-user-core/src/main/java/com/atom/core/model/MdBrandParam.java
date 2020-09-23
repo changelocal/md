@@ -37,5 +37,5 @@ public class MdBrandParam extends MdBrand{
     private List<String> brandIds;
     private Date createTimeBegin;
     private Date createTimeEnd;
-    private List<String> fitProjectsList;
+    private List<String> groups;
 }
