@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Form :inline="true" :label-width="60">
+    <Form :inline="true" :label-width="80">
       <Form-item label="状态">
         <Select v-model="mapType" placeholder="请选择">
           <Option
@@ -104,7 +104,7 @@ export default {
         note: [{ required: true, message: "请输入", trigger: "blur" }],
       },
       columns1: [
-        { title: "查询商标", key: "name" },
+        { title: "查询商标", key: "searchWord" },
         { title: "咨询人", key: "buyerName" },
         { title: "咨询人手机", key: "buyerMobile" },
         { title: "状态", key: "status", slot: "status", width: 100 },

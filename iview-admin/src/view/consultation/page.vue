@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Form :inline="true" :label-width="60">
+    <Form :inline="true" :label-width="80">
       <Form-item label="状态">
         <Select v-model="mapType" placeholder="请选择">
           <Option

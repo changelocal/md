@@ -10,8 +10,11 @@ import java.util.List;
 public final class Tmkoo {
     @Data
     public static class Result{
+        //相关商标的注册数
         private int otherCnt;
+        //商标名
         private String brandName;
+        //注册了的注册号
         private List<String> regNos;
         private List<RegisterInfo> registers;
     }

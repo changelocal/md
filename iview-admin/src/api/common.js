@@ -6,3 +6,10 @@ export const loadSelect = () => {
     method: 'get'
   })
 }
+
+export const subClass = (code) => {
+  return axios.request({
+    url: '/web/common/brandclass/'+code,
+    method: 'get'
+  })
+}

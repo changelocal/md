@@ -25,7 +25,7 @@ export const update = (data) => {
 }
 export const count = () => {
   return axios.request({
-    url: '/admin/user/count',
+    url: '/admin/user/home',
     method: 'get'
   })
 }

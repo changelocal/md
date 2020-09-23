@@ -98,8 +98,9 @@ export default {
     reqList() {
       count().then((res) => {
         if (res.status === true) {
+          // console.log(res)
           const rdata = res.data;
-          this.inforCardData = rdata.list;
+          this.inforCardData = rdata;
         } else {
           this.$Notice.error({
             title: "客户端请求错误",

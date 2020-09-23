@@ -100,6 +100,8 @@ public class TmkooCommon {
         System.out.println(result);
         res.setOtherCnt(otherCnt);
         res.setRegisters(result);
+        res.setBrandName(keyword);
+        res.setRegNos(regNoes);
         return res;
     }
 

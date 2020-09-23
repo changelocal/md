@@ -1,5 +1,6 @@
 package com.md.union.front.api.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.arc.common.ServiceException;
 import com.arc.util.auth.AppUserPrincipal;
 import com.arc.util.http.BaseResponse;
@@ -427,49 +428,60 @@ public class BrandController {
                         trademarkCatesUnRegis.add(info);
                     }
                 });
-
-
                 int success = (45-search.getRegisters().size() )*2 + search.getOtherCnt();
                 result.setSuccess(String.valueOf(success));
-
-                //  增加到数据库
-                SearchRecordDTO.SearchRecordInfo insert = new SearchRecordDTO.SearchRecordInfo();
-                insert.setSearchWord(search.getBrandName());
-                insert.setRegistNo(StringUtils.join(search.getRegNos(), ","));
-
-                List<Integer> collect1 = search.getRegisters().stream().map(q -> q.getCate()).collect(Collectors.toList());
-                insert.setRegistCate(StringUtils.join(collect1, ","));
-                List<Integer> collect2 = trademarkCatesUnRegis.stream().map(q -> q.getCateCode()).collect(Collectors.toList());
-                insert.setUnregistCate(StringUtils.join(collect2, ","));
-
-                insert.setSuccess(result.getSuccess());
-                insert.setBuyerMobile(AppUserPrincipal.getPrincipal().getMobile());
-                insert.setOpenId(AppUserPrincipal.getPrincipal().getMinId());
-//                insert.setBuyerMobile("8964");
-//                insert.setOpenId("999999");
-                insert.setStatus(1);
-                BaseResponse<SearchRecordDTO.Resp> update = frontClient.add(insert);
-                if (!update.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
-                    throw new ServiceException(update.getStatus(), update.getMessage());
-                }
                 result.setTotal(1);
-            } else {
+            }
+            //查不到
+            else {
+                responseCate.getResult().getCates().forEach(p -> {
+                    Brand.TrademarkCateSearch info = new Brand.TrademarkCateSearch();
+                    if (p.getCode() < 10) {
+                        info.setCateName("0" + p.getCode() + "-" + p.getCategoryName());
+                    } else {
+                        info.setCateName(p.getCode() + "-" + p.getCategoryName());
+                    }
+                    info.setCateCode(p.getCode());
+                    trademarkCatesUnRegis.add(info);
+                });
+                result.setSuccess("100");
                 result.setTotal(0);
             }
+            //  增加到数据库
+            SearchRecordDTO.SearchRecordInfo insert = new SearchRecordDTO.SearchRecordInfo();
+            insert.setSearchWord(search.getBrandName());
+            insert.setRegistNo(StringUtils.join(search.getRegNos(), ","));
+
+            List<Integer> collect1 = search.getRegisters().stream().map(q -> q.getCate()).collect(Collectors.toList());
+            insert.setRegistCate(StringUtils.join(collect1, ","));
+            List<Integer> collect2 = trademarkCatesUnRegis.stream().map(q -> q.getCateCode()).collect(Collectors.toList());
+            insert.setUnregistCate(StringUtils.join(collect2, ","));
+
+            insert.setSuccess(result.getSuccess());
+            insert.setBuyerMobile(AppUserPrincipal.getPrincipal().getMobile());
+            insert.setOpenId(AppUserPrincipal.getPrincipal().getMinId());
+//                insert.setBuyerMobile("8964");
+//                insert.setOpenId("999999");
+            insert.setStatus(1);
+            BaseResponse<SearchRecordDTO.Resp> update = frontClient.add(insert);
+            if (!update.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+                throw new ServiceException(update.getStatus(), update.getMessage());
+            }
         }
-
-
         result.setTrademarkCateListRegist(trademarkCatesRegis);
         result.setRegistCount(trademarkCatesRegis.size());
 
         result.setTrademarkCateListUnRegist(trademarkCatesUnRegis);
         result.setUnRegistCount(trademarkCatesUnRegis.size());
-
+//        log.info("searchDetail result1:{}", JSON.toJSONString(result));
         //****************************************相似商标
         TrademarkDTO.MdBrand requestFamilar = new TrademarkDTO.MdBrand();
         requestFamilar.setBrandName(request.getBrandName());
         requestFamilar.setPriceHigh(new BigDecimal(0));
         requestFamilar.setPriceLow(new BigDecimal(0));
+        if(request.getBrandCate()>0){
+            requestFamilar.setCategory(request.getBrandCate());
+        }
         requestFamilar.setPageIndex(1);
         requestFamilar.setPageSize(10);
         BaseResponse<TrademarkDTO.QueryResp> responseFamilar = frontClient.search(requestFamilar);
@@ -494,6 +506,7 @@ public class BrandController {
             }
         }
         result.setFamiliar(trademarkCatesFamilar);
+        log.info("searchDetail result:{}", JSON.toJSONString(result));
         return result;
     }
 
