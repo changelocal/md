@@ -32,12 +32,10 @@ public class ServiceController {
     @GetMapping("/get/{code}")
     public ServiceVO.Service details(@PathVariable("code") String code) {
         ServiceVO.Service ret = new ServiceVO.Service();
-
         ServiceParam serviceParam = new ServiceParam();
         serviceParam.setId(code);
         List<Service> services = serviceDao.find(serviceParam);
         BeanUtils.copyProperties(services.get(0), ret);
-
         return ret;
     }
 
@@ -45,17 +43,13 @@ public class ServiceController {
     @PostMapping("/add/consultation")
     public ServiceVO.Service addConsultation(@RequestBody Consultation con) {
         ServiceVO.Service ret = new ServiceVO.Service();
-
         Consultation consultation = new Consultation();
         BeanUtils.copyProperties(con, consultation);
         consultation.setCreateTime(new Date());
-
         long add = consultationDao.add(consultation);
-
         return ret;
     }
 
-    @ApiOperation(value = "增加咨询记录", notes = "增加咨询记录")
     @PostMapping("/find")
     public ServiceVO.FindResp find(@RequestBody ServiceVO.Service con) {
         ServiceVO.FindResp ret = new ServiceVO.FindResp();

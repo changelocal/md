@@ -1,15 +1,13 @@
 package com.atom.core.dao;
 
-import com.arc.db.jsd.Filter;
-import com.arc.db.jsd.SortType;
-import com.arc.db.jsd.Sorters;
-import com.arc.db.jsd.UpdateValues;
+import com.arc.db.jsd.*;
 import com.arc.util.data.PageResult;
 import com.atom.core.model.SearchRecord;
 import com.atom.core.model.SearchRecordParam;
 import com.google.common.base.Strings;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +27,14 @@ public class SearchRecordDao extends BaseDao  {
 	public PageResult<SearchRecord> query(SearchRecordParam searchRecordParam) {
 		PageResult<SearchRecord> result = new PageResult<>();
 		Filter filter= Filter.create();
+
+        if(null!=(searchRecordParam.getCreateTimeBegin())){
+            filter=filter.and(f("create_time", FilterType.GTE,searchRecordParam.getCreateTimeBegin()));
+        }
+        if(null!=(searchRecordParam.getCreateTimeEnd())){
+            filter=filter.and(f("create_time",FilterType.LTE,searchRecordParam.getCreateTimeEnd()));
+        }
+
 		if(searchRecordParam.getId()>0){
 			filter=filter.and(f("id",searchRecordParam.getId()));
 		}
@@ -127,8 +133,8 @@ public class SearchRecordDao extends BaseDao  {
 	}
 
 	public int add(SearchRecord searchRecord) {
-		long id = (long) DB().insert(searchRecord).result(true).getKeys().get(0);
-		return (int)id;
+        BigInteger id = (BigInteger) DB().insert(searchRecord).result(true).getKeys().get(0);
+		return id.intValue();
 	}
 
 	public void update(SearchRecord searchRecord) {

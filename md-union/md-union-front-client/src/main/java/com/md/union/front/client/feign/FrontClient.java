@@ -84,7 +84,7 @@ public interface FrontClient {
 
     @GetMapping(value = "/brand/root", headers = { "Content-Type=application/json" })
     BaseResponse<TrademarkDTO.RootBrandResp> root();
-
+    //45分类的详细子分类
     @GetMapping(value = "/brand/details/{code}", headers = { "Content-Type=application/json" })
     BaseResponse<TrademarkDTO.RootBrandResp> details(@PathVariable("code") int code);
     /**

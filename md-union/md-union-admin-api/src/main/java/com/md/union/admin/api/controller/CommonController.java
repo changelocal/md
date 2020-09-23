@@ -1,12 +1,16 @@
 package com.md.union.admin.api.controller;
 
+import com.arc.common.ServiceException;
+import com.arc.util.http.BaseResponse;
 import com.md.union.admin.api.Enums.ChangeEnums;
 import com.md.union.admin.api.Enums.DealEnums;
 import com.md.union.admin.api.vo.Brand;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.md.union.admin.api.vo.Consultation;
+import com.md.union.front.client.dto.TrademarkDTO;
+import com.md.union.front.client.feign.FrontClient;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +19,8 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 @RequestMapping("/web/common")
 public class CommonController {
+    @Autowired
+    private FrontClient frontClient ;
     @GetMapping("/loadService")
     public Brand.DealRight loadService() {
         Brand.DealRight result = new Brand.DealRight();
@@ -39,5 +45,27 @@ public class CommonController {
         result.setRights(rights);
         result.setChanges(changes);
         return result;
+    }
+
+    @ApiOperation("45大分类详情")
+    @GetMapping("/brandclass/{code}")
+    public Consultation.BrandClassDetailsResp brandClass(@PathVariable("code") int code) {
+        Consultation.BrandClassDetailsResp res = new Consultation.BrandClassDetailsResp();
+
+        BaseResponse<TrademarkDTO.RootBrandResp> response = frontClient.details(code);
+        if (!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+            throw new ServiceException(response.getStatus(), response.getMessage());
+        }
+        List<Consultation.BrandClass> rootBrandClasses = new ArrayList<>();
+        response.getResult().getCates().forEach(e -> {
+            Consultation.BrandClass node = new Consultation.BrandClass();
+            node.setId(e.getCode());
+            node.setDesc(e.getDes());
+            node.setName(e.getCode() + " " + e.getCategoryName());
+            rootBrandClasses.add(node);
+        });
+        res.setBrandClasses(rootBrandClasses);
+//        BeanUtils.copyProperties(response.getResult().getCates(), res);
+        return res;
     }
 }

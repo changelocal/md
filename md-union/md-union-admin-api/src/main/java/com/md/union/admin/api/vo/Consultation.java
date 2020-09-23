@@ -150,6 +150,20 @@ public class Consultation {
         @ApiModelProperty("总条数")
         private int count;
     }
-
+    @Data
+    @ApiModel("45大分类详情")
+    public static class BrandClassDetailsResp{
+        @ApiModelProperty("45大分类")
+        private List<BrandClass> brandClasses;
+    }
+    @Data
+    @ApiModel("45大分类")
+    public static class BrandClass{
+        @ApiModelProperty("名字")
+        private int id;
+        private String name;
+        @ApiModelProperty("详情")
+        private String desc;
+    }
 
 }
