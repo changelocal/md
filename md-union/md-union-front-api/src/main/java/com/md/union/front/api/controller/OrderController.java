@@ -129,7 +129,7 @@ public class OrderController {
         toPay.setOpenid(AppUserPrincipal.getPrincipal().getMinId());
         toPay.setOrderNo(order.getOrderNo());
         toPay.setPayment(String.valueOf(order.getPrePay()));
-        toPay.setNote("请您在48小时内支付，如有问题请联系顾问！");
+        toPay.setNote("请在48小时内支付，如有问题请联系顾问！");
         minCommon.pushToPay(toPay);
 
         return result;
