@@ -7,6 +7,7 @@ import com.arc.util.http.BaseResponse;
 import com.google.common.base.Strings;
 import com.md.union.front.api.Enums.OrderStatusEnums;
 import com.md.union.front.api.Enums.OrderTypeEnums;
+import com.md.union.front.api.Enums.SaleTypeEnums;
 import com.md.union.front.api.facade.MinCommon;
 import com.md.union.front.api.vo.Brand;
 import com.md.union.front.api.vo.Category;
@@ -392,6 +393,14 @@ public class OrderController {
             result.setProductName(brandResp.getResult().getMdBrands().get(0).getBrandName());
             result.setCategoryName("商标订单");
             result.setImg(brandResp.getResult().getMdBrands().get(0).getImageUrl());
+            //更新商标为锁定
+            TrademarkDTO.MdBrand mdBrand = new TrademarkDTO.MdBrand();
+            mdBrand.setId(request.getCode());
+            mdBrand.setIsSale(SaleTypeEnums.locked.getType());
+            BaseResponse<TrademarkDTO.Resp> update1 = frontClient.update(mdBrand);
+            if (!update1.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+                throw new ServiceException(update1.getStatus(), update1.getMessage());
+            }
         }
 
 

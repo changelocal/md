@@ -7,6 +7,7 @@ import com.arc.util.http.BaseResponse;
 import com.google.common.base.Strings;
 import com.md.union.front.api.Enums.OrderStatusEnums;
 import com.md.union.front.api.Enums.OrderTypeEnums;
+import com.md.union.front.api.Enums.SaleTypeEnums;
 import com.md.union.front.api.config.MinProperties;
 import com.md.union.front.api.facade.MinCommon;
 import com.md.union.front.api.vo.Order;
@@ -113,6 +114,7 @@ public class PayController {
                 brandOrderVO1.setOrderNo(orderNo);
                 brandOrderVO1.setPageIndex(1);
                 brandOrderVO1.setPageSize(10);
+                //查询订单
                 BaseResponse<OrderDTO.QueryResp> query = orderClient.query(brandOrderVO1);
                 int key = 0;
                 long userid = 0;
@@ -129,10 +131,21 @@ public class PayController {
                     brandOrderVO.setStatus(OrderStatusEnums.PRE_SUB.getType());
                     brandOrderVO.setPreTime(new Date());
                     brandOrderVO.setOverTime(new Date());
+                    //更新订单
                     BaseResponse update = orderClient.update(brandOrderVO);
                     if (!update.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
                         throw new ServiceException(update.getStatus(), update.getMessage());
                     }
+                    //更新商标状态
+
+                    TrademarkDTO.MdBrand mdBrand = new TrademarkDTO.MdBrand();
+                    mdBrand.setId(query.getResult().getItems().get(0).getProductNo());
+                    mdBrand.setIsSale(SaleTypeEnums.saled.getType());
+                    BaseResponse<TrademarkDTO.Resp> update1 = frontClient.update(mdBrand);
+                    if (!update1.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+                        throw new ServiceException(update1.getStatus(), update1.getMessage());
+                    }
+
                     //获得用户openid，推送通知
                     WxUserDTO.WxUser adminUser = new WxUserDTO.WxUser();
                     adminUser.setId((int)userid);
