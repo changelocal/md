@@ -25,7 +25,7 @@ public class Category {
         private boolean registerStatus;
     }
 
-    @Data
+    @Data 
     @ApiModel("商标分类详情购买展示")
     public static class SearchReq{
         @ApiModelProperty("是否注册")

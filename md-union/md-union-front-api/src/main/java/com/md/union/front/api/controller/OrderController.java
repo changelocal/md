@@ -12,6 +12,7 @@ import com.md.union.front.api.vo.Brand;
 import com.md.union.front.api.vo.Category;
 import com.md.union.front.api.vo.Order;
 import com.md.union.front.api.vo.WxMss;
+import com.md.union.front.client.dto.AdminUserDTO;
 import com.md.union.front.client.dto.OrderDTO;
 import com.md.union.front.client.dto.ServiceDTO;
 import com.md.union.front.client.dto.TrademarkDTO;
@@ -107,7 +108,7 @@ public class OrderController {
         result.setUserId(order.getUserId());
         result.setOrderNo(order.getOrderNo());
         result.setImgUrl(order.getImg());
-        result.setPerson(getPerson());
+        result.setPerson(getPerson(order.getOpUserId()));
         result.setCategoryName(order.getCategoryName());
         result.setPayPrice("" + (order.getPrePay() + order.getRestPay()));
         result.setPrePrice("" + order.getPrePay());
@@ -128,7 +129,7 @@ public class OrderController {
         toPay.setOpenid(AppUserPrincipal.getPrincipal().getMinId());
         toPay.setOrderNo(order.getOrderNo());
         toPay.setPayment(String.valueOf(order.getPrePay()));
-        toPay.setNote("请您在48小时内支付，如有问题请联系顾问，名典商标网，您的不二之选！");
+        toPay.setNote("请您在48小时内支付，如有问题请联系顾问！");
         minCommon.pushToPay(toPay);
 
         return result;
@@ -156,9 +157,7 @@ public class OrderController {
         result.setTotalPrice(String.valueOf(order.getTotalPay()));
         result.setOverTime(null);
         result.setCreateTime(sf.format(order.getCreateTime()));
-        result.setPerson(getPerson());
-        result.setCategroyList(getlist());
-        result.setPerson(getPerson());
+        result.setPerson(getPerson(order.getOpUserId()));
         result.setCategroyList(getlist());
         return result;
     }
@@ -217,8 +216,8 @@ public class OrderController {
             item.setBrandName(p.getProductName());
             item.setCategoryName(p.getCategoryName());
             item.setImgNo("redxydd");
-            item.setMaxPrice("￥" + 3000);
-            item.setMinPrice("￥" + 1000);
+            item.setMaxPrice("￥" + p.getTotalPay());
+            item.setMinPrice("￥" + p.getTotalPay());
             item.setPrePrice("￥" + p.getPrePay());
             item.setOrderStatus(p.getStatus());
             item.setOrderType(p.getOrderType());
@@ -255,12 +254,19 @@ public class OrderController {
         return result;
     }
 
-    private Brand.Person getPerson() {
+    private Brand.Person getPerson(int userId) {
+
+        AdminUserDTO.AdminUser adminUser = new AdminUserDTO.AdminUser();
+        adminUser.setId((userId));
+        BaseResponse<AdminUserDTO.QueryResp> queryRespBaseResponse = frontClient.find(adminUser);
+        if (!BaseResponse.STATUS_HANDLE_SUCCESS.equals(queryRespBaseResponse.getStatus())) {
+            throw new ServiceException(queryRespBaseResponse.getStatus(), queryRespBaseResponse.getMessage());
+        }
         Brand.Person person = new Brand.Person();
-        person.setHeadImg("http://pic.5tu.cn/uploads/allimg/1607/pic_5tu_big_201607221326573826.jpg");
-        person.setName("客服1");
-        person.setPhone("15688706317");
-        person.setQq("571660498");
+        person.setHeadImg(queryRespBaseResponse.getResult().getAdminUsers().get(0).getAvatar());
+        person.setName(queryRespBaseResponse.getResult().getAdminUsers().get(0).getNickname());
+        person.setPhone(queryRespBaseResponse.getResult().getAdminUsers().get(0).getMobile());
+        person.setQq(queryRespBaseResponse.getResult().getAdminUsers().get(0).getQqAccount());
         return person;
     }
 
@@ -392,14 +398,12 @@ public class OrderController {
         result.setOrderNo("" + System.currentTimeMillis());
         result.setStatus(OrderStatusEnums.PRE_PAY.getType());
         result.setPrePay(prePrice);
-        result.setRestPay(prePrice + 5000);
-        result.setTotalPay(prePrice + 5000);
+        result.setRestPay(0);
+        result.setTotalPay(prePrice);
         result.setUserId(AppUserPrincipal.getPrincipal().getId());
         result.setOpUserId(request.getPersonId());
         result.setCreateTime(new Date());
         result.setUpdateTime(new Date());
-
-
         result.setOrderType(request.getOrderType());
         result.setProductNo(request.getCode());
         result.setMinPrice(prePrice);

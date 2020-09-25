@@ -247,7 +247,7 @@ export default {
       }
     },
     formatMapStatus(row) {
-      return row === 1 ? "发起咨询" : "回复咨询";
+      return row === 1 ? "发起搜索" : "回复搜索";
     },
     onSave(confirm) {
       this.$refs.formFields.validate((valid) => {
