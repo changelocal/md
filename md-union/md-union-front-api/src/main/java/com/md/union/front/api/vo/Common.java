@@ -43,5 +43,10 @@ public class Common {
         private String session_key;
         private String iv;
     }
-
+    @Data
+    @ApiModel("搜索历史")
+    public static class History{
+        private List<String> hot;
+        private List<String> myHistory;
+    }
 }

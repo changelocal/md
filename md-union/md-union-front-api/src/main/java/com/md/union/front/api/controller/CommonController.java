@@ -293,7 +293,7 @@ public class CommonController {
         return null;
     }
 
-    @ApiOperation("首页热门搜索，搜索次数")
+    @ApiOperation("没有用到")
     @PostMapping("/update/wxuser")
     public void updateWxuser(@RequestBody Consultation.WxUser minUser) {
         WxUserDTO.UpdateWxUser user = new WxUserDTO.UpdateWxUser();
@@ -303,5 +303,34 @@ public class CommonController {
         if (!BaseResponse.STATUS_HANDLE_SUCCESS.equals(userRes.getStatus())) {
             throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "添加用户失败");
         }
+    }
+
+    @ApiOperation("首页热门搜索历史")
+    @GetMapping("/search/history")
+    public Common.History searchHis() {
+        Common.History history = new Common.History();
+        List<String> hot = new ArrayList<>();
+        hot.add("口罩");
+        hot.add("绿色");
+        hot.add("新能源");
+        hot.add("通州");
+        history.setHot(hot);
+        List<String> myhis = new ArrayList<>();
+        history.setMyHistory(myhis);
+
+        SearchRecordDTO.SearchRecordInfo searchRecordInfo = new SearchRecordDTO.SearchRecordInfo();
+        searchRecordInfo.setPageIndex(1);
+        searchRecordInfo.setPageSize(10);
+        searchRecordInfo.setOpenId(AppUserPrincipal.getPrincipal().getMinId());
+        BaseResponse<SearchRecordDTO.QueryResp> userRes = frontClient.query(searchRecordInfo);
+        if (!BaseResponse.STATUS_HANDLE_SUCCESS.equals(userRes.getStatus())) {
+            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "添加用户失败");
+        }
+        if(!CollectionUtils.isEmpty(userRes.getResult().getInfos())){
+            userRes.getResult().getInfos().forEach(p->{
+                myhis.add(p.getSearchWord());
+            });
+        }
+        return history;
     }
 }
