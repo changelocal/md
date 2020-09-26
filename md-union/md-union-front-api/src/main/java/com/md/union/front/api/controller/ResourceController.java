@@ -2,6 +2,7 @@ package com.md.union.front.api.controller;
 
 import com.arc.common.ServiceException;
 import com.arc.util.http.BaseResponse;
+import com.google.common.base.Strings;
 import com.md.union.front.api.Enums.OrderStatusEnums;
 import com.md.union.front.api.vo.Common;
 import com.md.union.front.client.dto.OrderDTO;
@@ -43,9 +44,14 @@ public class ResourceController {
     @PostMapping("/commit")
     public Common.CommitRes commit(@RequestBody Common.CommitReq request) {
         Common.CommitRes res = new Common.CommitRes();
-
+        if (Strings.isNullOrEmpty(request.getId())) {
+            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "订单主键id不能为空");
+        }
         if (CollectionUtils.isEmpty(request.getRefs())) {
             throw new ServiceException(BaseResponse.STATUS_HANDLE_SUCCESS, "提交资料不可为空");
+        }
+        if (request.getModel() == 0) {
+            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "文件类型不能为空");
         }
         //覆盖之前文件信息
         RefDTO.OrderRefFile orderRefFile = new RefDTO.OrderRefFile();
