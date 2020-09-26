@@ -66,7 +66,6 @@ public class BrandController {
             brand.setCode(e.getCode());
             brand.setIcon("https://pay.mdlogo.cn/file/brand_class/" + e.getCode() + ".png");
             brand.setTypeName(e.getCode() + "类");
-            brand.setMultiName(e.getMultiName());
             result.add(brand);
 
             Brand.GroupRes list = list(e.getCode(), e.getCategoryName());
@@ -114,6 +113,7 @@ public class BrandController {
                 res.setMaxPrice(e.getPriceHigh().toString());
                 res.setMinPrice(e.getPrice().toString());
                 res.setSpecial(true);
+                res.setMultiName(e.getMultiName());
                 specialRes.add(res);
             });
         }
