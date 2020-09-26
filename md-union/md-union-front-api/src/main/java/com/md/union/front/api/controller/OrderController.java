@@ -3,6 +3,7 @@ package com.md.union.front.api.controller;
 import com.alibaba.fastjson.JSON;
 import com.arc.common.ServiceException;
 import com.arc.util.auth.AppUserPrincipal;
+import com.arc.util.file.oss.OssClientTool;
 import com.arc.util.http.BaseResponse;
 import com.google.common.base.Strings;
 import com.md.union.front.api.Enums.OrderStatusEnums;
@@ -43,6 +44,8 @@ public class OrderController {
     @Autowired
     private MinCommon minCommon;
     private SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    @Autowired
+    private OssClientTool ossClientTool;
 
 
     @ApiOperation("我的订单列表")
@@ -75,7 +78,7 @@ public class OrderController {
         }
     }*/
 
-    /*@ApiOperation("我的订单提交资料")
+    @ApiOperation("我的订单提交资料")
     @PostMapping("submit/file")
     public void submitOrderFile(@RequestBody Order.SubmitOrderFile request) {
         if (request.getOrderNo() == null) {
@@ -87,7 +90,8 @@ public class OrderController {
         if (CollectionUtils.isEmpty(request.getFileIds())) {
             throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "上传文件资料不能为空");
         }
-    }*/
+
+    }
 
     @ApiOperation("我的商品订单详情")
     @GetMapping("/detail/{id}")
