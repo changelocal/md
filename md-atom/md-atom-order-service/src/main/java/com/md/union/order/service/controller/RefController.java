@@ -50,7 +50,7 @@ public class RefController {
         }
         List<OrderRefFile> file = new ArrayList<>();
         request.forEach(p -> {
-            file.add(convert(p));
+            file.add(convertAdd(p));
         });
         log.info("orderRefFileDao.addBatch param:{}", JSON.toJSONString(file));
         orderRefFileDao.addBatch(file);
@@ -129,5 +129,15 @@ public class RefController {
         result.setCreateTime(new Date());
         return result;
     }
-
+    private OrderRefFile convertAdd(RefVO.OrderRefFile request) {
+        OrderRefFile result = new OrderRefFile();
+        result.setOrderNo(request.getOrderNo());
+        result.setUserNo(request.getUserNo());
+        result.setFileId(request.getFileId());
+        result.setFileSource(request.getFileSource());
+        result.setFileType(request.getFileType());
+        result.setDel(request.getDel());
+        result.setCreateTime(new Date());
+        return result;
+    }
 }
