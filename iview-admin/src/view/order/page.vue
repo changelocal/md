@@ -32,6 +32,9 @@
       <Form-item label="订单号">
         <Input v-model="orderNo" placeholder="请输入订单号" clearable></Input>
       </Form-item>
+      <Form-item label="买家手机">
+        <Input v-model="userMobile" placeholder="请输入手机号" clearable></Input>
+      </Form-item>
       <Form-item label>
         <Button type="primary" @click="onSearch">搜索</Button>
       </Form-item>
@@ -78,7 +81,7 @@
           <Input v-model="form.orderNo" disabled placeholder clearable />
         </Form-item>
         <Form-item label="类型" prop>
-          <Input v-model="form.type" disabled placeholder clearable />
+          <Input v-model="form.orderTypeName" disabled placeholder clearable />
         </Form-item>
         <Form-item label="状态" prop="status">
           <Select v-model="form.status" placeholder="请选择">
@@ -138,27 +141,28 @@ export default {
   data() {
     return {
       rulesRight: {
-        prePay: [{ required: true, message: "请输入", trigger: "blur" }],
-        restPay: [{ required: true, message: "请输入", trigger: "blur" }],
-        totalPay: [{ required: true, message: "请输入", trigger: "blur" }],
-        status: [{ required: true, message: "请输入", trigger: "blur" }],
+        prePay: [{ required: true, message: "请输入" }],
+        restPay: [{ required: true, message: "请输入" }],
+        totalPay: [{ required: true, message: "请输入" }],
+        status: [{ required: true, message: "请输入" }],
       },
       columns1: [
         { title: "订单号", key: "orderNo", width: 130 },
         { title: "状态", key: "statusName" , width: 100},
         { title: "订单类型", key: "orderTypeName" , width: 120},
-        { title: "商标类型", key: "categoryName" },
+        { title: "产品名称", key: "productName" },
+        // { title: "商标类型", key: "categoryName" },
         { title: "预付款", key: "prePay", width: 80 },
         { title: "剩余付款", key: "restPay", width: 90 },
         { title: "共付款", key: "totalPay", width: 80 },
-        { title: "买家", key: "userId" },
-        { title: "销售", key: "opUserId" },
-        { title: "产品名称", key: "productName" },
+        { title: "买家手机", key: "userMobile" , width: 120 },
+        { title: "销售", key: "opUserName" },
         { title: "创建时间", key: "createTime", width: 150 },
         { title: "操作", slot: "action", width: 170, align: "center" },
       ],
       openType: "add",
       orderNo: "",
+      userMobile: "",
       form: {
         no: "",
         status: "",
@@ -167,6 +171,7 @@ export default {
         restPay: 0,
         totalPay: 0,
         buyer: "",
+        orderTypeName: "",
       },
       options: [
         {
@@ -268,7 +273,17 @@ export default {
         orderStatus: this.status,
         orderType: this.kind,
         orderNo: this.orderNo,
+        userMobile: this.userMobile,
         dateRange: this.planStartTime,
+      };
+    },
+    formQueryUpdate() {
+      return {
+        id: this.form.id,
+        status: this.form.status,
+        prePay: this.form.prePay,
+        restPay: this.form.restPay,
+        totalPay: this.form.totalPay,
       };
     },
   },
@@ -280,6 +295,34 @@ export default {
     this.reqList();
   },
   methods: {
+    onSave(confirm) {
+      this.$refs.formFields.validate((valid) => {
+        if (valid) {
+          if (this.openType === "edit") {
+            this.reqEdit();
+          }
+        } else {
+          return false;
+        }
+      });
+
+    },
+    reqEdit() {
+      update(this.formQueryUpdate).then((res) => {
+        if (res.status === true) {
+          this.close();
+          this.reqList();
+        } else {
+          this.$Notice.error({
+            title: "客户端请求错误",
+          });
+        }
+      });
+    },
+    close() {
+      this.popShow = false;
+      this.form = this.formClear();
+    },
     onImage(index) {
       const item = this.tableData[index];
       this.$router
@@ -320,6 +363,7 @@ export default {
       this.form.prePay = item.prePay;
       this.form.restPay = item.restPay;
       this.form.totalPay = item.totalPay;
+      this.form.orderTypeName = item.orderTypeName;
 
       this.popShow = true;
     },

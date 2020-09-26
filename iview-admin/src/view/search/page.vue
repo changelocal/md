@@ -105,7 +105,7 @@ export default {
       },
       columns1: [
         { title: "查询商标", key: "searchWord" },
-        { title: "咨询人", key: "buyerName" },
+        // { title: "咨询人", key: "buyerName" },
         { title: "咨询人手机", key: "buyerMobile" },
         { title: "状态", key: "status", slot: "status", width: 100 },
         // {title: '预付款', key: 'prePay', width: 80},
