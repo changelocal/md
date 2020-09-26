@@ -8,9 +8,7 @@ import com.md.union.admin.api.Enums.OrderTypeEnums;
 import com.md.union.admin.api.Enums.UploadPicEnums;
 import com.md.union.admin.api.vo.Order;
 import com.md.union.admin.api.vo.Ref;
-import com.md.union.front.client.dto.OrderDTO;
-import com.md.union.front.client.dto.RefDTO;
-import com.md.union.front.client.dto.ServiceDTO;
+import com.md.union.front.client.dto.*;
 import com.md.union.front.client.feign.FrontClient;
 import com.md.union.front.client.feign.OrderClient;
 import com.md.union.front.client.feign.OrderRefClient;
@@ -24,10 +22,8 @@ import org.springframework.web.bind.annotation.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -65,13 +61,48 @@ public class OrderController {
         OrderDTO.BrandOrderVO param = new OrderDTO.BrandOrderVO();
         BeanUtils.copyProperties(request, param);
 
-        if(request.getDateRange().length>0){
+        if(request.getDateRange().length>0
+                && !Strings.isNullOrEmpty(request.getDateRange()[0])
+                && !Strings.isNullOrEmpty(request.getDateRange()[1])){
             param.setCreateTimeBegin(dealDateFormat(request.getDateRange()[0]));
             param.setCreateTimeEnd(dealDateFormat(request.getDateRange()[1]));
         }else{
             param.setCreateTimeBegin(null);
             param.setCreateTimeEnd(null);
         }
+        if(!Strings.isNullOrEmpty(request.getUserMobile())){
+            WxUserDTO.WxUser adminUserPara = new WxUserDTO.WxUser();
+            adminUserPara.setPageIndex(1);
+            adminUserPara.setPageSize(20);
+            adminUserPara.setMobile(request.getUserMobile());
+            BaseResponse<WxUserDTO.QueryResp> queryWx = frontClient.query(adminUserPara);
+            if (!queryWx.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+                throw new ServiceException(queryWx.getStatus(), queryWx.getMessage());
+            }
+            if(!CollectionUtils.isEmpty(queryWx.getResult().getItems())){
+                param.setUserId(queryWx.getResult().getItems().get(0).getId());
+            }
+        }
+
+        //买家map
+        WxUserDTO.WxUser adminUser = new WxUserDTO.WxUser();
+        adminUser.setPageIndex(1);
+        adminUser.setPageSize(20);
+        BaseResponse<WxUserDTO.QueryResp> queryWx = frontClient.query(adminUser);
+        if (!queryWx.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+            throw new ServiceException(queryWx.getStatus(), queryWx.getMessage());
+        }
+        Map<Long, String> collect = queryWx.getResult().getItems().stream().filter(p->p.getMobile()!=null).collect(Collectors.toMap(WxUserDTO.WxUser::getId, WxUserDTO.WxUser::getMobile));
+        //销售map
+        AdminUserDTO.AdminUser admin = new AdminUserDTO.AdminUser();
+        admin.setPageSize(20);
+        admin.setPageIndex(1);
+        BaseResponse<AdminUserDTO.QueryResp> queryAdmin = frontClient.query(admin);
+        if (!queryAdmin.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+            throw new ServiceException(queryAdmin.getStatus(), queryAdmin.getMessage());
+        }
+        Map<Integer, String> collectAdmin = queryAdmin.getResult().getAdminUsers().stream().filter(p->p.getNickname()!=null).collect(Collectors.toMap(AdminUserDTO.AdminUser::getId, AdminUserDTO.AdminUser::getNickname));
+
 
         BaseResponse<OrderDTO.QueryResp> query = orderClient.query(param);
         if (!query.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
@@ -84,6 +115,8 @@ public class OrderController {
                 BeanUtils.copyProperties(p, info);
                 info.setStatusName(OrderStatusEnums.valueType(info.getStatus()).getTitle());
                 info.setOrderTypeName(OrderTypeEnums.valueType(info.getOrderType()).getTitle());
+                info.setUserMobile(collect.get(p.getUserId()));
+                info.setOpUserName(collectAdmin.get(p.getOpUserId()));
                 infos.add(info);
             });
 

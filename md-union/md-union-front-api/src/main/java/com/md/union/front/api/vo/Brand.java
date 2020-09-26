@@ -263,7 +263,7 @@ public class Brand {
         @ApiModelProperty("品牌顾问信息")
         private Brand.Person person;
         private String brandNo;
-        private String OrderType;
+        private int OrderType;
         private List<FlowInfo> flowInfos;
     }
     @Data

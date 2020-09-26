@@ -7,6 +7,7 @@ import com.arc.util.http.BaseResponse;
 import com.arc.util.tmkoo.Tmkoo;
 import com.arc.util.tmkoo.TmkooCommon;
 import com.md.union.front.api.Enums.BrandTypeEnums;
+import com.md.union.front.api.Enums.OrderTypeEnums;
 import com.md.union.front.api.facade.MinCommon;
 import com.md.union.front.api.vo.Brand;
 import com.md.union.front.api.vo.Category;
@@ -245,7 +246,7 @@ public class BrandController {
     @PostMapping("/buy/detail")
     public Brand.Detail buyDetail(@RequestBody Category.BuyDetailReq request) {
         Brand.Detail result = new Brand.Detail();
-
+        log.info("buyDetail param:{}", request);
         //获取商标list
         TrademarkDTO.MdBrand req = new TrademarkDTO.MdBrand();
         req.setBrandName(request.getBrandName());
@@ -306,7 +307,7 @@ public class BrandController {
             });
         }
         result.setTrademarkCateList(trademarkCates);
-
+        log.info("获取咨询人信息");
         //获取咨询人信息
         TrademarkDTO.Consultation consultation = new TrademarkDTO.Consultation();
         BaseResponse<TrademarkDTO.ConsultationResp> responsePerson = frontClient.consultation(consultation);
@@ -322,7 +323,7 @@ public class BrandController {
         person.setQq(responsePerson.getResult().getQqAccount());
         person.setId(responsePerson.getResult().getId());
         result.setPerson(person);
-        result.setOrderType("4");
+        result.setOrderType(OrderTypeEnums.BRAND_BUY.getType());
 
         if (null != regNo.get()) {
             Tmkoo.Flow info = TmkooCommon.info(minCommon.getHost(), regNo.get(), cate.get());
@@ -335,7 +336,7 @@ public class BrandController {
             }
             result.setFlowInfos(flowInfos);
         }
-
+        log.info("buyDetail result:{}", result);
         return result;
     }
 
