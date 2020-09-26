@@ -2,6 +2,7 @@ package com.md.union.admin.api.controller;
 
 import com.arc.common.ServiceException;
 import com.arc.util.http.BaseResponse;
+import com.google.common.base.Strings;
 import com.md.union.admin.api.vo.Consultation;
 import com.md.union.front.client.dto.ConsultationDTO;
 import com.md.union.front.client.dto.TrademarkDTO;
@@ -56,7 +57,9 @@ public class ConsultationController {
         ConsultationDTO.Info adminUser = new ConsultationDTO.Info();
         BeanUtils.copyProperties(request, adminUser);
 
-        if(request.getDateRange()!=null && request.getDateRange().length>0){
+        if(request.getDateRange()!=null && request.getDateRange().length>0
+                && !Strings.isNullOrEmpty(request.getDateRange()[0])
+                && !Strings.isNullOrEmpty(request.getDateRange()[1])){
             adminUser.setCreateTimeBegin(dealDateFormat(request.getDateRange()[0]));
             adminUser.setCreateTimeEnd(dealDateFormat(request.getDateRange()[1]));
         }else{
@@ -86,6 +89,9 @@ public class ConsultationController {
 //                }else{
 //                    info.setName("无");
 //                }
+                if(p.getOrderNo().equals("000000")){
+                    info.setName("首页咨询");
+                }
                 infos.add(info);
             });
             ret.setList(infos);

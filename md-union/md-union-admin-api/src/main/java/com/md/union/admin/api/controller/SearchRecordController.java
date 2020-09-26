@@ -2,6 +2,7 @@ package com.md.union.admin.api.controller;
 
 import com.arc.common.ServiceException;
 import com.arc.util.http.BaseResponse;
+import com.google.common.base.Strings;
 import com.md.union.admin.api.vo.SearchRecord;
 import com.md.union.front.client.dto.SearchRecordDTO;
 import com.md.union.front.client.feign.FrontClient;
@@ -57,7 +58,9 @@ public class SearchRecordController {
         SearchRecordDTO.SearchRecordInfo adminUser = new SearchRecordDTO.SearchRecordInfo();
         BeanUtils.copyProperties(request, adminUser);
 
-        if(request.getDateRange()!=null && request.getDateRange().length>0){
+        if(request.getDateRange()!=null && request.getDateRange().length>0
+        && !Strings.isNullOrEmpty(request.getDateRange()[0])
+                && !Strings.isNullOrEmpty(request.getDateRange()[1])){
             adminUser.setCreateTimeBegin(dealDateFormat(request.getDateRange()[0]));
             adminUser.setCreateTimeEnd(dealDateFormat(request.getDateRange()[1]));
         }else{

@@ -18,6 +18,7 @@ public class Order {
         @ApiModelProperty("订单类型 1商标注册订单2商标维权订单3商标信息变更订单")
         public int orderType;
         public String orderNo;
+        public String userMobile;
         @ApiModelProperty("当前页")
         public int pageIndex;
         @ApiModelProperty("每页显示条数")
@@ -81,11 +82,13 @@ public class Order {
          * 购买用户id
          */
         private long userId;
+        private String userMobile;
 
         /**
          * 后台运营下单人id
          */
         private int opUserId;
+        private String opUserName;
         /**
          * 产品名称
          */
