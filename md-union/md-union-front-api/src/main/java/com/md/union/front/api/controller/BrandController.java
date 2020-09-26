@@ -254,13 +254,14 @@ public class BrandController {
         if (!response.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(response.getStatus(), response.getMessage());
         }
+        log.info("获取咨询人信息2");
         //得到45大类
         BaseResponse<TrademarkDTO.RootBrandResp> responseCate = frontClient.root();
         if (!responseCate.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(responseCate.getStatus(), responseCate.getMessage());
         }
         Map<Integer, String> name = responseCate.getResult().getCates().stream().collect(Collectors.toMap(p -> p.getCode(), q -> q.getCategoryName()));
-
+        log.info("获取咨询人信息1");
         List<Brand.TrademarkCate> trademarkCates = new ArrayList<>();
         AtomicInteger cate = new AtomicInteger();
         AtomicReference<String> regNo = new AtomicReference<>("");

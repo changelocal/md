@@ -71,7 +71,7 @@ public class SearchRecordDao extends BaseDao  {
 		if(!Strings.isNullOrEmpty(searchRecordParam.getOpUserName())){
 			filter=filter.and(f("op_user_name",searchRecordParam.getOpUserName()));
 		}
-		Sorters sorters = t("search_record").sorters(SortType.ASC,"id");
+		Sorters sorters = t("search_record").sorters(SortType.DESC,"create_time");
 		long total=(long)this.DB().select(count()).from("search_record").where(filter).result().value();
 		if(total>0){
 			List<SearchRecord> list = DB().select(SearchRecord.class).where(filter).orderBy(sorters)
