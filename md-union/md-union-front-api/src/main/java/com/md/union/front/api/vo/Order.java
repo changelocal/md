@@ -13,7 +13,7 @@ public class Order {
 
     @ApiModel("我的订单列表查询")
     @Data
-    public static class SearchReq{
+    public static class SearchReq {
         @ApiModelProperty("当前页")
         public int pageIndex;
         @ApiModelProperty("每页显示条数")
@@ -22,7 +22,7 @@ public class Order {
 
     @ApiModel("用户购买商标的订单列表")
     @Data
-    public static class ListRes{
+    public static class ListRes {
         @ApiModelProperty("商标订单")
         public List<OrderRes> list;
         @ApiModelProperty("总条数")
@@ -31,7 +31,7 @@ public class Order {
 
     @ApiModel("我的订单列表")
     @Data
-    public static class OrderRes{
+    public static class OrderRes {
         @ApiModelProperty("主键id")
         public int id;
         @ApiModelProperty("订单编号")
@@ -58,7 +58,7 @@ public class Order {
 
     @ApiModel("订单提交")
     @Data
-    public static class SubmitOrder{
+    public static class SubmitOrder {
         @ApiModelProperty("订单类型")
         public int orderType;
         @ApiModelProperty("预付款价格")
@@ -73,20 +73,22 @@ public class Order {
         private String productNo;
     }
 
-    @ApiModel("服务订单提交")
+    @ApiModel("订单提交")
     @Data
-    public static class BuyOrder{
+    public static class BuyOrder {
         @ApiModelProperty("订单类型")
         public int orderType;
         @ApiModelProperty("预付款价格")
         public String code;
         @ApiModelProperty("客服人员id")
         private int personId;
+        @ApiModelProperty("分类主键id")
+        private List<String> categoryIds;
     }
 
     @ApiModel("我的订单列提交资料")
     @Data
-    public static class SubmitOrderFile{
+    public static class SubmitOrderFile {
         @ApiModelProperty("订单编号")
         public String orderNo;
         @ApiModelProperty("订单提交资料方式 1企业 2 个人")
@@ -97,7 +99,7 @@ public class Order {
 
     @Data
     @ApiModel("商标订单详情")
-    public static class Detail{
+    public static class Detail {
         @ApiModelProperty("主键id")
         private int id;
         @ApiModelProperty("用户id")
@@ -134,14 +136,12 @@ public class Order {
 
     @Data
     @ApiModel("发起订单支付")
-    public static class PayParam{
+    public static class PayParam {
         @ApiModelProperty("订单编号")
         private String orderNo;
         @ApiModelProperty("商标编号")
         private String brandNo;
     }
-
-
 
 
 }

@@ -288,44 +288,6 @@ public class OrderController {
         return result;
     }
 
-    private OrderDTO.BrandOrderVO convert(Order.SubmitOrder request) {
-        if (request.getTotalPay() == null) {
-            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "商品总价不能为空");
-        }
-        if (request.getPrePay() == null) {
-            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "预支付价不能为空");
-        }
-        int restPay = Integer.parseInt(request.getTotalPay()) - Integer.parseInt(request.getPrePay());
-        OrderDTO.BrandOrderVO result = new OrderDTO.BrandOrderVO();
-        result.setOrderNo("" + System.currentTimeMillis());
-        result.setStatus(OrderStatusEnums.PRE_PAY.getType());
-        result.setPrePay(Integer.parseInt(request.getPrePay()));
-        result.setRestPay(restPay);
-        result.setTotalPay(Integer.parseInt(request.getTotalPay()));
-        result.setUserId(AppUserPrincipal.getPrincipal().getId());
-        result.setOpUserId(1);
-        result.setCreateTime(new Date());
-        result.setUpdateTime(new Date());
-
-
-        result.setOrderType(request.getOrderType());
-        result.setProductNo(request.getProductNo());
-        result.setMinPrice(10000);
-        result.setMinPrice(20000);
-        if (Strings.isNullOrEmpty(request.getProductNo())) {
-            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "商标编号不能为空");
-        }
-        Map<String, TrademarkDTO.MdBrand> brandMap = getBrandByBrandIds(Arrays.asList(request.getProductNo()));
-        if (!brandMap.containsKey(request.getProductNo()))
-            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "商标编号不存在");
-        TrademarkDTO.MdBrand brand = brandMap.get(request.getProductNo());
-        result.setProductName(brand.getBrandName());
-        result.setCategory(brand.getCategory());
-        result.setCategoryName(brand.getCategoryName());
-        result.setImg(brand.getImageUrl());
-        return result;
-    }
-
     private Map<String, TrademarkDTO.MdBrand> getBrandByBrandIds(List<String> brandIds) {
         Map<String, TrademarkDTO.MdBrand> result = new HashMap<>();
         if (CollectionUtils.isEmpty(brandIds))
