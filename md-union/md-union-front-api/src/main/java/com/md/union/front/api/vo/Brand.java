@@ -22,6 +22,8 @@ public class Brand {
         private String categoryName;
         @ApiModelProperty("分类")
         private String typeName;
+        @ApiModelProperty("是否有同名商标1：不显示多  2：显示多")
+        private int multiName;
     }
 
     @Data
@@ -52,6 +54,8 @@ public class Brand {
         public String minPrice;
         @ApiModelProperty("是否是特价")
         public boolean special;
+        @ApiModelProperty("是否有同名商标1：不显示多  2：显示多")
+        private int multiName;
     }
 
     @Data

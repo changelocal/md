@@ -27,6 +27,8 @@ public class TrademarkDTO {
         private String categoryName;
         @ApiModelProperty("热门商标图标")
         private String icon;
+        @ApiModelProperty("是否有同名商标1：不显示多  2：显示多")
+        private int multiName;
     }
     @Data
     @ApiModel("热门商标点击查询结果")

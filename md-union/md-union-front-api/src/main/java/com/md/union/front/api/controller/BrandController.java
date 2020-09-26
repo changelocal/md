@@ -66,6 +66,7 @@ public class BrandController {
             brand.setCode(e.getCode());
             brand.setIcon("https://pay.mdlogo.cn/file/brand_class/" + e.getCode() + ".png");
             brand.setTypeName(e.getCode() + "类");
+            brand.setMultiName(e.getMultiName());
             result.add(brand);
 
             Brand.GroupRes list = list(e.getCode(), e.getCategoryName());
@@ -197,6 +198,7 @@ public class BrandController {
                 res.setSpecial(e.getPromoteFlag() == 1);
                 res.setMinPrice(e.getPrice().toString());
                 res.setMaxPrice(e.getPriceHigh().toString());
+                res.setMultiName(e.getMultiName());
                 specialRes.add(res);
             });
         }
@@ -503,6 +505,7 @@ public class BrandController {
                 res.setMinPrice(e.getPrice().toString());
                 res.setMaxPrice(e.getPriceHigh().toString());
                 res.setSpecial(e.getPromoteFlag() == 1);
+                res.setMultiName(e.getMultiName());
                 trademarkCatesFamilar.add(res);
             }
         }
