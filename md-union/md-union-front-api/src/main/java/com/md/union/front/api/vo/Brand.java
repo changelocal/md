@@ -351,6 +351,8 @@ public class Brand {
         private int cateCode;
         @ApiModelProperty("商标分类名字")
         private String cateName;
+        @ApiModelProperty("是否有同名商标1：不显示多  2：显示多")
+        private int multiName;
     }
     @Data
     @ApiModel("权威认证")

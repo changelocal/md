@@ -272,6 +272,7 @@ public class BrandController {
                 res.setId(e.getId());
                 res.setName(e.getBrandName());
                 res.setPic(e.getImageUrl());
+                res.setMultiName(e.getMultiName());
                 trademarkCates.add(res);
 
                 result.setFirstDate(null == e.getFirstCheckTime() ? "" : timeFormat.format(e.getFirstCheckTime()));

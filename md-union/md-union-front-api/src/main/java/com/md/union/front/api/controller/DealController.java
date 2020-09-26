@@ -229,7 +229,8 @@ public class DealController {
             item.setId(dealEnums[i].getNo());
             item.setBrandType(dealEnums[i].getType());
             item.setTitle(dealEnums[i].getTitle());
-            item.setIcon(dealEnums[i].getIcon());
+            //要用别的icon，不是枚举里的
+            item.setIcon("https://pay.mdlogo.cn/file/home-service/"+i+".png");
             result.add(item);
         }
 
