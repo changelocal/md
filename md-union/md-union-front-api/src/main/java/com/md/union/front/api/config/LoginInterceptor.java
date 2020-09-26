@@ -68,9 +68,9 @@ public class LoginInterceptor implements HandlerInterceptor {
             principal.setMinId(minUser.getMinId());
             principal.setMobile(minUser.getMobile());
         } else {
-            principal.setToken("777962f836e6532c917a400b84569f7d");
+            /*principal.setToken("777962f836e6532c917a400b84569f7d");
             principal.setId(153);
-            principal.setMinId("o2zlA5RYnwP_QUOEUoaHpYTZKTa0");
+            principal.setMinId("o2zlA5RYnwP_QUOEUoaHpYTZKTa0");*/
         }
         log.info("登录用户上下文对象信息 :{}", JSON.toJSONString(principal));
 
