@@ -235,7 +235,7 @@ export default {
           .push({
             name: "MakeOrder",
             query: {
-              buyerId: item.id,
+              buyerId: item.openid,
               buyerName: item.buyerName,
               buyerMobile: item.buyerMobile,
             },

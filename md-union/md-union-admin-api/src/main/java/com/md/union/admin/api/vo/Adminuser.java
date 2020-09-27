@@ -14,7 +14,7 @@ public class Adminuser {
     @Data
     @ApiModel("商标起名详情展示")
     public static class Info{
-        private String id;
+        private int id;
 
         /**
          *

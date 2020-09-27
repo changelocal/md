@@ -98,16 +98,6 @@
             />
           </Select>
         </Form-item>
-        <Form-item label="定金" prop="prePay">
-          <InputNumber
-            :max="99999"
-            :min="1"
-            :step="1"
-            v-model="formService.prePay"
-            placeholder="请输入"
-            clearable
-          />
-        </Form-item>
         <Form-item label="总价" prop="totalPay">
           <InputNumber
             :max="99999"
@@ -206,7 +196,7 @@ export default {
     formQueryPush() {
       return {
         userId: this.formService.buyerId,
-        prePay: this.formService.prePay,
+        // prePay: this.formService.prePay,
         totalPay: this.formService.totalPay,
         productNo: this.formService.serviceId,
         orderType: this.animal === "维权" ? 2 : 3,
@@ -276,14 +266,14 @@ export default {
     onSaveService(confirm) {
       this.$refs.formFields.validate((valid) => {
         if (valid) {
-          if (
-            Number(this.formService.prePay) >= Number(this.formService.totalPay)
-          ) {
-            this.$Notice.error({
-              title: "定金不能大于等于总价",
-            });
-            return false;
-          }
+          // if (
+          //   Number(this.formService.prePay) >= Number(this.formService.totalPay)
+          // ) {
+          //   this.$Notice.error({
+          //     title: "定金不能大于等于总价",
+          //   });
+          //   return false;
+          // }
           pushService(this.formQueryPush).then((res) => {
             console.log(res);
             if (res.status === true) {
