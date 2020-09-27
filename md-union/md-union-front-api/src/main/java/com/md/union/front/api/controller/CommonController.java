@@ -52,16 +52,20 @@ public class CommonController {
     @ResponseBody
     @PostMapping("upfile2oss")
     public OssFileInfo upFile(@RequestParam(value = "fileObj") MultipartFile fileObj) {
+        log.info("upFile.begin ");
         /*String[] ex = fileObj.getContentType().split("/");
         SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyyMM");
         String fileId = dateFormat2.format(new Date()) + DigestUtils.md5Hex(fileObj.getOriginalFilename()
                 + System.currentTimeMillis() + new Random().nextLong()) + "." + ex[1];*/
         String fileId = new Date().getTime() + "T" + new Random().nextLong();
+        log.info("uploadImg2Oss.begin ");
         ossClientTool.uploadImg2Oss(fileObj, realPath.concat(fileId));
+        log.info("uploadImg2Oss.end ");
 //        logger.info("==================================https://tianxiuquan.oss-cn-zhangjiakou.aliyuncs.com/" + realPath + fileName);
         String url = "https://tianxiuquan.oss-cn-zhangjiakou.aliyuncs.com/" + realPath + fileId;
         OssFileInfo res = new OssFileInfo();
         res.setName(url);
+        log.info("upFile.end ");
         return res;
     }
 
