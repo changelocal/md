@@ -105,13 +105,43 @@ public class CommonController {
         queryRespBaseResponse.getResult().getMdBrands().forEach(p->{
             Tmkoo.Flow info = TmkooCommon.info(minCommon.getHost(), p.getRegNo(), p.getCategory());
             if(!CollectionUtils.isEmpty(info.getFlowInfos())){
-                info.getFlowInfos().forEach(q->{
-                    if(q.getCode().equals("") ||
-                    q.getCode().equals("") ||
-                    q.getCode().equals("")){
+                for (Tmkoo.FlowInfo q : info.getFlowInfos()) {
+                    if (q.getCode().equals("2") ||
+                            q.getCode().equals("7") ||
+                            q.getCode().equals("10") ||
+                            q.getCode().equals("12") ||
+                            q.getCode().equals("17") ||
+                            q.getCode().equals("21") ||
+                            q.getCode().equals("25") ||
+                            q.getCode().equals("51") ||
+                            q.getCode().equals("89") ||
+                            q.getCode().equals("90") ||
+                            q.getCode().equals("94") ||
+                            q.getCode().equals("95") ||
+                            q.getCode().equals("96") ||
+                            q.getCode().equals("101") ||
+                            q.getCode().equals("102") ||
+                            q.getCode().equals("103") ||
+                            q.getCode().equals("104") ||
+                            q.getCode().equals("105") ||
+                            q.getCode().equals("118") ||
+                            q.getCode().equals("119") ||
+                            q.getCode().equals("127") ||
+                            q.getCode().equals("135") ||
+                            q.getCode().equals("152") ||
+                            q.getCode().equals("153") ||
+                            q.getCode().equals("155") ||
+                            q.getCode().equals("168") ||
+                            q.getCode().equals("169") ||
+                            q.getCode().equals("170") ||
+                            q.getCode().equals("171") ||
+                            q.getCode().equals("177") ||
+                            q.getCode().equals("181") ||
+                            q.getCode().equals("182")) {
                         ids.add(p.getId());
+                        break;
                     }
-                });
+                }
             }
         });
 
