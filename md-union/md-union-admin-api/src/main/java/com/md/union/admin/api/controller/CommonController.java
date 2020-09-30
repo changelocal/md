@@ -6,6 +6,7 @@ import com.md.union.admin.api.Enums.ChangeEnums;
 import com.md.union.admin.api.Enums.DealEnums;
 import com.md.union.admin.api.vo.Brand;
 import com.md.union.admin.api.vo.Consultation;
+import com.md.union.front.client.dto.BrandRefreshRecordDTO;
 import com.md.union.front.client.dto.TrademarkDTO;
 import com.md.union.front.client.feign.FrontClient;
 import io.swagger.annotations.ApiOperation;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -67,5 +69,19 @@ public class CommonController {
         res.setBrandClasses(rootBrandClasses);
 //        BeanUtils.copyProperties(response.getResult().getCates(), res);
         return res;
+    }
+
+    @ApiOperation("刷新所有商标状态")
+    @GetMapping("/brand/refresh")
+    public void refresh() {
+
+        BrandRefreshRecordDTO.BrandRefreshRecordInfo brandRefreshRecordInfo = new BrandRefreshRecordDTO.BrandRefreshRecordInfo();
+        brandRefreshRecordInfo.setCreateTime(new Date());
+        brandRefreshRecordInfo.setUpdateTime(new Date());
+        brandRefreshRecordInfo.setNote("开始更新");
+        frontClient.add(brandRefreshRecordInfo);
+
+
+
     }
 }
