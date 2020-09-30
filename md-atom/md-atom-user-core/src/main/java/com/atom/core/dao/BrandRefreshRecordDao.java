@@ -1,23 +1,20 @@
 package com.atom.core.dao;
 
-import com.google.common.base.Strings;
-import com.atom.core.dao.BaseDao;
-import com.atom.core.dao.BrandRefreshRecordDao;
-import com.atom.core.model.BrandRefreshRecord;
-import com.atom.core.model.BrandRefreshRecordParam;
-import org.springframework.stereotype.Repository;
 import com.arc.db.jsd.Filter;
 import com.arc.db.jsd.SortType;
 import com.arc.db.jsd.Sorters;
 import com.arc.db.jsd.UpdateValues;
 import com.arc.util.data.PageResult;
+import com.atom.core.model.BrandRefreshRecord;
+import com.atom.core.model.BrandRefreshRecordParam;
+import com.google.common.base.Strings;
+import org.springframework.stereotype.Repository;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.arc.db.jsd.Shortcut.count;
-import static com.arc.db.jsd.Shortcut.f;
-import static com.arc.db.jsd.Shortcut.t;
+import static com.arc.db.jsd.Shortcut.*;
 
 /**
  * Created by md on 2020/07/25.
@@ -66,8 +63,8 @@ public class BrandRefreshRecordDao extends BaseDao  {
 	}
 
 	public int add(BrandRefreshRecord brandRefreshRecord) {
-		long id = (long) DB().insert(brandRefreshRecord).result(true).getKeys().get(0);
-		return (int)id;
+        BigInteger id = (BigInteger) DB().insert(brandRefreshRecord).result(true).getKeys().get(0);
+		return id.intValue();
 	}
 
 	public void update(BrandRefreshRecord brandRefreshRecord) {

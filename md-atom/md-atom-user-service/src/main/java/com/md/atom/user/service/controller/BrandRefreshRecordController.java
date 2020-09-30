@@ -54,8 +54,9 @@ public class BrandRefreshRecordController {
         BrandRefreshRecord user = new BrandRefreshRecord();
         BeanUtils.copyProperties(request, user);
         user.setCreateTime(new Date());
-        brandRefreshRecordDao.add(user);
+        int code = brandRefreshRecordDao.add(user);
         BrandRefreshRecordVO.Resp result = new BrandRefreshRecordVO.Resp();
+        result.setCode(code);
         return result;
     }
     @ApiOperation(value = "新增加管理人员", notes = "新增加管理人员")
