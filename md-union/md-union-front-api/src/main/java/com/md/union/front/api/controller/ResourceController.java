@@ -84,7 +84,7 @@ public class ResourceController {
             log.info("orderRefClient.addBatch param:{}", JSON.toJSONString(addList));
             BaseResponse addResp = orderRefClient.addBatch(addList);
             log.info("orderRefClient.addBatch result:{}", JSON.toJSONString(addResp));
-            if (!BaseResponse.STATUS_HANDLE_SUCCESS.equals(addResp.getResult())) {
+            if (!BaseResponse.STATUS_HANDLE_SUCCESS.equals(addResp.getStatus())) {
                 throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "批量添加保存上传文件失败");
             }
         }
