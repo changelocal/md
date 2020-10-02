@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -44,7 +43,7 @@ public class AdminuserController {
         return result;
     }
 
-    @ApiOperation("商标起名查询")
+    @ApiOperation("查询")
     @PostMapping("/query")
     public Adminuser.SearchRes query(@RequestBody Adminuser.SearchReq request) {
         Adminuser.SearchRes ret = new Adminuser.SearchRes();
@@ -93,6 +92,7 @@ public class AdminuserController {
         String salt = DigestUtils.md5Hex(request.getPassword() + System.currentTimeMillis());
         adminUser.setPassword(DigestUtils.md5Hex(request.getPassword() + salt));//md5 getBusinessNo
         adminUser.setSalt(salt); //md5 getBusinessNo+timestamp
+        adminUser.setAvatar("http://ytmd-library.oss-cn-beijing.aliyuncs.com/user/image/58/8b/588b-49c9-a36b-da9b34058f60-d5ee3810f2f4-d41d8.png");
         BaseResponse<AdminUserDTO.Resp> query = frontClient.add(adminUser);
         if (!query.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(query.getStatus(), query.getMessage());

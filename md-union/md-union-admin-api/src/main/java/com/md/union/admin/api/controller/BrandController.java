@@ -16,6 +16,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -29,7 +31,7 @@ public class BrandController {
     public Brand.SearchRes query(@RequestBody Brand.SearchReq request) {
         Brand.SearchRes ret = new Brand.SearchRes();
         TrademarkDTO.MdBrand req = new TrademarkDTO.MdBrand();
-        if(request.getGroups().length>0){
+        if(request.getGroups() !=null && request.getGroups().length>0){
             req.setGroups(Arrays.asList(request.getGroups()));
         }
         //名字
@@ -78,6 +80,14 @@ public class BrandController {
         req.setPageSize(request.getPageSize());
 
         BeanUtils.copyProperties(request, req);
+
+        //得到45大类
+        BaseResponse<TrademarkDTO.RootBrandResp> responseCate = frontClient.root();
+        if (!responseCate.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+            throw new ServiceException(responseCate.getStatus(), responseCate.getMessage());
+        }
+        Map<Integer, String> name = responseCate.getResult().getCates().stream().collect(Collectors.toMap(p -> p.getCode(), q -> q.getCategoryName()));
+
         BaseResponse<TrademarkDTO.QueryResp> query = frontClient.search(req);
         if (!query.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(query.getStatus(), query.getMessage());
@@ -87,6 +97,7 @@ public class BrandController {
             query.getResult().getMdBrands().forEach(p->{
                 Brand.Info info = new Brand.Info();
                 BeanUtils.copyProperties(p, info);
+                info.setCategoryName(p.getCategory() + "类 " + name.get(p.getCategory()));
                 infos.add(info);
             });
 

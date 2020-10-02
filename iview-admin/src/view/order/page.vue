@@ -172,6 +172,7 @@ export default {
         totalPay: 0,
         buyer: "",
         orderTypeName: "",
+        productNo: "",
       },
       options: [
         {
@@ -284,6 +285,7 @@ export default {
         prePay: this.form.prePay,
         restPay: this.form.restPay,
         totalPay: this.form.totalPay,
+        productNo: this.form.productNo,
       };
     },
   },
@@ -364,6 +366,7 @@ export default {
       this.form.restPay = item.restPay;
       this.form.totalPay = item.totalPay;
       this.form.orderTypeName = item.orderTypeName;
+      this.form.productNo = item.productNo;
 
       this.popShow = true;
     },

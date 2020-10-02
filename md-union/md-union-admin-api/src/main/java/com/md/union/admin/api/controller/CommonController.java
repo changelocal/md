@@ -2,17 +2,24 @@ package com.md.union.admin.api.controller;
 
 import com.arc.common.ServiceException;
 import com.arc.util.http.BaseResponse;
+import com.arc.util.tmkoo.Tmkoo;
+import com.arc.util.tmkoo.TmkooCommon;
 import com.md.union.admin.api.Enums.ChangeEnums;
 import com.md.union.admin.api.Enums.DealEnums;
+import com.md.union.admin.api.Enums.SaleTypeEnums;
+import com.md.union.admin.api.facade.MinCommon;
 import com.md.union.admin.api.vo.Brand;
 import com.md.union.admin.api.vo.Consultation;
+import com.md.union.front.client.dto.BrandRefreshRecordDTO;
 import com.md.union.front.client.dto.TrademarkDTO;
 import com.md.union.front.client.feign.FrontClient;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -21,6 +28,9 @@ import java.util.List;
 public class CommonController {
     @Autowired
     private FrontClient frontClient ;
+    @Autowired
+    private MinCommon minCommon;
+
     @GetMapping("/loadService")
     public Brand.DealRight loadService() {
         Brand.DealRight result = new Brand.DealRight();
@@ -67,5 +77,49 @@ public class CommonController {
         res.setBrandClasses(rootBrandClasses);
 //        BeanUtils.copyProperties(response.getResult().getCates(), res);
         return res;
+    }
+
+    @ApiOperation("刷新所有商标状态")
+    @GetMapping("/brand/refresh")
+    public void refresh() {
+        BrandRefreshRecordDTO.BrandRefreshRecordInfo brandRefreshRecordInfo = new BrandRefreshRecordDTO.BrandRefreshRecordInfo();
+        brandRefreshRecordInfo.setCreateTime(new Date());
+        brandRefreshRecordInfo.setUpdateTime(new Date());
+        brandRefreshRecordInfo.setNote("开始更新");
+        BaseResponse<BrandRefreshRecordDTO.Resp> add = frontClient.add(brandRefreshRecordInfo);
+
+        TrademarkDTO.MdBrand mdBrand = new TrademarkDTO.MdBrand();
+        mdBrand.setIsSale(SaleTypeEnums.not_sale.getType());
+        mdBrand.setIsDelete(1);
+        mdBrand.setIsEnable(2);
+        mdBrand.setType(1);
+        BaseResponse<TrademarkDTO.QueryResp> queryRespBaseResponse = frontClient.find(mdBrand);
+        if (!queryRespBaseResponse.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+            throw new ServiceException(queryRespBaseResponse.getStatus(), queryRespBaseResponse.getMessage());
+        }
+        if(CollectionUtils.isEmpty(queryRespBaseResponse.getResult().getMdBrands())){
+
+        }
+
+        List<String> ids = new ArrayList<>();
+        queryRespBaseResponse.getResult().getMdBrands().forEach(p->{
+            Tmkoo.Flow info = TmkooCommon.info(minCommon.getHost(), p.getRegNo(), p.getCategory());
+            if(!CollectionUtils.isEmpty(info.getFlowInfos())){
+                info.getFlowInfos().forEach(q->{
+                    if(q.getCode().equals("") ||
+                    q.getCode().equals("") ||
+                    q.getCode().equals("")){
+                        ids.add(p.getId());
+                    }
+                });
+            }
+        });
+
+        BrandRefreshRecordDTO.BrandRefreshRecordInfo brandRefreshRecordInfo1 = new BrandRefreshRecordDTO.BrandRefreshRecordInfo();
+        brandRefreshRecordInfo1.setId(add.getResult().getCode());
+        brandRefreshRecordInfo1.setUpdateTime(new Date());
+        brandRefreshRecordInfo1.setNote("更新完成");
+        frontClient.update(brandRefreshRecordInfo1);
+
     }
 }

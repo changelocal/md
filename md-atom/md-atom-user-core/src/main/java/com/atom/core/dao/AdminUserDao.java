@@ -10,6 +10,7 @@ import com.atom.core.model.AdminUserParam;
 import com.google.common.base.Strings;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -140,8 +141,8 @@ public class AdminUserDao extends BaseDao {
     }
 
     public int add(AdminUser adminUser) {
-        long id = (long) DB().insert(adminUser).result(true).getKeys().get(0);
-        return (int) id;
+        BigInteger id = (BigInteger) DB().insert(adminUser).result(true).getKeys().get(0);
+        return  id.intValue();
     }
 
     public void update(AdminUser adminUser) {

@@ -45,6 +45,9 @@
         <Form-item label="商标名字">
           <Input v-model="name" placeholder="请输入商标名字" clearable></Input>
         </Form-item>
+        <Form-item label="商标编号">
+          <Input v-model="brandId" placeholder="请输入商标编号" clearable></Input>
+        </Form-item>
         <Form-item label>
           <Button type="primary" @click="onSearch">搜索</Button>
         </Form-item>
@@ -184,11 +187,12 @@ export default {
             ]);
           },
         },
-        { title: "类型", key: "category" },
+        { title: "类型", key: "categoryName" },
         { title: "名称", key: "brandName" },
         { title: "注册号", key: "mobile" },
         { title: "分类", key: "brandType" },
-        { title: "价格区间", key: "price", slot: "price" },
+        { title: "最低价格", key: "price" },
+        { title: "友商价格", key: "priceHigh" },
         // {title: '热门', key: 'isQuality', slot: 'isQuality'},
         // {title: '上架', key: 'isEnable', slot: 'isEnable'},
         // {title: '操作', slot: 'action', width: 150, align: 'center'}
@@ -197,12 +201,16 @@ export default {
       brandPrice: 1,
       charLength: 0,
       brandType: 0,
+      brandId:"",
       openType: "add",
       form: {
         buyerId: "",
         buyerName: "",
         buyerMobile: "",
         brandName: "",
+        brandType: "",
+        brandTypeId: "",
+        img: "",
         prePay: 0,
         restPay: 0,
         totalPay: 0,
@@ -367,17 +375,22 @@ export default {
         priceType: this.brandPrice,
         unionType: this.brandType,
         brandSize: this.charLength,
+        brandId: this.brandId,
       };
     },
     formQueryUpdate() {
       return {
-        buyerId: this.form.id,
-        buyerName: this.form.type,
-        buyerMobile: this.form.email,
-        brandIds: this.form.brandIds,
+        userId: this.form.buyerId,
+        buyerName: this.form.buyerName,
+        buyerMobile: this.form.buyerMobile,
+        productNo: this.form.brandIds,
+        productName: this.form.brandName,
+        category: this.form.brandTypeId,
+        categoryName: this.form.brandType,
         prePay: this.form.prePay,
         restPay: this.form.restPay,
         totalPay: this.form.totalPay,
+        img: this.form.img,
       };
     },
     rBuyerId() {
@@ -413,6 +426,9 @@ export default {
         if (res.status === true) {
           this.onClose();
           this.reqList();
+          this.$Notice.success({
+            title: "订单推送成功，请在订单列表里查看",
+          });
         } else {
             this.$Notice.error({
               title: '客户端请求错误',
@@ -450,14 +466,17 @@ export default {
         this.form.buyerName = this.rBuyerName;
         this.form.buyerMobile = this.rBuyerMobile;
         this.form.brandName = this.selectedItems[0].brandName;
+        this.form.brandIds = this.selectedItems[0].brandId;
+        this.form.img = this.selectedItems[0].imageUrl;
 
         this.selectedItems.forEach((p) => {
-          this.form.prelPay += p.price;
-          this.form.totalPay += p.priceHigh;
-          this.form.brandType += p.type;
+          this.form.prePay = p.priceHigh-p.price;
+          this.form.totalPay = p.priceHigh;
+          this.form.brandType = p.categoryName;
+          this.form.brandTypeId = p.category;
         });
 
-        this.form.restPay = this.form.totalPay - this.form.prelPay;
+        this.form.restPay = this.form.totalPay - this.form.prePay;
         this.popShow = true;
       }
     },
@@ -470,6 +489,19 @@ export default {
       this.popNewOrderShow = false;
       // if (confirm) this.reqFun(data);
       this.form = this.formClear();
+    },
+    formClear() {
+      return {
+        id: "",
+        buyerId: "",
+        buyerName: "",
+        buyerMobile: "",
+        brandName: "",
+        prePay: 0,
+        restPay: 0,
+        totalPay: 0,
+        brandIds: [],
+      };
     },
     onSearch() {
       if (this.name === "") {

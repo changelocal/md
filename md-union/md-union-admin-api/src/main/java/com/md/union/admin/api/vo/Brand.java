@@ -54,6 +54,7 @@ public class Brand {
          * 商标所属类别
          */
         private int category;
+        private String categoryName;
 
         /**
          * 商标类似群组
@@ -362,6 +363,7 @@ public class Brand {
     public static class SearchReq{
         @ApiModelProperty("商标名称")
         private String brandName;
+        private String brandId;
         @ApiModelProperty("商标分类编号")
         private int categoryNo;
         @ApiModelProperty("价格类型")

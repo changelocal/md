@@ -182,7 +182,8 @@ export default {
         { title: "注册号", key: "regNo" },
         { title: "分类", key: "brandType" },
         { title: "适合项目", key: "fitProjects" , width: 150},
-        { title: "价格区间", key: "price", slot: "price" },
+        { title: "最低价格", key: "price"},
+        { title: "友商价格", key: "priceHigh"},
         { title: "热门", key: "isQuality", slot: "isQuality" , width: 60},
         { title: "上架", key: "isEnable", slot: "isEnable", width: 60 },
         { title: "操作", slot: "action", width: 150, align: "center" },
@@ -469,6 +470,17 @@ export default {
       this.popNewOrderShow = false;
       // if (confirm) this.reqFun(data);
       this.form = this.formClear();
+    },
+    formClear() {
+      return {
+        id: "",
+        brandName: "",
+        brandId: "",
+        isEnable: false,
+        isQuality: false,
+        price: 0,
+        priceHigh: 0,
+      };
     },
     onSearch() {
       // console.log(this.checked)

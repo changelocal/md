@@ -30,6 +30,7 @@ public final class Tmkoo {
     @Data
     public static class FlowInfo{
         private String date;
+        private String code;
         private String name;
     }
 }

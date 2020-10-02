@@ -48,6 +48,7 @@ public class TmkooCommon {
                     Tmkoo.FlowInfo info = new Tmkoo.FlowInfo();
                     info.setDate(results.getJSONObject(i).getString("flowDate"));
                     info.setName(results.getJSONObject(i).getString("flowName"));
+                    info.setCode(results.getJSONObject(i).getString("code"));
                     flowInfos.add(info);
                 }
                 flow.setFlowInfos(flowInfos);

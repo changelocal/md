@@ -93,6 +93,7 @@ public class Order {
          * 产品名称
          */
         private String productName;
+        private String productNo;
     }
 
     @ApiModel("订单提交")
@@ -101,15 +102,20 @@ public class Order {
         @ApiModelProperty("订单类型")
         public int orderType;
         @ApiModelProperty("预付款价格")
-        public String prePay;
+        public int prePay;
         @ApiModelProperty("尾款价格")
-        public String restPay;
+        public int restPay;
         @ApiModelProperty("总价")
-        public String totalPay;
+        public int totalPay;
         @ApiModelProperty("后台运营下单人id")
         public int opUserId;
         @ApiModelProperty("产品编号")
         private String productNo;
+        private String productName;
+        public int category;
+        public String categoryName;
+        public String img;
+        public String userId;
     }
 
     @ApiModel("我的订单列提交资料")
@@ -123,7 +129,7 @@ public class Order {
         List<String> fileIds;
     }
 
-    @ApiModel("订单提交")
+    @ApiModel("服务订单提交")
     @Data
     public static class SubmitServiceOrder{
         @ApiModelProperty("预付款价格")

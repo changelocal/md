@@ -5,6 +5,7 @@ import com.arc.util.http.BaseResponse;
 import com.google.common.base.Strings;
 import com.md.union.admin.api.Enums.OrderStatusEnums;
 import com.md.union.admin.api.Enums.OrderTypeEnums;
+import com.md.union.admin.api.Enums.SaleTypeEnums;
 import com.md.union.admin.api.Enums.UploadPicEnums;
 import com.md.union.admin.api.vo.Order;
 import com.md.union.admin.api.vo.Ref;
@@ -136,6 +137,27 @@ public class OrderController {
         if (!query.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
             throw new ServiceException(query.getStatus(), query.getMessage());
         }
+        //如果是商标订单无效，释放商标
+        if(adminUser.getStatus() == OrderStatusEnums.DISABLE.getType()
+        && adminUser.getOrderType() == OrderTypeEnums.BRAND_BUY.getType()){
+            //更新商标状态
+            TrademarkDTO.MdBrand req = new TrademarkDTO.MdBrand();
+            req.setPageSize(10);
+            req.setPageIndex(1);
+            req.setBrandId(adminUser.getProductNo());
+            BaseResponse<TrademarkDTO.QueryResp> query2 = frontClient.search(req);
+            if (!query2.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+                throw new ServiceException(query2.getStatus(), query2.getMessage());
+            }
+
+            TrademarkDTO.MdBrand adminUser2 = new TrademarkDTO.MdBrand();
+            adminUser2.setId(query2.getResult().getMdBrands().get(0).getId());
+            adminUser2.setIsSale(SaleTypeEnums.not_sale.getType());
+            BaseResponse<TrademarkDTO.Resp> query1 = frontClient.update(adminUser2);
+            if (!query1.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+                throw new ServiceException(query1.getStatus(), query1.getMessage());
+            }
+        }
     }
     @ApiOperation("获得订单相关图片")
     @PostMapping("/ref")
@@ -178,8 +200,8 @@ public class OrderController {
         OrderDTO.BrandOrderVO result = new OrderDTO.BrandOrderVO();
         result.setOrderNo("" + System.currentTimeMillis());
         result.setStatus(OrderStatusEnums.PRE_PAY.getType());
-        result.setPrePay(serviceOrder.getPrePay());
-        result.setRestPay(serviceOrder.getTotalPay()-serviceOrder.getPrePay());
+        result.setPrePay(serviceOrder.getTotalPay());
+        result.setRestPay(0);
         result.setTotalPay(serviceOrder.getTotalPay());
         result.setUserId(serviceOrder.getUserId());
         result.setOpUserId(1);//todo
@@ -187,8 +209,8 @@ public class OrderController {
         result.setUpdateTime(new Date());
         result.setOrderType(serviceOrder.getOrderType());
         result.setProductNo(serviceOrder.getProductNo());
-        result.setMinPrice(10000);
-        result.setMaxPrice(10000);
+        result.setMinPrice(serviceOrder.getTotalPay());
+        result.setMaxPrice(serviceOrder.getTotalPay());
         if (Strings.isNullOrEmpty(serviceOrder.getProductNo())) {
             throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "商标服务主键不能为空");
         }
@@ -205,38 +227,66 @@ public class OrderController {
 
     @ApiOperation("推送订单")
     @PostMapping("/push")
-    public void createOrder(@RequestBody Order.SubmitServiceOrder serviceOrder) {
+    public void createOrder(@RequestBody Order.SubmitOrder serviceOrder) {
         OrderDTO.BrandOrderVO order = convertOrder(serviceOrder);
         BaseResponse response = orderClient.add(order);
         if (!BaseResponse.STATUS_HANDLE_SUCCESS.equals(response.getStatus())) {
             throw new ServiceException(response.getStatus(), response.getMessage());
         }
+        //更新商标状态
+        TrademarkDTO.MdBrand req = new TrademarkDTO.MdBrand();
+        req.setPageSize(10);
+        req.setPageIndex(1);
+        req.setBrandId(serviceOrder.getProductNo());
+        BaseResponse<TrademarkDTO.QueryResp> query = frontClient.search(req);
+        if (!query.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+            throw new ServiceException(query.getStatus(), query.getMessage());
+        }
+
+        TrademarkDTO.MdBrand adminUser = new TrademarkDTO.MdBrand();
+        adminUser.setId(query.getResult().getMdBrands().get(0).getId());
+        adminUser.setIsSale(SaleTypeEnums.locked.getType());
+        BaseResponse<TrademarkDTO.Resp> query1 = frontClient.update(adminUser);
+        if (!query1.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+            throw new ServiceException(query1.getStatus(), query1.getMessage());
+        }
     }
-    private OrderDTO.BrandOrderVO convertOrder(Order.SubmitServiceOrder serviceOrder) {
+    private OrderDTO.BrandOrderVO convertOrder(Order.SubmitOrder serviceOrder) {
         OrderDTO.BrandOrderVO result = new OrderDTO.BrandOrderVO();
+        WxUserDTO.WxUser adminUser = new WxUserDTO.WxUser();
+        adminUser.setPageSize(10);
+        adminUser.setPageIndex(1);
+        adminUser.setMinId(serviceOrder.getUserId());
+        BaseResponse<WxUserDTO.QueryResp> query = frontClient.query(adminUser);
+        if (!query.getStatus().equals(BaseResponse.STATUS_HANDLE_SUCCESS)) {
+            throw new ServiceException(query.getStatus(), query.getMessage());
+        }
+        if(CollectionUtils.isEmpty(query.getResult().getItems())){
+            throw new ServiceException(query.getStatus(), "客户不存在");
+        }
+
         result.setOrderNo("" + System.currentTimeMillis());
         result.setStatus(OrderStatusEnums.PRE_PAY.getType());
         result.setPrePay(serviceOrder.getPrePay());
         result.setRestPay(serviceOrder.getTotalPay()-serviceOrder.getPrePay());
         result.setTotalPay(serviceOrder.getTotalPay());
-        result.setUserId(serviceOrder.getUserId());
+        result.setUserId(query.getResult().getItems().get(0).getId());
         result.setOpUserId(1);//todo
         result.setCreateTime(new Date());
         result.setUpdateTime(new Date());
         result.setOrderType(OrderTypeEnums.BRAND_REGISTER.getType());
         result.setProductNo(serviceOrder.getProductNo());
-        result.setMinPrice(10000);
-        result.setMaxPrice(10000);
+        result.setMinPrice(serviceOrder.getTotalPay());
+        result.setMaxPrice(serviceOrder.getTotalPay());
         if (Strings.isNullOrEmpty(serviceOrder.getProductNo())) {
-            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "商标服务主键不能为空");
+            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "商品主键不能为空");
         }
-        BaseResponse<ServiceDTO.Service> serviceResp = frontClient.getService(serviceOrder.getProductNo());
-        if (!BaseResponse.STATUS_HANDLE_SUCCESS.equals(serviceResp.getStatus())) {
-            throw new ServiceException(serviceResp.getStatus(), serviceResp.getMessage());
-        }
-        result.setProductName(serviceResp.getResult().getServiceName());
-        result.setCategoryName(serviceResp.getResult().getServiceName());
-        result.setImg(serviceResp.getResult().getImageUrl());
+
+        result.setProductName(serviceOrder.getProductName());
+        result.setProductNo(serviceOrder.getProductNo());
+        result.setCategoryName(serviceOrder.getCategoryName());
+        result.setCategory(serviceOrder.getCategory());
+        result.setImg(serviceOrder.getImg());
         return result;
     }
 
