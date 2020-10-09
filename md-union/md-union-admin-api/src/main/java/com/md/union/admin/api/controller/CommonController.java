@@ -144,6 +144,15 @@ public class CommonController {
                 }
             }
         });
+        if(!CollectionUtils.isEmpty(ids)){
+            ids.forEach(s->{
+                TrademarkDTO.MdBrand mdBrand1 = new TrademarkDTO.MdBrand();
+                mdBrand1.setId(s);
+                //已经删除
+                mdBrand1.setIsDelete(2);
+                frontClient.update(mdBrand1);
+            });
+        }
 
         BrandRefreshRecordDTO.BrandRefreshRecordInfo brandRefreshRecordInfo1 = new BrandRefreshRecordDTO.BrandRefreshRecordInfo();
         brandRefreshRecordInfo1.setId(add.getResult().getCode());
