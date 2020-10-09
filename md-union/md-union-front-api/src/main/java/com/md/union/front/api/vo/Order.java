@@ -113,25 +113,28 @@ public class Order {
         @ApiModelProperty("分类名称")
         public String categoryName;
         @ApiModelProperty("支付价格")
-        public String payPrice;
+        private String payPrice;
         @ApiModelProperty("定金")
-        public String prePrice;
+        private String prePrice;
         @ApiModelProperty("订单状态 1待支付定金 2待提交资料 3委托受理 4待支付尾款 5已完成")
-        public int orderStatus;
+        private int orderStatus;
         @ApiModelProperty("下单时间")
-        public String createTime;
+        private String createTime;
         @ApiModelProperty("订单总价")
-        public String totalPrice;
+        private String totalPrice;
         @ApiModelProperty("商标购买的分类编号")
         private List<Category.Info> categroyList;
         @ApiModelProperty("订单完成时间")
         private String overTime;
         @ApiModelProperty("品牌名称")
-        public String brandName;
+        private String brandName;
         @ApiModelProperty("最低价")
-        public String minPrice;
+        private String minPrice;
         @ApiModelProperty("最高价")
-        public String maxPrice;
+        private String maxPrice;
+        @ApiModelProperty("文件")
+        private SubmitOrderFile file;
+
     }
 
     @Data
