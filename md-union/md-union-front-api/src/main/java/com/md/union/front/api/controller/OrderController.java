@@ -14,12 +14,10 @@ import com.md.union.front.api.vo.Brand;
 import com.md.union.front.api.vo.Category;
 import com.md.union.front.api.vo.Order;
 import com.md.union.front.api.vo.WxMss;
-import com.md.union.front.client.dto.AdminUserDTO;
-import com.md.union.front.client.dto.OrderDTO;
-import com.md.union.front.client.dto.ServiceDTO;
-import com.md.union.front.client.dto.TrademarkDTO;
+import com.md.union.front.client.dto.*;
 import com.md.union.front.client.feign.FrontClient;
 import com.md.union.front.client.feign.OrderClient;
+import com.md.union.front.client.feign.OrderRefClient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +37,8 @@ public class OrderController {
 
     @Autowired
     private OrderClient orderClient;
+    @Autowired
+    private OrderRefClient orderRefClient;
     @Autowired
     private FrontClient frontClient;
     @Autowired
@@ -128,6 +128,24 @@ public class OrderController {
         result.setMinPrice("" + order.getMinPrice());
         result.setMaxPrice("" + order.getMaxPrice());
 
+        RefDTO.OrderRefFile fileReq = new RefDTO.OrderRefFile();
+        fileReq.setOrderNo(String.valueOf(request.getId()));
+        BaseResponse<List<RefDTO.OrderRefFile>> fileList = orderRefClient.findByCondition(fileReq);
+        if (!BaseResponse.STATUS_HANDLE_SUCCESS.equals(fileList.getStatus())) {
+            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "查询文件附件失败");
+        }
+        Order.SubmitOrderFile file = new Order.SubmitOrderFile();
+        file.setOrderNo(String.valueOf(request.getId()));
+        List<String> fileIds = new ArrayList<>();
+        file.setFileIds(fileIds);
+        if (!CollectionUtils.isEmpty(fileList.getResult())) {
+            fileList.getResult().forEach(p -> {
+                file.setSubmitType(p.getFileSource());
+                fileIds.add(p.getFileId());
+            });
+        }
+        result.setFile(file);
+
         //发消息，等待支付
         WxMss.ToPay toPay = new WxMss.ToPay();
         toPay.setName(order.getProductName());
@@ -136,6 +154,7 @@ public class OrderController {
         toPay.setPayment(String.valueOf(order.getPrePay()));
         toPay.setNote("请在48小时内支付，如有问题请联系顾问！");
         minCommon.pushToPay(toPay);
+
 
         return result;
     }
@@ -206,6 +225,15 @@ public class OrderController {
         }
 
         return response.getResult();
+    }
+
+    @ApiOperation("确认订单")
+    @GetMapping("/file/confirm/{id}")
+    public void fileConfirm(@PathVariable("id") int id) {
+        OrderDTO.BrandOrderVO orderReq = new OrderDTO.BrandOrderVO();
+        orderReq.setId(id);
+        orderReq.setStatus(OrderStatusEnums.END_PAY.getType());
+        orderClient.update(orderReq);
     }
 
     private List<Order.OrderRes> convertOrder(List<OrderDTO.BrandOrderVO> request) {
@@ -285,44 +313,6 @@ public class OrderController {
             item.setIcon("");
             result.add(item);
         }
-        return result;
-    }
-
-    private OrderDTO.BrandOrderVO convert(Order.SubmitOrder request) {
-        if (request.getTotalPay() == null) {
-            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "商品总价不能为空");
-        }
-        if (request.getPrePay() == null) {
-            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "预支付价不能为空");
-        }
-        int restPay = Integer.parseInt(request.getTotalPay()) - Integer.parseInt(request.getPrePay());
-        OrderDTO.BrandOrderVO result = new OrderDTO.BrandOrderVO();
-        result.setOrderNo("" + System.currentTimeMillis());
-        result.setStatus(OrderStatusEnums.PRE_PAY.getType());
-        result.setPrePay(Integer.parseInt(request.getPrePay()));
-        result.setRestPay(restPay);
-        result.setTotalPay(Integer.parseInt(request.getTotalPay()));
-        result.setUserId(AppUserPrincipal.getPrincipal().getId());
-        result.setOpUserId(1);
-        result.setCreateTime(new Date());
-        result.setUpdateTime(new Date());
-
-
-        result.setOrderType(request.getOrderType());
-        result.setProductNo(request.getProductNo());
-        result.setMinPrice(10000);
-        result.setMinPrice(20000);
-        if (Strings.isNullOrEmpty(request.getProductNo())) {
-            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "商标编号不能为空");
-        }
-        Map<String, TrademarkDTO.MdBrand> brandMap = getBrandByBrandIds(Arrays.asList(request.getProductNo()));
-        if (!brandMap.containsKey(request.getProductNo()))
-            throw new ServiceException(BaseResponse.STATUS_SYSTEM_FAILURE, "商标编号不存在");
-        TrademarkDTO.MdBrand brand = brandMap.get(request.getProductNo());
-        result.setProductName(brand.getBrandName());
-        result.setCategory(brand.getCategory());
-        result.setCategoryName(brand.getCategoryName());
-        result.setImg(brand.getImageUrl());
         return result;
     }
 
