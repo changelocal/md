@@ -63,7 +63,7 @@
         <apache-curator.version>4.2.0</apache-curator.version>
         <bytetcc.version>0.5.9</bytetcc.version>
         <servlet-api.version>4.0.1</servlet-api.version>
-        <httpclient.version>4.5</httpclient.version>
+        <httpclient.version>4.5.13</httpclient.version>
         <mysql.version>8.0.20</mysql.version>
         <h2database.version>1.4.200</h2database.version>
         <jest.version>6.3.0</jest.version>
