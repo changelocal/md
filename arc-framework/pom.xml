@@ -65,7 +65,7 @@
         <servlet-api.version>4.0.1</servlet-api.version>
         <httpclient.version>4.5</httpclient.version>
         <mysql.version>8.0.20</mysql.version>
-        <h2database.version>1.4.200</h2database.version>
+        <h2database.version>2.0.206</h2database.version>
         <jest.version>6.3.0</jest.version>
         <fastjson.version>1.2.47</fastjson.version>
         <javax-validation-api.version>2.0.1.Final</javax-validation-api.version>
